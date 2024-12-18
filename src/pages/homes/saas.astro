@@ -6,7 +6,7 @@ import Hero2 from '~/components/widgets/Hero2.astro';
 import Features from '~/components/widgets/Features.astro';
 import Steps2 from '~/components/widgets/Steps2.astro';
 import Content from '~/components/widgets/Content.astro';
-import Pricing from '~/components/widgets/Pricing.astro';
+import Prices from '~/components/widgets/Pricing.astro';
 
 import { headerData } from '~/navigation';
 import FAQs from '~/components/widgets/FAQs.astro';
@@ -37,7 +37,7 @@ const metadata = {
     />
   </Fragment>
 
-  <!-- Hero2 Widget ******************* -->
+  <!-- first Hero2 Widget with picture and buttons ******************* -->
 
   <Hero2
     tagline="SaaS Web Demo"
@@ -64,7 +64,7 @@ const metadata = {
     </Fragment>
   </Hero2>
 
-  <!-- Features Widget *************** -->
+  <!-- Features Widget ***************
 
   <Features
     id="features"
@@ -105,7 +105,7 @@ const metadata = {
         icon: 'tabler:eyeglass',
       },
     ]}
-  />
+  /> -->
 
   <!-- Content Widget **************** -->
 
@@ -203,7 +203,7 @@ const metadata = {
 
   <!-- Content Widget **************** -->
 
-  <Content
+  <!-- <Content
     items={[
       {
         title: 'Description:',
@@ -219,7 +219,7 @@ const metadata = {
       alt: 'Small Business Image',
     }}
   >
-    <Fragment slot="content">
+<Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
         Small business growth: <br /><span class="text-2xl">Converting visitors into customers</span>
       </h3>
@@ -228,45 +228,93 @@ const metadata = {
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
-  </Content>
+  </Content> -->
 
   <!-- Pricing Widget ******************* -->
 
-  <Pricing
-    title="Flexible pricing plans"
+  <!-- Pricing Widget ******************* -->
+
+  <Prices
+    title="Our prices"
+    subtitle="Only pay for what you need"
     prices={[
       {
-        title: 'free',
-        subtitle: 'Access to core features and a wide range of templates',
-        price: '0',
-        period: '/ month',
+        title: 'basic',
+        subtitle: 'Optimal choice for personal use',
+        price: 29,
+        period: 'per month',
+        items: [
+          {
+            description: 'Etiam in libero, et volutpat',
+          },
+          {
+            description: 'Aenean ac nunc dolor tristique',
+          },
+          {
+            description: 'Cras scelerisque accumsan lib',
+          },
+          {
+            description: 'In hac habitasse',
+          },
+        ],
         callToAction: {
           target: '_blank',
-          text: 'Get Started for Free',
+          text: 'Get started',
           href: '#',
         },
       },
       {
-        title: 'pro',
-        subtitle: 'Premium templates and advanced customization',
-        price: 15,
-        period: '/ Month',
+        title: 'standard',
+        subtitle: 'Optimal choice for small teams',
+        price: 69,
+        period: 'Per Month',
+        items: [
+          {
+            description: 'Proin vel laoreet',
+          },
+          {
+            description: 'Ut efficitur habitasse egestas',
+          },
+          {
+            description: 'Volutpat hac curabitur',
+          },
+          {
+            description: 'Pellentesque blandit ut nibh',
+          },
+          {
+            description: 'Donec fringilla sem',
+          },
+        ],
         callToAction: {
           target: '_blank',
-          text: 'Upgrade to Pro',
+          text: 'Get started',
           href: '#',
         },
         hasRibbon: true,
         ribbonTitle: 'popular',
       },
       {
-        title: 'Enterprise',
-        subtitle: 'Tailored solutions for large-scale projects',
-        price: 45,
-        period: '/ Month',
+        title: 'premium',
+        subtitle: 'Optimal choice for companies',
+        price: 199,
+        period: 'Per Month',
+        items: [
+          {
+            description: 'Curabitur suscipit risus',
+          },
+          {
+            description: 'Aliquam habitasse malesuada',
+          },
+          {
+            description: 'Suspendisse sit amet blandit',
+          },
+          {
+            description: 'Suspendisse auctor blandit dui',
+          },
+        ],
         callToAction: {
           target: '_blank',
-          text: 'Unlock Enterprise Features',
+          text: 'Get started',
           href: '#',
         },
       },
