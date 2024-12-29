@@ -2,84 +2,58 @@
 import Layout from '~/layouts/PageLayout.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import UserRegistrationWidget from '~/components/widgets/UserRegistrationWidget.astro';
-import Button from '~/components/widgets/Testimonials.astro';
 
-import { createDocument } from '../lib/utilsDatabase';
-import { isValidPhone, isValidEmail, isRegistered } from '../lib/utilsValidation';
+import { readDocuments } from '../lib/utilsDatabase';
+import { isValidEmail, EmailisRegistered } from '../lib/utilsValidation';
 import type { Input } from '~/types';
 
 const metadata = {
   title: 'Kontakt',
 };
 
-const errors = { firstName: '', lastName: '', email: '', phone: '', password: '', registered: '' };
+const errors = { email: '', password: '', registered: '' };
 const inputs: Input[] = [
-  { type: 'text', name: 'firstName', label: 'Vorname', required: true },
-  { type: 'text', name: 'lastName', label: 'Nachname', required: true },
   { type: 'email', name: 'email', label: 'E-Mail Adresse', required: true },
-  { type: 'tel', name: 'phone', label: 'Telefonnummer', required: true },
   { type: 'password', name: 'password', label: 'Passwort', required: true },
-  { type: 'password', name: 'confirmPassword', label: 'Passwort erneut eingeben', required: true },
 ];
 
 if (Astro.request.method === 'POST') {
-  console.log('Post request');
+  console.log('Login Request');
 
   try {
     const data = await Astro.request.formData();
-    const firstName = data.get('firstName');
-    const lastName = data.get('lastName');
     const email = data.get('email');
-    const phone = data.get('phone');
     const password = data.get('password');
-    const confirmPassword = data.get('confirmPassword');
 
-    const userExists = await isRegistered(firstName, lastName, email);
+    const userExists = await EmailisRegistered( email );
 
     // Validation checks
-    if (typeof firstName !== 'string' || firstName.length < 1) {
-      errors.firstName += 'Bitte trage einen korrekten Vornamen ein. ';
-    }
-
-    if (typeof lastName !== 'string' || lastName.length < 1) {
-      errors.lastName += 'Bitte trage einen Nachnamen ein. ';
-    }
 
     if (typeof email !== 'string' || !isValidEmail(email)) {
       errors.email += 'Inkorrekte E-Mail Adresse ';
-    } else if (userExists) {
-      errors.registered += 'Nutzer schon registriert';
-      console.log('index');
+    } else if (!userExists) {
+      errors.registered += 'Nutzer nicht registriert';
+      console.log('Nutzer nicht registriert');
       return Astro.redirect('/index');
-    }
-
-    if (typeof phone !== 'string' || !isValidPhone(phone)) {
-      errors.phone += 'Telefonnummer ist nicht korrekt. ';
     }
 
     if (typeof password !== 'string' || password.length < 6) {
       errors.password += 'Passwort muss mindestens sechs Zeichen haben. ';
     }
 
-    if (password !== confirmPassword) {
-      errors.password += 'Abgleich fehlgeschlagen. ';
-    }
-
     const hasErrors = Object.values(errors).some((msg) => msg);
     if (hasErrors) {
       // preserve already filled form fields when errors occured
       inputs
-        .filter((input) => input.name != 'password' && input.name != 'confirmPassword')
+        .filter((input) => input.name != 'password')
         .forEach((input) => (input.value = data.get(input.name)?.toString()));
     } else {
-      await createDocument('users', {
-        firstName,
-        lastName,
+      await readDocuments('users', {
         email,
-        phone,
         password,
       });
-      return Astro.redirect('../index');
+      console.log('Index weiterleitung')
+      return Astro.redirect('index');
     }
   } catch (error) {
     if (error instanceof Error) {
@@ -91,26 +65,15 @@ if (Astro.request.method === 'POST') {
 
 <Layout metadata={metadata}>
   <UserRegistrationWidget
-    title="Registrieren"
+    title="Anmelden"
     subtitle="Bitte fülle die Felder aus"
-    tagline="Schnelle Registrierung"
-    button={{ text: 'Registrieren' }}
+    tagline=""
+    button={{ text: 'Jetzt anmelden' }}
     inputs={inputs}
     errors={errors}
     disclaimer={{
       label: 'Mit dem Absenden akzeptierst du unsere Datenschutzerklärung.',
     }}
-  />
-
-  <Button title="Schon ein Konto" ; tagline="jetzt Anmelden"
-  
-  callToAction={{
-    target: '_self',
-    text: 'Anmelden',
-    href: '../login',
-    icon: 'tabler:chevron-right',
-  }}
-
   />
 
   <Features2

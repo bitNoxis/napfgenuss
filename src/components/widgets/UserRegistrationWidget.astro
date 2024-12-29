@@ -1,0 +1,52 @@
+---
+import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
+import Headline from '~/components/ui/Headline.astro';
+import FormContainer from '~/components/widgets/Contact.astro'; // your existing form widget
+
+// We’ll receive props or slots from the outside (for customization)
+const {
+  id = 'registration-widget',
+  title = 'Registrieren',
+  subtitle = 'Bitte fülle die Felder aus',
+  tagline = '',
+  isDark = false,
+  classes = {},
+  bg = '',
+  // The following typically come from how your FormContainer is set up:
+  inputs = [
+    { type: 'text', name: 'firstName', label: 'Vorname', required: true },
+    { type: 'text', name: 'lastName', label: 'Nachname', required: true },
+    { type: 'email', name: 'email', label: 'E-Mail Adresse', required: true },
+    { type: 'tel', name: 'phone', label: 'Telefonnummer', required: true },
+    { type: 'password', name: 'password', label: 'Passwort', required: true },
+    { type: 'password', name: 'confirmPassword', label: 'Passwort erneut eingeben', required: true },
+  ],
+  errors,
+  textarea,
+  disclaimer,
+  button,
+  description,
+} = Astro.props;
+
+const FORM_ID = 'user-registration-form';
+---
+
+<WidgetWrapper
+  id={id}
+  isDark={isDark}
+  containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`}
+  bg={bg}
+>
+  <Headline title={title} subtitle={subtitle} tagline={tagline} />
+
+    <FormContainer
+      id={FORM_ID}
+      inputs={inputs}
+      errors={errors}
+      textarea={textarea}
+      disclaimer={disclaimer}
+      button={button}
+      description={description}
+    />
+  </div>
+</WidgetWrapper>

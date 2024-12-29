@@ -3,121 +3,70 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 export const headerData = {
   links: [
     {
-      text: 'Homes',
+      text: "So funktioniert's",
       links: [
         {
-          text: 'SaaS',
-          href: getPermalink('/homes/saas'),
-        },
-        {
-          text: 'Startup',
-          href: getPermalink('/homes/startup'),
-        },
-        {
-          text: 'Mobile App',
-          href: getPermalink('/homes/mobile-app'),
-        },
-        {
-          text: 'Personal',
-          href: getPermalink('/homes/personal'),
+          text: 'Unsere Idee',
+          href: getPermalink('/services'),
         },
       ],
     },
     {
-      text: 'Pages',
+      text: 'Über uns',
       links: [
         {
-          text: 'Services',
-          href: getPermalink('/services'),
-        },
-        {
-          text: 'Pricing',
-          href: getPermalink('/pricing'),
-        },
-        {
-          text: 'About us',
+          text: 'Das sind wir',
           href: getPermalink('/about'),
         },
         {
-          text: 'Contact',
+          text: 'Kontakt',
           href: getPermalink('/contact'),
         },
         {
-          text: 'Terms',
+          text: 'Geschäftsbedingungen',
           href: getPermalink('/terms'),
         },
         {
-          text: 'Privacy policy',
+          text: 'Datenschutz',
           href: getPermalink('/privacy'),
         },
       ],
     },
     {
-      text: 'Landing',
+      text: 'Unser Futter',
       links: [
         {
-          text: 'Lead Generation',
-          href: getPermalink('/landing/lead-generation'),
-        },
-        {
-          text: 'Long-form Sales',
-          href: getPermalink('/landing/sales'),
-        },
-        {
-          text: 'Click-Through',
-          href: getPermalink('/landing/click-through'),
-        },
-        {
-          text: 'Product Details (or Services)',
-          href: getPermalink('/landing/product'),
-        },
-        {
-          text: 'Coming Soon or Pre-Launch',
-          href: getPermalink('/landing/pre-launch'),
-        },
-        {
-          text: 'Subscription',
-          href: getPermalink('/landing/subscription'),
+          text: 'Suchen',
+          href: getPermalink('/search'),
         },
       ],
     },
+
     {
       text: 'Blog',
       links: [
         {
-          text: 'Blog List',
+          text: 'Alle Artikel',
           href: getBlogPermalink(),
         },
         {
-          text: 'Article',
+          text: 'Artikel XY',
           href: getPermalink('get-started-website-with-astro-tailwind-css', 'post'),
         },
         {
-          text: 'Article (with MDX)',
-          href: getPermalink('markdown-elements-demo-post', 'post'),
-        },
-        {
-          text: 'Category Page',
+          text: 'Kategorien',
           href: getPermalink('tutorials', 'category'),
-        },
-        {
-          text: 'Tag Page',
-          href: getPermalink('astro', 'tag'),
         },
       ],
     },
-    {
-      text: 'Widgets',
-      href: '#',
-    },
   ],
-  actions: [{ text: 'Download', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
+  actions: [{ variant: 'primary', target: '_self', text: 'Anmelden', href: '/contact'}]
 };
 
 export const footerData = {
   links: [
     {
-      title: 'Product',
+      title: 'Alle Seiten',
       links: [
         { text: 'Features', href: '#' },
         { text: 'Security', href: '#' },
@@ -139,7 +88,7 @@ export const footerData = {
       ],
     },
     {
-      title: 'Support',
+      title: 'Hilfe',
       links: [
         { text: 'Docs', href: '#' },
         { text: 'Community Forum', href: '#' },
@@ -149,7 +98,7 @@ export const footerData = {
       ],
     },
     {
-      title: 'Company',
+      title: 'Unternehmen',
       links: [
         { text: 'About', href: '#' },
         { text: 'Blog', href: '#' },
