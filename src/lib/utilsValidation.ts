@@ -24,3 +24,16 @@ export async function isRegistered(firstName, lastName, email) {
       throw error;
     }
   }
+
+  export async function EmailisRegistered( email ) {
+    try {
+      const query = { email };
+      const users = await readDocuments('users', query);
+  
+      // Return true if the user is already registered
+      return users.length > 0;
+    } catch (error) {
+      console.error('Error checking registration:', error);
+      throw error;
+    }
+  }

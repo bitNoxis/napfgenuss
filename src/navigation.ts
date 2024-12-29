@@ -57,10 +57,6 @@ export const headerData = {
           text: 'Kategorien',
           href: getPermalink('tutorials', 'category'),
         },
-        // {
-        //   text: 'Tag Page',
-        //   href: getPermalink('astro', 'tag'),
-        // },
       ],
     },
   ],
@@ -70,7 +66,7 @@ export const headerData = {
 export const footerData = {
   links: [
     {
-      title: 'Product',
+      title: 'Alle Seiten',
       links: [
         { text: 'Features', href: '#' },
         { text: 'Security', href: '#' },
@@ -92,7 +88,7 @@ export const footerData = {
       ],
     },
     {
-      title: 'Support',
+      title: 'Hilfe',
       links: [
         { text: 'Docs', href: '#' },
         { text: 'Community Forum', href: '#' },
@@ -102,7 +98,7 @@ export const footerData = {
       ],
     },
     {
-      title: 'Company',
+      title: 'Unternehmen',
       links: [
         { text: 'About', href: '#' },
         { text: 'Blog', href: '#' },
