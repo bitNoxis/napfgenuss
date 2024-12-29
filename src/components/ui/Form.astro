@@ -2,32 +2,32 @@
 import type { Form as Props } from '~/types';
 import Button from '~/components/ui/Button.astro';
 
-const { inputs, textarea, disclaimer, button = 'Contact us', description = '' } = Astro.props;
+const { inputs, errors, textarea, disclaimer, button, description = '' } = Astro.props;
 ---
 
-<form>
+<form method="POST">
   {
     inputs &&
-      inputs.map(
-        ({ type = 'text', name, label = '', autocomplete = 'on', placeholder = '' }) =>
-          name && (
-            <div class="mb-6">
-              {label && (
-                <label for={name} class="block text-sm font-medium">
-                  {label}
-                </label>
-              )}
-              <input
-                type={type}
-                name={name}
-                id={name}
-                autocomplete={autocomplete}
-                placeholder={placeholder}
-                class="py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
-              />
-            </div>
-          )
-      )
+      inputs.map(({ type = 'text', name, label = '', autocomplete = 'on', placeholder, value, required }) => (
+        <div class="mb-6">
+          {label && (
+            <label for={name} class="block text-sm font-medium">
+              {label}
+            </label>
+          )}
+          <input
+            type={type}
+            name={name}
+            id={name}
+            autocomplete={autocomplete}
+            placeholder={placeholder}
+            value={value}
+            required={required}
+            class="py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+          />
+          {Object.hasOwn(errors, name) && <div style="color: red;">{errors[name]}</div>}
+        </div>
+      ))
   }
 
   {
@@ -71,7 +71,7 @@ const { inputs, textarea, disclaimer, button = 'Contact us', description = '' } 
     button && (
       <div class="mt-10 grid">
         <Button variant="primary" type="submit">
-          {button}
+          {button.text}
         </Button>
       </div>
     )

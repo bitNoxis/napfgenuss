@@ -3,51 +3,114 @@ import Layout from '~/layouts/PageLayout.astro';
 import HeroText from '~/components/widgets/HeroText.astro';
 import ContactUs from '~/components/widgets/Contact.astro';
 import Features2 from '~/components/widgets/Features2.astro';
+import UserRegistrationWidget from '~/components/widgets/UserRegistrationWidget.astro';
+
+import { createDocument } from '../lib/utilsDatabase';
+import { isValidPhone, isValidEmail, isRegistered } from '../lib/utilsValidation';
+import type { Input } from '~/types';
 
 const metadata = {
-  title: 'Contact',
+  title: 'Kontakt',
 };
+
+const errors = { firstName: '', lastName: '', email: '', phone: '', password: '', registered: '' };
+const inputs: Input[] = [
+  { type: 'text', name: 'firstName', label: 'Vorname', required: true },
+  { type: 'text', name: 'lastName', label: 'Nachname', required: true },
+  { type: 'email', name: 'email', label: 'E-Mail Adresse', required: true },
+  { type: 'tel', name: 'phone', label: 'Telefonnummer', required: true },
+  { type: 'password', name: 'password', label: 'Passwort', required: true },
+  { type: 'password', name: 'confirmPassword', label: 'Passwort erneut eingeben', required: true },
+];
+
+if (Astro.request.method === 'POST') {
+  console.log('Post request');
+
+  try {
+    const data = await Astro.request.formData();
+    const firstName = data.get('firstName');
+    const lastName = data.get('lastName');
+    const email = data.get('email');
+    const phone = data.get('phone');
+    const password = data.get('password');
+    const confirmPassword = data.get('confirmPassword');
+
+    const userExists = await isRegistered(firstName, lastName, email);
+
+    // Validation checks
+    if (typeof firstName !== 'string' || firstName.length < 1) {
+      errors.firstName += 'Bitte trage einen korrekten Vornamen ein. ';
+    }
+
+    if (typeof lastName !== 'string' || lastName.length < 1) {
+      errors.lastName += 'Bitte trage einen Nachnamen ein. ';
+    }
+
+    if (typeof email !== 'string' || !isValidEmail(email)) {
+      errors.email += 'Inkorrekte E-Mail Adresse ';
+    } else if (userExists) {
+      errors.registered += 'Nutzer schon registriert';
+      console.log('index')
+      return Astro.redirect('/index');
+    }
+
+    if (typeof phone !== 'string' || !isValidPhone(phone)) {
+      errors.phone += 'Telefonnummer ist nicht korrekt. ';
+    }
+
+    if (typeof password !== 'string' || password.length < 6) {
+      errors.password += 'Passwort muss mindestens sechs Zeichen haben. ';
+    }
+
+    if (password !== confirmPassword) {
+      errors.password += 'Abgleich fehlgeschlagen. ';
+    }
+
+
+    const hasErrors = Object.values(errors).some((msg) => msg);
+    if (hasErrors) {
+      // preserve already filled form fields when errors occured
+      inputs
+        .filter((input) => input.name != 'password' && input.name != 'confirmPassword')
+        .forEach((input) => (input.value = data.get(input.name)?.toString()));
+    } else {
+      await createDocument('users', {
+        firstName,
+        lastName,
+        email,
+        phone,
+        password,
+      });
+      return Astro.redirect('/index');
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
+}
 ---
 
 <Layout metadata={metadata}>
-  <!-- HeroText Widget ******************* -->
-
-  <HeroText tagline="Contact" title="Let's Connect!" />
-
-  <ContactUs
-    id="form"
-    title="Drop us a message today!"
-    subtitle="For quicker answers, explore our FAQs section. You may find the solution you're looking  for right there! If not, our support team is delighted to help you."
-    inputs={[
-      {
-        type: 'text',
-        name: 'name',
-        label: 'Name',
-      },
-      {
-        type: 'email',
-        name: 'email',
-        label: 'Email',
-      },
-    ]}
-    textarea={{
-      label: 'Message',
-    }}
+  <UserRegistrationWidget
+    title="Registrieren"
+    subtitle="Bitte fülle die Felder aus"
+    tagline="Schnelle Registrierung"
+    button={{ text: 'Registrieren' }}
+    inputs={inputs}
+    errors={errors}
     disclaimer={{
-      label:
-        'By submitting this contact form, you acknowledge and agree to the collection of your personal information.',
+      label: 'Mit dem Absenden akzeptierst du unsere Datenschutzerklärung.',
     }}
-    description="Our support team typically responds within 24 business hours."
   />
-
-  <!-- Features2 Widget ************** -->
 
   <Features2
     title="We are here to help!"
     items={[
       {
         title: 'General support',
-        description: `Chat with us for inquiries related to account management, website navigation, payment issues, accessing purchased templates or general questions about the website's functionality.`,
+        description:
+          "Chat with us for inquiries related to account management, website navigation, payment issues, accessing purchased templates or general questions about the website's functionality.",
       },
       {
         title: 'Contact sales',
