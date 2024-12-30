@@ -36,8 +36,8 @@ export const headerData = {
       text: 'Unser Futter',
       links: [
         {
-          text: 'Suchen',
-          href: getPermalink('/search'),
+          text: 'Produkte',
+          href: getPermalink('/indexProducts'),
         },
       ],
     },

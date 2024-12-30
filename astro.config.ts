@@ -11,11 +11,15 @@ import icon from 'astro-icon';
 import compress from 'astro-compress';
 import type { AstroIntegration } from 'astro';
 
-import node from '@astrojs/node';
+// import node from '@astrojs/node';
 
 import astrowind from './vendor/integration';
 
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin, lazyImagesRehypePlugin } from './src/utils/frontmatter';
+
+import vercel from '@astrojs/vercel/serverless';
+
+import react from '@astrojs/react';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -26,7 +30,7 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 export default defineConfig({
   // site: 'https://URL',
   output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel({}),
   integrations: [tailwind({
     applyBaseStyles: false,
   }), sitemap(), mdx(), icon({
@@ -61,7 +65,7 @@ export default defineConfig({
     Logger: 1,
   }), astrowind({
     config: './src/config.yaml',
-  })],
+  }), react()],
 
   image: {
     domains: ['cdn.pixabay.com'],
