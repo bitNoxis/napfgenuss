@@ -12,7 +12,7 @@ import {
 type Props = ImageProps;
 type ImageType = {
   src: string;
-  attributes: HTMLAttributes<'img'>;
+  attributes: string | HTMLAttributes<'img'>;
 };
 
 const props = Astro.props;
