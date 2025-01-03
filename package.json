@@ -42,6 +42,7 @@
     "lodash.merge": "^4.6.2",
     "mongodb": "^6.12.0",
     "react": "^19.0.0",
+    "react-compiler-runtime": "^19.0.0-beta-55955c9-20241229",
     "react-dom": "^19.0.0",
     "react-player": "^2.13.0",
     "svelte": "^5.15.0",
