@@ -29,7 +29,7 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 
 export default defineConfig({
   // site: 'https://URL',
-  output: 'server',
+  output: 'static',
   adapter: vercel({}),
   integrations: [tailwind({
     applyBaseStyles: false,
