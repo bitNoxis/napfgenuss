@@ -26,7 +26,6 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 export default defineConfig({
   // site: 'https://URL',
   output: 'static',
-  adapter: node({ mode: 'standalone' }),
   integrations: [tailwind({
     applyBaseStyles: false,
   }), sitemap(), mdx(), icon({
