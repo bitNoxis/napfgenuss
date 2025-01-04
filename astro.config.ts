@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { defineConfig } from 'astro/config';
-
+import netlify from '@astrojs/netlify';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
@@ -25,7 +25,8 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 
 export default defineConfig({
   // site: 'https://URL',
-  output: 'static',
+  output: 'server',
+  adapter: netlify(),
   integrations: [tailwind({
     applyBaseStyles: false,
   }), sitemap(), mdx(), icon({
