@@ -1,0 +1,48 @@
+---
+import Hero from '~/components/widgets/Hero.astro';
+import Layout from '~/layouts/PageLayout.astro';
+import Header from '~/components/widgets/Header.astro';
+import Image from '~/components/common/Image.astro'
+
+import { headerData } from '~/navigation';
+
+import { readDocuments } from '~/lib/utilsDatabase';
+
+const ProductVariable = { 
+                id:"",
+                name:"",
+                url:"",
+                price:{},
+                description:"",
+                image:""}
+
+const metadata = {
+  title: 'Produkte',
+};
+---
+<Layout metadata={metadata}>
+  <Fragment slot="header">
+    <Header
+      {...headerData}
+      actions={[
+        {
+          variant: 'primary',
+          text: 'Anmelden',
+          href: '#',
+        },
+      ]}
+      isSticky
+    />
+  </Fragment>
+
+
+  <!-- Hero Image ******************* -->
+
+  <Image
+    src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
+    alt='Picture',
+    layout='cover',
+    height='600'
+  />
+ 
+  
