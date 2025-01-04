@@ -1,33 +1,22 @@
 [build]
-# Ordner für statische Inhalte
 publish = "dist"
-# Befehl, um das Projekt zu bauen
 command = "npm run build"
-# Ordner für Serverless Functions
 functions = "netlify/functions"
 
-[build.processing.html]
-# Pretty URLs deaktivieren (optional, je nach Bedarf)
-pretty_urls = false
-
 [functions]
-# Node.js-Bundler für die Serverless-Funktionen (schnell und kompatibel)
 node_bundler = "esbuild"
 
 [[redirects]]
-# Alle Anfragen an die SSR-Funktion weiterleiten
 from = "/*"
 to = "/.netlify/functions/___netlify-handler"
 status = 200
 
 [[headers]]
-# Caching für Astro generierte Dateien
 for = "/_astro/*"
 [headers.values]
 Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-# Caching für statische Assets
 for = "/assets/*"
 [headers.values]
 Cache-Control = "public, max-age=31536000, immutable"
