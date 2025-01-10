@@ -1,0 +1,70 @@
+---
+import Examples from './Examples.astro'
+
+const LunaDayPrice = 1.12;
+const BaluDayPrice = 0.85;
+const FelixDayPrice = 1.29;
+const MaxDayPrice = 1.29;
+
+function PriceCalculation(price, period) {
+  switch (period) {
+    case 'Preis pro Tag':
+      return price;
+    case 'Preis pro Monat':
+      return (price * 30).toFixed(2); // Monthly price calculation
+    case 'Preis pro Kilogram':
+      return (price / 2000).toFixed(2); // Kilogram-based price
+    default:
+      return price;
+  }
+}
+let period = 'Preis pro Monat';
+
+const {} = Astro.props;
+
+---
+
+<Examples
+    buttons={[
+    { text: 'Preis pro Tag', period: 'Preis pro Tag' },
+    { text: 'Preis pro Monat', period: 'Preis pro Monat' },
+    { text: 'Preis pro Kilogram', period: 'Preis pro Kilogram' },
+    ]};
+
+    title="Premium-Qualität muss nicht teuer sein"
+    subtitle="Individuelle Ernährung für deinen Liebling – ohne Kompromisse beim Preis. Entdecke, wie erschwinglich individualisiertes Futter sein kann."
+    examples={[
+      {
+        petname: 'Luna',
+        subtitle: 'Grundlegende Verpflegung',
+        price: PriceCalculation(LunaDayPrice, period),
+        period: period,
+        image:'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        alt: 'Luna Bild',
+      },
+      {
+        petname: 'Balu',
+        subtitle: 'Gute Verpflegung',
+        price: PriceCalculation(BaluDayPrice, period),
+        period: period,
+        image:'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        alt: 'Balu Bild',
+      },
+      {
+        petname: 'Felix',
+        subtitle: 'Optimale Verpflegung',
+        price: PriceCalculation(FelixDayPrice, period),
+        period: period,
+        image:'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        alt: 'Felix Bild',
+      },
+      {
+        petname: 'Max',
+        subtitle: 'Optimale Verpflegung',
+        price: PriceCalculation(MaxDayPrice, period),
+        period: period,
+        image:'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        alt: 'Max Bild',
+      },
+    ]}
+/>

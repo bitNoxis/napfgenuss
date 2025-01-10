@@ -132,6 +132,13 @@ export interface Stat {
   icon?: string;
 }
 
+export interface Kibbles {
+  img?: string;
+  title?: string;
+  icon?: string;
+  kibble?: string | string | link; 
+}
+
 export interface Item {
   title?: string;
   description?: string;
@@ -145,6 +152,21 @@ export interface Price {
   title?: string;
   subtitle?: string;
   description?: string;
+  price?: number | string;
+  period?: string;
+  items?: Array<Item>;
+  callToAction?: CallToAction;
+  hasRibbon?: boolean;
+  ribbonTitle?: string;
+}
+
+export interface Examples {
+  buttons?: Array<CallToAction>;
+  petname?: string;
+  subtitle?: string;
+  description?: string;
+  image?: string;
+  alt?: string;
   price?: number | string;
   period?: string;
   items?: Array<Item>;
@@ -189,6 +211,8 @@ export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
   icon?: string;
   classes?: Record<string, string>;
   type?: 'button' | 'submit' | 'reset';
+  onClick?: (event: MouseEvent) => void;
+  period?: string;
 }
 
 export interface ItemGrid {
@@ -226,12 +250,20 @@ export interface Team extends Omit<Headline, 'classes'>, Widget {
   team?: Array<TeamMember>;
 }
 
+export interface Kibbles extends Omit<Headline, 'classes'>, Widget {
+  kibbles?: Array<Kibbles>;
+}
+
 export interface Stats extends Omit<Headline, 'classes'>, Widget {
   stats?: Array<Stat>;
 }
 
 export interface Pricing extends Omit<Headline, 'classes'>, Widget {
   prices?: Array<Price>;
+}
+
+export interface Examples extends Omit<Headline, 'classes'>, Widget {
+  examples?: Array<Examples>;
 }
 
 export interface Testimonials extends Omit<Headline, 'classes'>, Widget {
