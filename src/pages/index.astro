@@ -7,6 +7,8 @@ import Steps2 from '~/components/widgets/Steps2.astro';
 import Content from '~/components/widgets/Content.astro';
 import Prices from '~/components/widgets/Pricing.astro';
 
+import DynamicExamples from '~/components/widgets/DynamicExamples.astro';
+
 import { headerData } from '~/navigation';
 import FAQs from '~/components/widgets/FAQs.astro';
 import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
@@ -22,7 +24,7 @@ const metadata = {
   <Hero2
     tagline="Dogly's Mission"
     actions={[
-      { variant: 'primary', target: '_self', text: 'Jetzt anmelden', href: '/contact'},
+      { variant: 'primary', target: '_self', text: 'Jetzt anmelden', href: '/contact' },
       { target: '_self', text: 'Mehr erfahren', href: '/about' },
     ]}
     image={{
@@ -38,9 +40,10 @@ const metadata = {
 
     <Fragment slot="subtitle">
       <span class="hidden sm:inline">
-        Ihr Hund ist einzigartig - genau wie sein <span class="font-semibold">Futter</span> sein sollte. </span
-      >
-      Bei Dogly bieten wir eine vollständig personalisierte Ernährung, die perfekt auf die Bedürfnisse Ihres Vierbeiners abgestimmt ist.
+        Ihr Hund ist einzigartig - genau wie sein <span class="font-semibold">Futter</span> sein sollte.
+      </span>
+      Bei Dogly bieten wir eine vollständig personalisierte Ernährung, die perfekt auf die Bedürfnisse Ihres Vierbeiners
+      abgestimmt ist.
     </Fragment>
   </Hero2>
 
@@ -58,7 +61,8 @@ const metadata = {
       },
       {
         title: 'Vorteile',
-        description: 'Einzigartig gutes Hundefutter, perfekt auf die Bedürfnisse Ihres Hundes. Damit fördern Sie die Gesundheit ihres Hundes, leisten einen wichtigen Beitrag zur Nachhaltigkeit und das alles ohen Mehraufwand für Sie.',
+        description:
+          'Einzigartig gutes Hundefutter, perfekt auf die Bedürfnisse Ihres Hundes. Damit fördern Sie die Gesundheit ihres Hundes, leisten einen wichtigen Beitrag zur Nachhaltigkeit und das alles ohen Mehraufwand für Sie.',
       },
     ]}
     image={{
@@ -138,8 +142,11 @@ const metadata = {
     </Fragment>
   </Content>
 
-  <!-- Pricing Widget ******************* -->
+  <!-- Examples Widget ******************* -->
+  <DynamicExamples/>
+  
 
+  <!-- Pricing Widget ******************* -->
   <Prices
     title="Unsere Preise"
     subtitle="Zahle nur für das, was du brauchst"
@@ -147,8 +154,8 @@ const metadata = {
       {
         title: 'Basis',
         subtitle: 'Grundlegende Verpflegung',
-        price: 29,
-        period: 'pro Monat',
+        price: 5,
+        period: 'pro Kilogram',
         items: [
           {
             description: 'Einmalige Konfiguration',
@@ -170,7 +177,7 @@ const metadata = {
         title: 'Standard',
         subtitle: 'Gute Verpflegung',
         price: 69,
-        period: 'pro Monat',
+        period: 'pro Kilogram',
         items: [
           {
             description: 'Futteranpassung alle 8 Wochen',

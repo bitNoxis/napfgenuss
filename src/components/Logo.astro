@@ -1,9 +1,27 @@
 ---
 import { SITE } from 'astrowind:config';
+import CustomLogo from './icons/CustomLogo.astro';
+
+const { color } = Astro.props;
 ---
 
 <span
-  class="self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold text-gray-900 whitespace-nowrap dark:text-white"
+  class="flex flex-box gap-4 self-center align-middle ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold text-gray-900 whitespace-nowrap dark:text-white"
 >
-  🐕 HUND
+<CustomLogo
+  width="35"
+  height="35"
+  fillColor="none"
+  strokeWidth="25"
+  color={color}
+/>
+
+NapfGenuss
+
 </span>
+
+<style define:vars={{ color }}>
+  span {
+    color:var(--color)
+  }
+</style>

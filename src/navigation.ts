@@ -3,33 +3,33 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 export const headerData = {
   links: [
     {
-      text: "So funktioniert's",
+      text: '',
       links: [
         {
-          text: 'Unsere Idee',
+          text: "So funktioniert's",
           href: getPermalink('/services'),
         },
       ],
     },
     {
-      text: 'Über uns',
+      text: '',
       links: [
         {
           text: 'Das sind wir',
           href: getPermalink('/about'),
         },
-        {
-          text: 'Kontakt',
-          href: getPermalink('/contact'),
-        },
-        {
-          text: 'Geschäftsbedingungen',
-          href: getPermalink('/terms'),
-        },
-        {
-          text: 'Datenschutz',
-          href: getPermalink('/privacy'),
-        },
+        // {
+        //   text: 'Kontakt',
+        //   href: getPermalink('/contact'),
+        // },
+        // {
+        //   text: 'Geschäftsbedingungen',
+        //   href: getPermalink('/terms'),
+        // },
+        // {
+        //   text: 'Datenschutz',
+        //   href: getPermalink('/privacy'),
+        // },
       ],
     },
     {
@@ -38,6 +38,10 @@ export const headerData = {
         {
           text: 'Suchen',
           href: getPermalink('/search'),
+        },
+        {
+          text: 'Produkte',
+          href: getPermalink('/products'),
         },
       ],
     },
