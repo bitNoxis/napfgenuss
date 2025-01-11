@@ -1,6 +1,10 @@
 ---
-import Examples from './Examples.astro'
+import Examples from './Examples.astro';
+import WidgetWrapper from '../ui/WidgetWrapper.astro';
+import Headline from '../ui/Headline.astro';
+import Button from '../ui/Button.astro';
 
+// Prices for calculation
 const LunaDayPrice = 1.12;
 const BaluDayPrice = 0.85;
 const FelixDayPrice = 1.29;
@@ -18,53 +22,103 @@ function PriceCalculation(price, period) {
       return price;
   }
 }
-let period = 'Preis pro Monat';
 
-const {} = Astro.props;
+var currentPeriod = 'Preis pro Monat';
 
+function UpdatePeriod(text) {
+      text = currentPeriod;
+    }
+
+const {
+  title = 'Premium-Qualität muss nicht teuer sein',
+  subtitle = 'Individuelle Ernährung für deinen Liebling – ohne Kompromisse beim Preis. Entdecke, wie erschwinglich individualisiertes Futter sein kann.',
+  tagline = '',
+  buttons = [
+    { text: 'Preis pro Tag', period: 'Preis pro Tag', id: 'Preis pro Tag' },
+    { text: 'Preis pro Monat', period: 'Preis pro Monat', id: 'Preis pro Monat' },
+    { text: 'Preis pro Kilogram', period: 'Preis pro Kilogram', id: 'Preis pro Kilogram' },
+  ],
+  id,
+  isDark = false,
+  classes = {},
+  bg = await Astro.slots.render('bg'),
+} = Astro.props;
 ---
 
-<Examples
-    buttons={[
-    { text: 'Preis pro Tag', period: 'Preis pro Tag' },
-    { text: 'Preis pro Monat', period: 'Preis pro Monat' },
-    { text: 'Preis pro Kilogram', period: 'Preis pro Kilogram' },
-    ]};
+<WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
+  <Headline title={title} subtitle={subtitle} tagline={tagline} />
+  <div class="flex items-stretch justify-center mb-10">
+    <div class="grid grid-cols-3 gap-4 dark:text-white sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+      {buttons.map(({ text, id }) => (
+        <div class="col-span-4 mx-auto flex w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+          <Button
+            class="w-full"
+            variant="secondary"
+            text={text}
+            type="button"
+            id={id}
+            data-period={text}
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+  <div id="examples-container">
+    <Examples
+      examples={[
+        {
+          petname: 'Luna',
+          subtitle: 'Labradoodle',
+          tagline: 'Sehr aktiv',
+          price: PriceCalculation(LunaDayPrice, currentPeriod),
+          period: currentPeriod,
+          image:
+            'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
+          alt: 'Luna Bild',
+        },
+        {
+          petname: 'Balu',
+          subtitle: 'Australian Shepherd',
+          tagline: 'im Wachstum',
+          price: PriceCalculation(BaluDayPrice, currentPeriod),
+          period: currentPeriod,
+          image:
+            'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
+          alt: 'Balu Bild',
+        },
+        {
+          petname: 'Otto',
+          subtitle: 'Rauhaar-Dackel',
+          tagline: 'Gelenkprobleme',
+          price: PriceCalculation(FelixDayPrice, currentPeriod),
+          period: currentPeriod,
+          image:
+            'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
+          alt: 'Felix Bild',
+        },
+        {
+          petname: 'Fiete',
+          subtitle: 'Golden Retriever',
+          tagline: 'Senior',
+          price: PriceCalculation(MaxDayPrice, currentPeriod),
+          period: currentPeriod,
+          image:
+            'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
+          alt: 'Max Bild',
+        },
+      ]}
+    />
+  </div>
+</WidgetWrapper>
 
-    title="Premium-Qualität muss nicht teuer sein"
-    subtitle="Individuelle Ernährung für deinen Liebling – ohne Kompromisse beim Preis. Entdecke, wie erschwinglich individualisiertes Futter sein kann."
-    examples={[
-      {
-        petname: 'Luna',
-        subtitle: 'Grundlegende Verpflegung',
-        price: PriceCalculation(LunaDayPrice, period),
-        period: period,
-        image:'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        alt: 'Luna Bild',
-      },
-      {
-        petname: 'Balu',
-        subtitle: 'Gute Verpflegung',
-        price: PriceCalculation(BaluDayPrice, period),
-        period: period,
-        image:'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        alt: 'Balu Bild',
-      },
-      {
-        petname: 'Felix',
-        subtitle: 'Optimale Verpflegung',
-        price: PriceCalculation(FelixDayPrice, period),
-        period: period,
-        image:'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        alt: 'Felix Bild',
-      },
-      {
-        petname: 'Max',
-        subtitle: 'Optimale Verpflegung',
-        price: PriceCalculation(MaxDayPrice, period),
-        period: period,
-        image:'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        alt: 'Max Bild',
-      },
-    ]}
-/>
+<script>
+
+    const buttonsQuery = document.querySelectorAll('button');
+  
+    buttonsQuery.forEach((button) => {
+      button.addEventListener('click', () => {
+        console.log(button.id);
+        UpdatePeriod(button.innerText);
+      });
+    });
+  </script>
