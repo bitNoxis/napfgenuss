@@ -164,6 +164,7 @@ export interface Examples {
   buttons?: Array<CallToAction>;
   petname?: string;
   subtitle?: string;
+  tagline?: string;
   description?: string;
   image?: string;
   alt?: string;
@@ -211,7 +212,7 @@ export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
   icon?: string;
   classes?: Record<string, string>;
   type?: 'button' | 'submit' | 'reset';
-  onClick?: (event: MouseEvent) => void;
+  id?: string;
   period?: string;
 }
 
