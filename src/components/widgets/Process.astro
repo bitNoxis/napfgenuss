@@ -18,11 +18,12 @@ const {
 <WidgetWrapper isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
   <Headline title={title} subtitle={subtitle} />
   <div class="flex items-stretch justify-center mb-10">
-    <div class="p-2 grid grid-cols-3 gap-4 dark:text-white sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+    <div class="p-2 grid grid-cols-1 gap-4 dark:text-white sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
       {
         process &&
-          process.map(({ subtitle, tagline, src, alt }) => (
-            <div class="flex-col items-stretch justify-items-center">
+          process.map(({ subtitle, tagline, src, alt, counter }) => (
+              <div class="flex-col items-stretch justify-items-center">
+                <div class="justify-center relative bg-primary text-center w-10 h-10 rounded-full top-5 rounded-full"><div class="relative top-1 text-center text-xl font-semibold align-middle">{counter}</div></div>
                 <Image 
                 width={300}
                 height={300}
