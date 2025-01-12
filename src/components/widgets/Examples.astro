@@ -15,7 +15,7 @@ const {
     <div class="grid grid-cols-4 gap-4 dark:text-white sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
       {
         examples &&
-          examples.map(({ petname, subtitle, tagline, price, period, image, alt, hasRibbon = false, ribbonTitle }) => {
+          examples.map(({ petname, subtitle, tagline, price, period, image, alt }) => {
             return (
               <div class="col-span-3 mx-auto flex w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
                 {price && period && (
@@ -48,9 +48,9 @@ const {
                       <div class="my-8">
                         <div class="flex align-baseline items-center justify-center text-center mb-1">
                           <span class="text-3xl">€</span>
-                          <span class="text-4xl font-extrabold">{price}</span>
+                          <span data-price={price} class="example-price text-4xl font-extrabold">{price}</span>
                         </div>
-                        <span class="text-base leading-6 lowercase text-gray-600 dark:text-slate-400">{period}</span>
+                        <span class="example-period text-base leading-6 lowercase text-gray-600 dark:text-slate-400">{period}</span>
                       </div>
                     </div>
                   </div>
