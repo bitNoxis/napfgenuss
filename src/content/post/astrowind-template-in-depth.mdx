@@ -140,13 +140,6 @@ Now, we get to the techniques used in _AstroWind_, we'll use the _pages/index.as
 You'll note that the index file imports a lot of components, each one roughly analagous to a panel in the index page. Each of these components, in turn, is instantiated sequentially throughout the page. But, you'll notice that some of them use this kind of construct (we'll use the last section, _CallToAction_, as it is most illustrative of the technique):
 
 ```astro
-<CallToAction
-  callToAction={{
-    text: 'Get template',
-    href: 'https://github.com/onwidget/astrowind',
-    icon: 'tabler:download',
-  }}
->
   <Fragment slot="title">
     Astro + <br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
   </Fragment>

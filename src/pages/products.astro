@@ -1,54 +1,310 @@
 ---
-import Button from '~/components/ui/Button.astro';
-
 import PageLayout from '~/layouts/PageLayout.astro';
 
 const metadata = {
-  title: 'Produkte',
+  title: 'Hundefutter Konfigurator',
 };
+
+const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Retriever'];
 ---
+
 <PageLayout metadata={metadata}>
-<!-- <header>
-  <script
-    src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-    crossorigin="anonymous"></script>
+  <div class="max-w-4xl mx-auto p-4 bg-page">
+    <form id="dog-configurator" class="space-y-8">
+      <div class="step-1">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie heißt dein Hund?</h2>
+        <input
+          type="text"
+          name="dogName"
+          class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+          required
+          minlength="2"
+          placeholder="Name eingeben"
+        />
+      </div>
 
-  <script
-    src="https://cdn.snipcart.com/scripts/2.0/snipcart.js"
-    data-api-key="MzNmMzc4MWMtMjZiZi00ZDBhLWI2NTAtMTllZmU1YjEwNDFhNjM4NzA0NTQ4MTEyNDgzMzE2"
-    id="snipcart"></script>
+      <div class="step-2 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wurde <span class="dog-name"></span> kastriert?</h2>
+        <div class="space-y-4">
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="isNeutered" value="yes" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Ja</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="isNeutered" value="no" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Nein</span>
+          </label>
+        </div>
+      </div>
 
-  <link href="https://cdn.snipcart.com/themes/2.0/base/snipcart.min.css" rel="stylesheet" type="text/css" />
-</header>; -->
+      <div class="step-3 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie alt ist <span class="dog-name"></span>?</h2>
+        <div class="flex space-x-4">
+          <div class="flex-1">
+            <input
+              type="number"
+              name="ageYears"
+              min="0"
+              max="25"
+              class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+              required
+              placeholder="Alter in Jahren"
+            />
+          </div>
+          <div class="flex-1">
+            <input
+              type="number"
+              name="ageMonths"
+              min="0"
+              max="11"
+              class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+              placeholder="Monate (optional)"
+            />
+          </div>
+        </div>
+      </div>
 
-<body>
-  <button
-  class="snipcart-add-item"
-  data-item-url="index.astro"
-  data-item-id="astro-print"
-  data-item-price="39.99"
-  data-item-description="A framed print of the Astro logo."
-  data-item-image="/images/Kibble01.png"
-  data-item-name="Astro Print"
-  data-item-custom1-name="Frame color"
-  data-item-custom1-options="Brown|Silver[+10.00]|Gold[+20.00]"
-  data-item-custom2-name="Delivery instructions"
-  data-item-custom2-type="textarea"
-  >
-  Add to cart
-  </button>
-  <a href="#" class="snipcart-checkout">Click here to checkout</a>
-</body>
+      <div class="step-4 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Rasse von <span class="dog-name"></span></h2>
+        <select
+          name="breed"
+          class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+          required
+        >
+          <option value="">Bitte wählen</option>
+          {dogBreeds.map(breed => (
+            <option value={breed}>{breed}</option>
+          ))}
+          <option value="mixed">Mischling</option>
+          <option value="unknown">Nicht bekannt</option>
+        </select>
+      </div>
+
+      <div class="flex justify-between pt-6">
+        <button
+          type="button"
+          id="prevButton"
+          class="btn btn-secondary hidden">
+          Zurück
+        </button>
+        <button
+          type="button"
+          id="nextButton"
+          class="btn btn-primary">
+          Weiter
+        </button>
+      </div>
+    </form>
+
+    <div id="snipcart-container" class="hidden mt-8 space-y-6">
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-heading font-bold mb-4 text-page">Deine Auswahl</h3>
+        <div id="summary" class="text-muted"></div>
+      </div>
+
+      <button
+        class="snipcart-add-item btn btn-primary w-full justify-center"
+        data-item-id="custom-dog-food"
+        data-item-price="39.99"
+        data-item-url="/produkte"
+        data-item-description=""
+        data-item-image=""
+        data-item-name=""
+        data-item-custom1-name="Portiongröße"
+        data-item-custom1-options="Klein|Mittel[+10.00]|Groß[+20.00]"
+      >
+        In den Warenkorb
+      </button>
+    </div>
+  </div>
 </PageLayout>
 
-<!-- <script>
-  window.SnipcartSettings = {
-      publicApiKey: 'MzNmMzc4MWMtMjZiZi00ZDBhLWI2NTAtMTllZmU1YjEwNDFhNjM4NzA0NTQ4MTEyNDgzMzE2',
-      loadStrategy: 'on-user-interaction',
-      modalStyle: 'side',
+<script is:inline>
+  // Globale Konstanten und Datenstrukturen
+  const foodImages = {
+    default: '/images/Kibble01.png',
+    small: '/images/Kibble01-small.png',
+    large: '/images/Kibble01-large.png'
   };
 
-  (()=>{var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`),n=document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`);e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`,i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`,t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl))}})();
-</script> -->
+  const dogData = {
+    name: '',
+    isNeutered: false,
+    age: {
+      years: 0,
+      months: 0
+    },
+    breed: ''
+  };
 
+  // Hauptinitialisierungsfunktion
+  window.initializeDogConfigurator = function() {
+    const form = document.getElementById('dog-configurator');
+    if (!form) return false;
+
+    const nextButton = document.getElementById('nextButton');
+    const prevButton = document.getElementById('prevButton');
+    const snipcartContainer = document.getElementById('snipcart-container');
+    const summaryDiv = document.getElementById('summary');
+
+    if (!nextButton || !prevButton || !snipcartContainer || !summaryDiv) return false;
+
+    // Entferne alte Event Listener durch Klonen
+    const newNextButton = nextButton.cloneNode(true);
+    const newPrevButton = prevButton.cloneNode(true);
+    nextButton.parentNode.replaceChild(newNextButton, nextButton);
+    prevButton.parentNode.replaceChild(newPrevButton, prevButton);
+
+    let currentStep = 1;
+
+    // Event Listeners
+    newNextButton.addEventListener('click', () => {
+      console.log('Next clicked, current step:', currentStep);
+      if (!validateStep()) {
+        return;
+      }
+      if (currentStep < 4) {
+        showStep(currentStep + 1);
+      } else {
+        finishConfiguration();
+      }
+    });
+
+    newPrevButton.addEventListener('click', () => {
+      if (currentStep > 1) {
+        showStep(currentStep - 1);
+      }
+    });
+
+    const nameInput = form.querySelector('[name="dogName"]');
+    if (nameInput) {
+      nameInput.addEventListener('input', updateDogName);
+    }
+
+    function updateDogName() {
+      const nameInput = form.querySelector('[name="dogName"]');
+      const nameSpans = document.querySelectorAll('.dog-name');
+      if (nameInput instanceof HTMLInputElement) {
+        dogData.name = nameInput.value || '';
+        nameSpans.forEach(span => {
+          if (span instanceof HTMLElement) {
+            span.textContent = nameInput.value || '';
+          }
+        });
+      }
+    }
+
+    function showStep(step) {
+      const steps = document.querySelectorAll('[class^="step-"]');
+      steps.forEach(el => el.classList.add('hidden'));
+
+      const nextStep = document.querySelector(`.step-${step}`);
+      if (nextStep) {
+        nextStep.classList.remove('hidden');
+      }
+
+      newPrevButton.classList.toggle('hidden', step === 1);
+      newNextButton.textContent = step === 4 ? 'Fertig' : 'Weiter';
+      currentStep = step;
+    }
+
+    function validateStep() {
+      const currentStepEl = document.querySelector(`.step-${currentStep}`);
+      if (!currentStepEl) return false;
+
+      const inputs = currentStepEl.querySelectorAll('input, select');
+      let isValid = true;
+
+      currentStepEl.querySelectorAll('.error-message').forEach(msg => msg.remove());
+
+      inputs.forEach(input => {
+        if (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+          if (!input.checkValidity()) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = input.validationMessage;
+            input.parentElement?.appendChild(err);
+          }
+        }
+      });
+
+      return isValid;
+    }
+
+    function finishConfiguration() {
+      const formData = new FormData(form);
+      dogData.name = formData.get('dogName')?.toString() || '';
+      dogData.isNeutered = formData.get('isNeutered') === 'yes';
+      dogData.age.years = parseInt(formData.get('ageYears')?.toString() || '0');
+      dogData.age.months = parseInt(formData.get('ageMonths')?.toString() || '0');
+      dogData.breed = formData.get('breed')?.toString() || '';
+
+      let imageUrl = foodImages.default;
+      if (['Deutscher Schäferhund', 'Rottweiler'].includes(dogData.breed)) {
+        imageUrl = foodImages.large;
+      } else if (dogData.breed === 'Dackel') {
+        imageUrl = foodImages.small;
+      }
+
+      const ageSummary = dogData.age.months
+        ? `${dogData.age.years} Jahre und ${dogData.age.months} Monate`
+        : `${dogData.age.years} Jahre`;
+
+      summaryDiv.innerHTML = `
+      <p class="mb-2">Name: ${dogData.name}</p>
+      <p class="mb-2">Alter: ${ageSummary}</p>
+      <p class="mb-2">Rasse: ${dogData.breed}</p>
+      <p>${dogData.isNeutered ? 'Kastriert' : 'Nicht kastriert'}</p>
+    `;
+
+      const snipcartButton = document.querySelector('.snipcart-add-item');
+      if (snipcartButton) {
+        const description = `Individuelles Hundefutter für ${dogData.name} (${ageSummary} alt, ${dogData.breed})`;
+        snipcartButton.setAttribute('data-item-name', `Hundefutter für ${dogData.name}`);
+        snipcartButton.setAttribute('data-item-description', description);
+        snipcartButton.setAttribute('data-item-image', imageUrl);
+      }
+
+      form.classList.add('hidden');
+      snipcartContainer.classList.remove('hidden');
+    }
+
+    // Initialisiere ersten Schritt
+    showStep(1);
+    return true;
+  }
+
+  // Setup-Funktion
+  function setupConfigurator() {
+    console.log('Setting up configurator');
+    const result = window.initializeDogConfigurator();
+    console.log('Setup result:', result);
+  }
+
+  // Initialisiere bei verschiedenen Events
+  document.addEventListener('DOMContentLoaded', setupConfigurator);
+  document.addEventListener('astro:page-load', setupConfigurator);
+  document.addEventListener('astro:after-swap', () => {
+    setTimeout(setupConfigurator, 0);
+  });
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupConfigurator);
+  } else {
+    setupConfigurator();
+  }
+</script>
+
+
+<script>
+  document.addEventListener('astro:after-swap', () => {
+    setTimeout(() => {
+      if (document.getElementById('dog-configurator')) {
+        window.initializeDogConfigurator();
+      }
+    }, 0);
+  });
+</script>

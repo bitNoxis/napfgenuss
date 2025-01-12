@@ -15,6 +15,8 @@ import BasicScripts from '~/components/common/BasicScripts.astro';
 // Comment the line below to disable View Transitions
 import { ViewTransitions } from 'astro:transitions';
 
+import Analytics from '@vercel/analytics/astro'
+import  SpeedInsights  from "@vercel/speed-insights/astro"
 import type { MetaData as MetaDataType } from '~/types';
 
 export interface Props {
@@ -36,6 +38,9 @@ const { language, textDirection } = I18N;
     <Metadata {...metadata} />
     <SiteVerification />
     <Analytics />
+    <SpeedInsights />
+
+
 
     <!-- Comment the line below to disable View Transitions -->
     <ViewTransitions fallback="swap" />
