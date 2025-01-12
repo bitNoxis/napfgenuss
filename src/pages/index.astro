@@ -1,11 +1,12 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 
-import Header from '~/components/widgets/Header.astro';
 import Hero2 from '~/components/widgets/Hero2.astro';
 import Steps2 from '~/components/widgets/Steps2.astro';
 import Content from '~/components/widgets/Content.astro';
 import Prices from '~/components/widgets/Pricing.astro';
+
+import Process from '~/components/widgets/Process.astro';
 
 import DynamicExamples from '~/components/widgets/DynamicExamples.astro';
 
@@ -111,40 +112,38 @@ const metadata = {
     </Fragment>
   </Content>
 
-  <!-- Content Widget **************** -->
+  <!-- So funktioniert's ******************* -->
 
-  <Content
-    isReversed
-    isAfterContent={true}
-    items={[
+  <Process
+    title="So funktioniert's"
+    subtitle="Erfahren Sie, wie einfach es ist, Ihren Hund mit NapfGenuss zu ernähren"
+    process={[
       {
-        title: 'Was bedeutet das?',
-        description: `Your portfolio is your masterpiece, and AstroWind is your canvas. Whether you're a designer, photographer, artist, or any other creative professional, AstroWind empowers you to showcase your work with elegance and sophistication. Tailored to highlight your creative projects, AstroWind's templates offer a visually immersive experience that lets your portfolio shine.`,
+        subtitle: '1. Anmeldung', 
+        tagline: 'Registrieren Sie sich und geben Sie die Daten Ihres Hundes ein.',
+        src: 'https://images.unsplash.com/photo-1618044619888-009e412ff12a?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        alt: 'Log-In und Profil erstellen',
       },
       {
-        title: 'Vorteile',
-        description: `Serve as a captivating backdrop to showcase your creative work, capturing attention and leaving a lasting impression. <br /> Tailor your portfolio to reflect your unique style and artistic vision. <br /> Prioritizes visuals, allowing you to present your work in high-resolution detail that draws viewers into your creations. <br /> Enables seamless navigation for effortless portfolio exploration.`,
+        subtitle: '2. Analyse', 
+        tagline: 'Unser System analysiert die Daten und erstellt einen idnividuellen Futterplan für Ihren Hund.',
+        src: 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?q=80&w=2212&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        alt: 'Analyse der Daten',
+      },
+      {
+        subtitle: '3. Lieferung', 
+        tagline: 'Erhalten Sie Ihr individuelles Hundefutter bequem nach Hause geliefert - wenn gewünscht monatlich.',
+        src: 'https://images.unsplash.com/photo-1655210913315-e8147faf7600?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        alt: 'Lieferung',
       },
     ]}
-    image={{
-      src: 'https://cdn.pixabay.com/photo/2022/05/30/14/05/paw-7231300_1280.jpg',
-      alt: 'Portfolio Image',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        Einfach & Zuverlässig <br /><span class="text-2xl">Alle Vorteile, kein Mehraufwand</span>
-      </h3>
-    </Fragment>
+    CTA = "Mehr erfahren!"
+    />
 
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
+  
 
   <!-- Examples Widget ******************* -->
   <DynamicExamples/>
-  
 
   <!-- Pricing Widget ******************* -->
   <Prices
