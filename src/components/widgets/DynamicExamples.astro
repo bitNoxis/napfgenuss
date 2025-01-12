@@ -4,8 +4,14 @@ import WidgetWrapper from '../ui/WidgetWrapper.astro';
 import Headline from '../ui/Headline.astro';
 import Button from '../ui/Button.astro';
 
-import { PriceCalculation, currentPeriod, FelixDayPrice, BaluDayPrice, MaxDayPrice, LunaDayPrice } from '../../lib/PriceCalculation';
-
+import {
+  PriceCalculation,
+  currentPeriod,
+  OttoDayPrice,
+  BaluDayPrice,
+  FieteDayPrice,
+  LunaDayPrice,
+} from '../../lib/PriceCalculation';
 
 const {
   title = 'Premium-Qualität muss nicht teuer sein',
@@ -26,11 +32,11 @@ const {
 <WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
   <Headline title={title} subtitle={subtitle} tagline={tagline} />
   <div class="flex items-stretch justify-center mb-10">
-    <div class="grid grid-cols-3 gap-4 dark:text-white sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3">
+    <div class="border border-600 rounded-full p-2 grid grid-cols-3 gap-4 dark:text-white sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3">
       {
         buttons.map(({ text, id }) => (
           <div class="col-span-4 mx-auto flex w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-            <Button class="w-full" variant="secondary" text={text} type="button" id={id} data-period={text} />
+            <Button class="w-full" text={text} type="button" id={id} data-period={text} />
           </div>
         ))
       }
@@ -61,7 +67,7 @@ const {
           petname: 'Otto',
           subtitle: 'Rauhaar-Dackel',
           tagline: 'Gelenkprobleme',
-          price: PriceCalculation(FelixDayPrice, currentPeriod),
+          price: PriceCalculation(OttoDayPrice, currentPeriod),
           period: currentPeriod,
           image: 'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
           alt: 'Felix Bild',
@@ -70,7 +76,7 @@ const {
           petname: 'Fiete',
           subtitle: 'Golden Retriever',
           tagline: 'Senior',
-          price: PriceCalculation(MaxDayPrice, currentPeriod),
+          price: PriceCalculation(FieteDayPrice, currentPeriod),
           period: currentPeriod,
           image: 'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
           alt: 'Max Bild',
@@ -81,32 +87,47 @@ const {
 </WidgetWrapper>
 
 <script>
-
   import { PriceCalculation } from '../../lib/PriceCalculation';
 
-  
+  let activeButton = '';
+
   function UpdatePeriod(text) {
     const example_price = document.querySelectorAll('.example-price');
     const example_period = document.querySelectorAll('.example-period');
+    const example_petname = document.querySelectorAll('.petname');
 
     example_price.forEach((price) => {
-      price.innerHTML = PriceCalculation(parseFloat(price.getAttribute('data-price')), text)
-      console.log(price.getAttribute('data-price'))
-
-    })
+      example_petname.forEach((petname) => {
+        petname = petname.getAttribute('data-petname');
+        price.innerHTML = PriceCalculation(parseFloat(price.getAttribute('data-price')), text, petname);
+      });
+    });
 
     example_period.forEach((period) => {
-      period.innerHTML = text
-
-    })
+      period.innerHTML = text;
+      activeButton = text;
+    });
   }
 
   const buttonsQuery = document.querySelectorAll('button');
 
   buttonsQuery.forEach((button) => {
     button.addEventListener('click', () => {
-      console.log(button.id);
+      // Wenn der Button bereits aktiv ist, nichts tun
+      if (button.innerText === activeButton) {
+        return;
+      }
+
+      // Andernfalls: Setze den neuen aktiven Button
       UpdatePeriod(button.innerText);
+
+      // Entferne 'btn-primary' von allen Buttons und setze 'btn-secondary'
+      buttonsQuery.forEach((btn) => {
+        btn.classList.replace('btn-primary', 'btn-secondary');
+      });
+
+      // Füge dem geklickten Button 'btn-primary' hinzu
+      button.classList.replace('btn-secondary', 'btn-primary');
     });
   });
 </script>
