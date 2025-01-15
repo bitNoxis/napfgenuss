@@ -26,10 +26,11 @@ const {
     {
       images &&
         images.map(
-          (image) =>
-            image.src && (
-              <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
-                <Image src={image.src} alt={image.alt || ''} class="max-h-12" width={120} height={48} layout="fixed" />
+          (images) =>
+            images.src && images.quote && (
+              <div class="flex flex-col items-center justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
+                <Image src={images.src} alt={images.alt || ''} class="max-h-12 justify-self-center fill" width={300} height={50}/>
+                <div class="m-8 text-center justify-center text-m font-light text-gray-800">{images.quote}</div>
               </div>
             )
         )
