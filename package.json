@@ -35,7 +35,6 @@
     "@vercel/speed-insights": "^1.1.0",
     "astro-embed": "^0.7.4",
     "astro-icon": "^1.1.5",
-    "dotenv": "^16.4.7",
     "limax": "4.1.0",
     "lodash.merge": "^4.6.2",
     "mongodb": "^6.12.0",
