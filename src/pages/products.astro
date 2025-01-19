@@ -13,6 +13,30 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
     <form id="dog-configurator" class="space-y-8">
       <div class="step-1">
         <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie heißt dein Hund?</h2>
+
+        <div class="flex space-x-4 mb-4">
+          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="dogGender"
+              value="male"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Er heißt</span>
+          </label>
+          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="dogGender"
+              value="female"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Sie heißt</span>
+          </label>
+        </div>
+
         <input
           type="text"
           name="dogName"
@@ -68,18 +92,102 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
 
       <div class="step-4 hidden">
         <h2 class="text-2xl font-heading font-bold mb-6 text-page">Rasse von <span class="dog-name"></span></h2>
-        <select
-          name="breed"
-          class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
-          required
-        >
-          <option value="">Bitte wählen</option>
-          {dogBreeds.map(breed => (
-            <option value={breed}>{breed}</option>
-          ))}
-          <option value="mixed">Mischling</option>
-          <option value="unknown">Nicht bekannt</option>
-        </select>
+
+        <div class="flex space-x-4 mb-6">
+          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="breedType"
+              value="purebred"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Reinrassig</span>
+          </label>
+          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="breedType"
+              value="mixed"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Mischling</span>
+          </label>
+          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="breedType"
+              value="unknown"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Ich kenne die Rasse nicht</span>
+          </label>
+        </div>
+
+        <!-- Reinrassig -->
+        <div id="purebred-select" class="hidden">
+          <select
+            name="breed"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+            required
+          >
+            <option value="">Bitte Rasse wählen</option>
+            {dogBreeds.map(breed => (
+              <option value={breed}>{breed}</option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Mischling -->
+        <div id="mixed-select" class="hidden space-y-4">
+          <select
+            name="breed1"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+            required
+          >
+            <option value="">Erste Rasse wählen</option>
+            {dogBreeds.map(breed => (
+              <option value={breed}>{breed}</option>
+            ))}
+          </select>
+          <select
+            name="breed2"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+            required
+          >
+            <option value="">Zweite Rasse wählen</option>
+            {dogBreeds.map(breed => (
+              <option value={breed}>{breed}</option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Unbekannte Rasse -->
+        <div id="unknown-weight" class="hidden space-y-3">
+          <p class="text-page mb-4">Was ist das ausgewachsene Gewicht von <span class="dog-name"></span>?</p>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="weight" value="mini" required class="mr-2">
+            <span class="text-page group-hover:text-primary">Mini (unter 5kg)</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="weight" value="small" required class="mr-2">
+            <span class="text-page group-hover:text-primary">Klein (5-10kg)</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="weight" value="medium" required class="mr-2">
+            <span class="text-page group-hover:text-primary">Mittel (10-25kg)</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="weight" value="large" required class="mr-2">
+            <span class="text-page group-hover:text-primary">Groß (25-45kg)</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="weight" value="giant" required class="mr-2">
+            <span class="text-page group-hover:text-primary">Riese (über 45kg)</span>
+          </label>
+        </div>
       </div>
 
       <div class="flex justify-between pt-6">
@@ -130,13 +238,17 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
   };
 
   const dogData = {
+    gender: '', // 'male' oder 'female'
     name: '',
     isNeutered: false,
     age: {
       years: 0,
       months: 0
     },
-    breed: ''
+    breedType: '', // 'purebred', 'mixed', oder 'unknown'
+    breed: '',
+    breed2: '', // für Mischlinge
+    weight: '' // für unbekannte Rassen
   };
 
   // Hauptinitialisierungsfunktion
@@ -210,6 +322,49 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       currentStep = step;
     }
 
+    // Geschlechts-Handler
+    const genderInputs = form.querySelectorAll('[name="dogGender"]');
+    genderInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        if (input instanceof HTMLInputElement) {
+          dogData.gender = input.value;
+        }
+      });
+    });
+
+// Rassen-Typ-Handler
+    const breedTypeInputs = form.querySelectorAll('[name="breedType"]');
+    const purebredSelect = document.getElementById('purebred-select');
+    const mixedSelect = document.getElementById('mixed-select');
+    const unknownWeight = document.getElementById('unknown-weight');
+
+    breedTypeInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        if (input instanceof HTMLInputElement) {
+          // Verstecke alle Optionen
+          purebredSelect?.classList.add('hidden');
+          mixedSelect?.classList.add('hidden');
+          unknownWeight?.classList.add('hidden');
+
+          // Zeige die gewählte Option
+          switch(input.value) {
+            case 'purebred':
+              purebredSelect?.classList.remove('hidden');
+              break;
+            case 'mixed':
+              mixedSelect?.classList.remove('hidden');
+              break;
+            case 'unknown':
+              unknownWeight?.classList.remove('hidden');
+              break;
+          }
+
+          dogData.breedType = input.value;
+        }
+      });
+    });
+
+    // Modifiziere die validateStep Funktion:
     function validateStep() {
       const currentStepEl = document.querySelector(`.step-${currentStep}`);
       if (!currentStepEl) return false;
@@ -219,8 +374,38 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
 
       currentStepEl.querySelectorAll('.error-message').forEach(msg => msg.remove());
 
+      if (currentStep === 1) {
+        const genderSelected = Array.from(genderInputs).some(input =>
+          input instanceof HTMLInputElement && input.checked
+        );
+        if (!genderSelected) {
+          isValid = false;
+          const err = document.createElement('div');
+          err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+          err.textContent = 'Bitte wähle das Geschlecht aus';
+          genderInputs[0].parentElement?.parentElement?.appendChild(err);
+        }
+      }
+
+      if (currentStep === 4) {
+        const breedTypeSelected = Array.from(breedTypeInputs).some(input =>
+          input instanceof HTMLInputElement && input.checked
+        );
+        if (!breedTypeSelected) {
+          isValid = false;
+          const err = document.createElement('div');
+          err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+          err.textContent = 'Bitte wähle eine Rassen-Option aus';
+          breedTypeInputs[0].parentElement?.parentElement?.appendChild(err);
+        }
+      }
+
       inputs.forEach(input => {
         if (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+          // Überspringe Validierung für versteckte Felder
+          const container = input.closest('div');
+          if (container?.classList.contains('hidden')) return;
+
           if (!input.checkValidity()) {
             isValid = false;
             const err = document.createElement('div');
@@ -236,14 +421,45 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
 
     function finishConfiguration() {
       const formData = new FormData(form);
+
+      // Bisherige Daten
       dogData.name = formData.get('dogName')?.toString() || '';
       dogData.isNeutered = formData.get('isNeutered') === 'yes';
       dogData.age.years = parseInt(formData.get('ageYears')?.toString() || '0');
       dogData.age.months = parseInt(formData.get('ageMonths')?.toString() || '0');
-      dogData.breed = formData.get('breed')?.toString() || '';
+
+      // Neue Daten
+      dogData.gender = formData.get('dogGender')?.toString() || '';
+      dogData.breedType = formData.get('breedType')?.toString() || '';
+
+      // Rassen-spezifische Daten
+      switch(dogData.breedType) {
+        case 'purebred':
+          dogData.breed = formData.get('breed')?.toString() || '';
+          break;
+        case 'mixed':
+          dogData.breed = formData.get('breed1')?.toString() || '';
+          dogData.breed2 = formData.get('breed2')?.toString() || '';
+          break;
+        case 'unknown':
+          dogData.weight = formData.get('weight')?.toString() || '';
+          break;
+      }
 
       let imageUrl = foodImages.default;
-      if (['Deutscher Schäferhund', 'Rottweiler'].includes(dogData.breed)) {
+      // Bestimme Bild basierend auf Rasse oder Gewicht
+      if (dogData.breedType === 'unknown') {
+        switch(dogData.weight) {
+          case 'mini':
+          case 'small':
+            imageUrl = foodImages.small;
+            break;
+          case 'large':
+          case 'giant':
+            imageUrl = foodImages.large;
+            break;
+        }
+      } else if (['Deutscher Schäferhund', 'Rottweiler'].includes(dogData.breed)) {
         imageUrl = foodImages.large;
       } else if (dogData.breed === 'Dackel') {
         imageUrl = foodImages.small;
@@ -252,17 +468,38 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       const ageSummary = dogData.age.months
         ? `${dogData.age.years} Jahre und ${dogData.age.months} Monate`
         : `${dogData.age.years} Jahre`;
- 
+
+      // Erweiterte Zusammenfassung
+      const breedSummary = (() => {
+        switch(dogData.breedType) {
+          case 'purebred':
+            return dogData.breed;
+          case 'mixed':
+            return `Mischling (${dogData.breed} / ${dogData.breed2})`;
+          case 'unknown':
+            const weightTexts = {
+              mini: 'Mini (unter 5kg)',
+              small: 'Klein (5-10kg)',
+              medium: 'Mittel (10-25kg)',
+              large: 'Groß (25-45kg)',
+              giant: 'Riese (über 45kg)'
+            };
+            return `Unbekannte Rasse - ${weightTexts[dogData.weight] || ''}`;
+          default:
+            return '';
+        }
+      })();
+
       summaryDiv.innerHTML = `
-      <p class="mb-2">Name: ${dogData.name}</p>
-      <p class="mb-2">Alter: ${ageSummary}</p>
-      <p class="mb-2">Rasse: ${dogData.breed}</p>
-      <p>${dogData.isNeutered ? 'Kastriert' : 'Nicht kastriert'}</p>
-    `;
+    <p class="mb-2">Name: ${dogData.name} (${dogData.gender === 'male' ? 'männlich' : 'weiblich'})</p>
+    <p class="mb-2">Alter: ${ageSummary}</p>
+    <p class="mb-2">Rasse: ${breedSummary}</p>
+    <p>${dogData.isNeutered ? 'Kastriert' : 'Nicht kastriert'}</p>
+  `;
 
       const snipcartButton = document.querySelector('.snipcart-add-item');
       if (snipcartButton) {
-        const description = `Individuelles Hundefutter für ${dogData.name} (${ageSummary} alt, ${dogData.breed})`;
+        const description = `Individuelles Hundefutter für ${dogData.name} (${ageSummary} alt, ${breedSummary})`;
         snipcartButton.setAttribute('data-item-name', `Hundefutter für ${dogData.name}`);
         snipcartButton.setAttribute('data-item-description', description);
         snipcartButton.setAttribute('data-item-image', imageUrl);
