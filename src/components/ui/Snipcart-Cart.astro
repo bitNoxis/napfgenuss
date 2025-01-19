@@ -1,5 +1,6 @@
 ---
 import CartIcon from '../icons/CartIcon.astro';
+import Button from './Button.astro';
 ---
 
 <body>
@@ -15,28 +16,48 @@ import CartIcon from '../icons/CartIcon.astro';
       
     </a>
   </body> 
-  <div id="reminder" style="display:none" class="absolute mt-14 w-50 h-dvh flex flex-col-reverse pb-60"><div class="bottom-10 bg-red-200"><div>Snipcart Reminder</div></div></div>
+  <div id="reminder" 
+     class="fixed bottom-10 transform -translate-x-1/2 w-80 bg-white shadow-lg border border-gray-300 rounded-lg p-4 flex items-center justify-between space-x-4">
+  <div class="text-gray-700">
+    <p class="font-semibold">Warenkorb</p>
+    <p class="text-sm text-gray-500">Es liegt Hundefutter in Ihrem Warenkorb!</p>
+  </div>
+  <Button variant="secondary" class="text-sm px-4 py-2 transition" href='/#/checkout'>Zur Kasse</Button>
+</div>
+
+
+
   <script>
     // Funktion, die ausgeführt wird, wenn der Counter aktualisiert wird
     const handleSnipcartCountChange = () => {
-      const snipcartCountElement = document.getElementById('snipcart_count');
-      const snipcartCount = parseInt(snipcartCountElement?.innerHTML || '0', 10);
-      const reminder = document.getElementById('reminder');
+      document.addEventListener('scroll', () => {
+        const snipcartCountElement = document.getElementById('snipcart_count');
+        const snipcartCount = parseInt(snipcartCountElement?.innerHTML || '0', 10);
+        const reminder = document.getElementById('reminder');
 
-      console.log('Aktueller Snipcart Count:', snipcartCount); // Debugging
-  
-      if (snipcartCount > 0) {
-        if (reminder) {
-          reminder.style.display = 'block';
-          console.log('Reminder anzeigen'); // Debugging
-        }
-      } else {
-        if (reminder) {
-          reminder.style.display = 'none';
-          console.log('Reminder ausblenden'); // Debugging
-        }
+        if (!snipcartCountElement || !reminder) {
+        console.error('Required elements (#snipcart_count or #reminder) not found.');
+        return;
       }
-    };
+
+        console.log('Aktueller Snipcart Count:', snipcartCount); // Debugging
+    
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+
+        if (snipcartCount > 0 && scrollY > viewportHeight) {
+          // User has scrolled below the fold and there are items in the cart
+          reminder.classList.remove('hidden');
+          reminder.classList.add('block');
+          console.log('Reminder anzeigen');
+        } else {
+          // Either no items in the cart or user is above the fold
+          reminder.classList.remove('block');
+          reminder.classList.add('hidden');
+          console.log('Reminder ausblenden');
+      }
+    })};
+
     // Starte den MutationObserver, sobald die Seite geladen ist
     document.addEventListener('DOMContentLoaded', () => {
       const snipcartCountElement = document.getElementById('snipcart_count');

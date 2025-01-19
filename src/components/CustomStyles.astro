@@ -25,11 +25,15 @@ import '@fontsource-variable/inter';
     --aw-font-serif: 'Inter Variable';
     --aw-font-heading: 'Inter Variable';
 
-    --aw-color-primary: #7DB03A;
+    --aw-color-primary: #527a1d;
     --primary-gradient: linear-gradient(to right, var(--aw-color-primary), var(--aw-color-secondary));
     --aw-color-secondary: #385317;
     --aw-color-tertiary: #161616;
-    --aw-color-accent: #CBBD93;
+    --aw-color-accent: #cbbd93;
+
+    --aw-color-white: #ffffff;
+    --aw-color-error: #b70000;
+    --aw-color-active: #9cbe6f;
 
     --aw-color-text-heading: rgb(0 0 0);
     --aw-color-text-default: rgb(16 16 16);
@@ -37,6 +41,189 @@ import '@fontsource-variable/inter';
     --aw-color-bg-page: rgb(255 255 255);
 
     --aw-color-bg-page-dark: rgb(3 6 32);
+
+    /* SNIPCART DESIGN */
+
+    /* Button */
+    --color-buttonPrimary: var(--aw-color-white);
+    --borderColor-buttonPrimary: var(--aw-color-primary);
+    --bgColor-buttonPrimary: var(--aw-color-primary);
+
+    /* Hover */
+    --color-buttonPrimary-hover: var(--aw-color-white);
+    --borderColor-buttonPrimary-hover: var(--aw-color-secondary);
+    --bgColor-buttonPrimary-hover: var(--aw-color-secondary);
+    --shadow-buttonPrimary-hover: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    /* Active */
+    --color-buttonPrimary-active: var(--aw-color-white);
+    --borderColor-buttonPrimary-active: var(--aw-color-active);
+    --bgColor-buttonPrimary-active: var(--aw-color-active);
+    --shadow-buttonPrimary-active: 0 2px 6px rgba(0, 0, 0, 0.2);
+
+    /* Focus */
+    --color-buttonPrimary-focus: var(--aw-color-white);
+    --borderColor-buttonPrimary-focus: var(--aw-color-primary);
+    --bgColor-buttonPrimary-focus: var(--aw-color-primary);
+    --shadow-buttonPrimary-focus: 0 0 0 3px rgba(82, 122, 29, 0.5);
+
+    /* Disabled */
+    --color-buttonPrimary-disabled: var(--aw-color-text-muted);
+    --borderColor-buttonPrimary-disabled: var(--aw-color-tertiary);
+    --bgColor-buttonPrimary-disabled: var(--aw-color-bg-page-dark);
+
+    /* Success */
+    --color-buttonPrimary-success: var(--aw-color-white);
+    --borderColor-buttonPrimary-success: var(--aw-color-primary);
+    --bgColor-buttonPrimary-success: var(--aw-color-primary);
+
+    /* Error */
+    --color-buttonPrimary-error: var(--aw-color-white);
+    --borderColor-buttonPrimary-error: var(--aw-color-error);
+    --bgColor-buttonPrimary-error: var(--aw-color-error);
+
+
+    /* Link */
+    /* Default */
+    --color-link: var(--aw-color-secondary);
+    --borderColor-link: transparent;
+    --bgColor-link: transparent;
+
+    /* Hover */
+    --color-link-hover: var(--aw-color-secondary);
+    --borderColor-link-hover: transparent;
+    --bgColor-link-hover: transparent;
+
+    /* Active */
+    --color-link-active: var(--aw-color-active);
+    --borderColor-link-active: transparent;
+    --bgColor-link-active: transparent;
+
+    /* Focus */
+    --color-link-focus: var(--aw-color-primary);
+    --borderColor-link-focus: var(--aw-color-primary);
+    --bgColor-link-focus: transparent;
+    --shadow-link-focus: 0 0 0 3px rgba(82, 122, 29, 0.5);
+
+    /* ----------------------- 
+    PART: Input
+    ----------------------- */
+
+    --color-input: var(--aw-color-text-default);
+    --borderColor-input: #e0e0e0; /* Neutral Grau für minimalistische Ränder */
+    --bgColor-input: var(--aw-color-white);
+
+    /* Hover */
+    --color-input-hover: var(--aw-color-text-default);
+    --borderColor-input-hover: #bdbdbd; /* Etwas dunkleres Grau beim Hover */
+    --bgColor-input-hover: var(--aw-color-white);
+    --shadow-input-hover: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+    /* Focus */
+    --color-input-focus: var(--aw-color-text-default);
+    --borderColor-input-focus: var(--aw-color-primary);
+    --bgColor-input-focus: var(--aw-color-white);
+    --shadow-input-focus: 0 0 0 3px rgba(82, 122, 29, 0.2);
+
+    /* Checked */
+    --color-input-checked: var(--aw-color-white);
+    --borderColor-input-checked: var(--aw-color-active);
+    --bgColor-input-checked: var(--aw-color-active);
+    --shadow-input-checked: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+    /* Disabled */
+    --color-input-disabled: var(--aw-color-text-muted);
+    --borderColor-input-disabled: #f0f0f0; /* Sehr helles Grau für disabled Inputs */
+    --bgColor-input-disabled: var(--aw-color-bg-page-dark);
+
+    /* Error */
+    --color-input-error: var(--aw-color-white);
+    --borderColor-input-error
+    --bgColor-input-error
+
+    /* Autofill */
+    --bgColor-input-autofill: var(--aw-color-active);
+
+    /* ----------------------- 
+    PART: Label
+    ----------------------- */
+
+    --color-inputLabel: var(--aw-color-text-default);
+
+    /* Hover */
+    --color-inputLabel-hover: var(--aw-color-secondary);
+
+    /* Focus */
+    --color-inputLabel-focus: var(--aw-color-primary);
+
+    /* ----------------------- 
+    PART: Icon
+    ----------------------- */
+
+    --color-inputIcon: var(--aw-color-secondary);
+
+    /* Hover */
+    --color-inputIcon-hover: var(--aw-color-primary);
+
+    /* Focus */
+    --color-inputIcon-focus: var(--aw-color-active);
+
+    /* Checked */
+    --color-inputIcon-checked: var(--aw-color-active);
+
+    /* Disabled */
+    --color-inputIcon-error: var(--aw-color-error);
+
+    /* -----------------------
+    PART: Placeholder
+    ----------------------- */
+
+    --color-inputPlaceholder: var(--aw-color-text-muted);
+
+    /* BADGES */
+    /* Default (completed) */
+    --color-badge: #000e00; /* Text in Schwarz */
+    --borderColor-badge /* Keine sichtbare Umrandung */
+
+    /* Active */
+    --color-badge: #000e00;
+    --color-badge-active: var(--aw-color-primary);
+    --borderColor-badge-active: var(--aw-color-accent);
+    --bgColor-badge-active: var(--aw-color-accent);
+
+    /* Disabled */
+    --color-badge-disabled: var(--aw-color-text-muted);
+    --borderColor-badge-disabled
+    --bgColor-badge-disabled: #e0e0e0; /* Sehr helles Grau */
+
+    /* GENERAL */
+    /* Default */
+    --color-default
+    --borderColor-default
+    --bgColor-default
+
+    /* Alt */
+    --color-alt
+    --bgColor-alt
+
+    /* Icon */
+    /* --color-icon: var(--aw-color-secondary); */
+    --color-icon: hsl(200, 90%, 40%);
+
+    /* Success */
+    --color-success: var(--aw-color-white);
+    --bgColor-success: var(--aw-color-primary);
+
+    /* Error */
+    --color-error: var(--aw-color-text-default);
+
+    /* Info */
+    --bgColor-info: var(--aw-color-primary);
+
+    /* Modal */
+    --bgColor-modal: var(--aw-color-white);
+    --bgColor-modalVeil: rgba(0, 0, 0, 0.5);
+
 
     ::selection {
       background-color: lavender;
@@ -48,11 +235,11 @@ import '@fontsource-variable/inter';
     --aw-font-serif: 'Inter Variable';
     --aw-font-heading: 'Inter Variable';
 
-    --aw-color-primary: #7DB03A;
+    --aw-color-primary: #7db03a;
     --primary-gradient: linear-gradient(to right, var(--aw-color-primary), var(--aw-color-secondary));
-    --aw-color-secondary: #7DB03A;
+    --aw-color-secondary: #7db03a;
     --aw-color-tertiary: #161616;
-    --aw-color-accent: #CBBD93;
+    --aw-color-accent: #cbbd93;
 
     --aw-color-text-heading: rgb(247, 248, 248);
     --aw-color-text-default: rgb(229 236 246);
