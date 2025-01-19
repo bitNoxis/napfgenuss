@@ -5,6 +5,7 @@ import Image from '~/components/common/Image.astro';
 
 const {
   examples = [],
+  isDark = false,
 
   // Add more props here
 } = Astro.props;
@@ -16,7 +17,7 @@ const {
       examples &&
         examples.map(({ petname, subtitle, tagline, price, period, images, alt }) => {
           return (
-            <div class="col-span-3 mx-auto flex w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
+            <div class="col-span-3 mx-auto flex w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter dark:bg-slate-900">
               {price && period && (
                 <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center">
                   <div class="px-2 py-0">

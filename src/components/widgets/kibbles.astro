@@ -3,7 +3,10 @@ import type { Kibbles as Props } from '~/types';
 
 import WidgetWrapper from '../ui/WidgetWrapper.astro';
 import Headline from '../ui/Headline.astro';
+import Image from '../common/Image.astro';
 import { Icon } from 'astro-icon/components';
+
+import ItemGrid2 from '../ui/ItemGrid2.astro';
 
 const {
   title = await Astro.slots.render('title'),
@@ -19,29 +22,25 @@ const {
 ---
 
 <WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-6xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
-    <Headline title={title} subtitle={subtitle} tagline={tagline} />
-    <div class=" flex flex-box justify-center text-center">
-        {
-          kibble &&
-            kibble.map(({ title, desc, img }) => (
-              <div class="group p-4 text-center md:border-r md:last:border-none dark:md:border-slate-500 intersect-once motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade intersect-quarter">
-                {img && 
-                    <img src={img}>
-                }
-                {title && (
-                  <div>
-                    {title}
-                  </div>
-                )}
+  <Headline title={title} subtitle={subtitle} tagline={tagline} />
+  <div class="flex flex-wrap justify-center text-center gap-4">
+    {
+      kibble &&
+        kibble.map(({ title, desc, img }) => (
+          <div class="flex flex-row sm:flex-col group p-4 text-center md:border-r md:last:border-none dark:md:border-slate-500 intersect-once motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade intersect-quarter">
+            {img && <Image src={img} width={200} height={200} alt="Kibble" />}
+            {title && (
+              <div class="align-middle text-lg font-bold text-gray-800 dark:text-slate-200 lg:text-xl opacity-100">
+                {title}
                 {desc && (
-                  <div class="text-sm font-medium uppercase tracking-widest text-gray-800 dark:text-slate-400 lg:text-base opacity-0 group-hover:opacity-100 group-hover:animate-fade">
+                  <div class="text-sm font-medium uppercase tracking-widest text-gray-800 dark:text-slate-400 lg:text-base opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:animate-fade">
                     {desc}
                   </div>
                 )}
               </div>
-            ))
-        }
-      </div>
-    
+            )}
+          </div>
+        ))
+    }
+  </div>
 </WidgetWrapper>
-

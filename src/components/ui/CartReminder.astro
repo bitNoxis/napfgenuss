@@ -1,0 +1,21 @@
+---
+
+---
+
+<div id="snipcart_count" class="w-0 h-0 snipcart-items-count opacity-0">0</div>
+
+<div id="reminder" class="w-50 h-20 absolute bottom-2 opacity-0">Snipcart Reminder</div>
+
+<script>
+  document.addEventListener('astro:after-swap', () => {
+    const snipcartCountElement = document.getElementById('snipcart_count');
+    const snipcartCount = parseInt(snipcartCountElement?.innerHTML || '0', 10);
+
+    if (snipcartCount > 0) {
+      const reminder = document.getElementById('reminder');
+      if (reminder) {
+        reminder.classList.replace('opacity-0', 'opacity-100');
+      }
+    }
+  });
+</script>

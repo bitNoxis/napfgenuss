@@ -11,6 +11,7 @@ import Metadata from '~/components/common/Metadata.astro';
 import SiteVerification from '~/components/common/SiteVerification.astro';
 import Analytics from '~/components/common/Analytics.astro';
 import BasicScripts from '~/components/common/BasicScripts.astro';
+import CartReminder from '~/components/ui/CartReminder.astro';
 
 // Comment the line below to disable View Transitions
 import { ViewTransitions } from 'astro:transitions';
@@ -36,6 +37,7 @@ const { language, textDirection } = I18N;
     <Metadata {...metadata} />
     <SiteVerification />
     <Analytics />
+    <CartReminder />
 
     <!-- Comment the line below to disable View Transitions -->
     <ViewTransitions fallback="swap" />
@@ -47,8 +49,8 @@ const { language, textDirection } = I18N;
         publicApiKey: 'MzNmMzc4MWMtMjZiZi00ZDBhLWI2NTAtMTllZmU1YjEwNDFhNjM4NzA0NTQ4MTEyNDgzMzE2',
         loadStrategy: 'on-user-interaction',
         modalStyle: 'side',
+        // templatesUrl: "~/layouts/snipcart-template.html",
       };
-
       (() => {
         var c, d;
         (d = (c = window.SnipcartSettings).version) != null || (c.version = '3.0');
@@ -124,8 +126,8 @@ const { language, textDirection } = I18N;
 
       // Initialisierung nach jedem Seitenwechsel
       document.addEventListener('astro:after-swap', () => {
-        initializeSnipcart();
-      });
+         initializeSnipcart();
+       });
     </script>
   </head>
 

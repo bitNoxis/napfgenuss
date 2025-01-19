@@ -10,9 +10,51 @@ import CartIcon from '../icons/CartIcon.astro';
        strokeColor=var(--aw-color-secondary)
        />
        <span class="relative bottom-2 right-2 w-5 h-5 rounded-full bg-secondary flex items-center justify-center m-auto">
-        <span class="text-white snipcart-items-count"></span>
+        <span id="snipcart_count" class="text-white snipcart-items-count"></span>
       </span>
       
     </a>
-    
   </body> 
+  <div id="reminder" style="display:none" class="absolute mt-14 w-50 h-dvh flex flex-col-reverse pb-60"><div class="bottom-10 bg-red-200"><div>Snipcart Reminder</div></div></div>
+  <script>
+    // Funktion, die ausgeführt wird, wenn der Counter aktualisiert wird
+    const handleSnipcartCountChange = () => {
+      const snipcartCountElement = document.getElementById('snipcart_count');
+      const snipcartCount = parseInt(snipcartCountElement?.innerHTML || '0', 10);
+      const reminder = document.getElementById('reminder');
+
+      console.log('Aktueller Snipcart Count:', snipcartCount); // Debugging
+  
+      if (snipcartCount > 0) {
+        if (reminder) {
+          reminder.style.display = 'block';
+          console.log('Reminder anzeigen'); // Debugging
+        }
+      } else {
+        if (reminder) {
+          reminder.style.display = 'none';
+          console.log('Reminder ausblenden'); // Debugging
+        }
+      }
+    };
+    // Starte den MutationObserver, sobald die Seite geladen ist
+    document.addEventListener('DOMContentLoaded', () => {
+      const snipcartCountElement = document.getElementById('snipcart_count');
+  
+      if (snipcartCountElement) {
+        // MutationObserver für Änderungen am Counter-Element einrichten
+        const observer = new MutationObserver(() => {
+          handleSnipcartCountChange();
+        });
+  
+        observer.observe(snipcartCountElement, {
+          childList: true, // Beobachtet Änderungen an den direkten Kindknoten
+          characterData: true, // Beobachtet Änderungen am Textinhalt
+          subtree: true, // Beobachtet Änderungen in untergeordneten Elementen
+        });
+  
+        // Einmal beim Start die Funktion ausführen
+        handleSnipcartCountChange();
+      }
+    });
+  </script>
