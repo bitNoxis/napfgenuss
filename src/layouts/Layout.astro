@@ -42,14 +42,14 @@ const { language, textDirection } = I18N;
     <script>
       // Funktion zur Initialisierung von Snipcart
       function initializeSnipcart() {
-    
-      window.SnipcartSettings = {
-        publicApiKey: 'MzNmMzc4MWMtMjZiZi00ZDBhLWI2NTAtMTllZmU1YjEwNDFhNjM4NzA0NTQ4MTEyNDgzMzE2',
-        loadStrategy: 'on-user-interaction',
-        modalStyle: 'side',
-        currency: 'eur',
-        // templatesUrl: "~/layouts/snipcart-template.html",
-      };
+        window.SnipcartSettings = {
+          publicApiKey: 'MzNmMzc4MWMtMjZiZi00ZDBhLWI2NTAtMTllZmU1YjEwNDFhNjM4NzA0NTQ4MTEyNDgzMzE2',
+          loadStrategy: 'on-user-interaction',
+          modalStyle: 'side',
+          currency: 'eur',
+          // templatesUrl: "~/layouts/snipcart-template.html",
+        };
+
       (() => {
         var c, d;
         (d = (c = window.SnipcartSettings).version) != null || (c.version = '3.0');
