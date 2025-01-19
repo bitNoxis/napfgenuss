@@ -1,20 +1,28 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 
-import Header from '~/components/widgets/Header.astro';
 import Hero2 from '~/components/widgets/Hero2.astro';
 import Steps2 from '~/components/widgets/Steps2.astro';
 import Content from '~/components/widgets/Content.astro';
-import Prices from '~/components/widgets/Pricing.astro';
+import Testimonials from '~/components/widgets/Testimonials.astro';
+
+import Process from '~/components/widgets/Process.astro';
+import Brands from '~/components/widgets/Brands.astro';
 
 import DynamicExamples from '~/components/widgets/DynamicExamples.astro';
-
-import { headerData } from '~/navigation';
 import FAQs from '~/components/widgets/FAQs.astro';
 import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 
+
+import HandyMockUp from 'src/assets/images/MockUps/HandyMockUp.png';
+import BagMockUp from 'src/assets/images/MockUps/MockUpProductLucky.png';
+
+import Prices from '~/components/widgets/Pricing.astro';
+import { headerData } from '~/navigation';
+import { count, table } from 'console';
+
 const metadata = {
-  title: 'Dogly Hundefutter',
+  title: 'NapfGenuss Hundefutter',
 };
 ---
 
@@ -22,47 +30,48 @@ const metadata = {
   <!-- first Hero2 Widget with picture and buttons ******************* -->
 
   <Hero2
-    tagline="Dogly's Mission"
+    tagline="Unsere Vision"
     actions={[
-      { variant: 'primary', target: '_self', text: 'Jetzt anmelden', href: '/contact' },
+      { variant: 'primary', target: '_self', text: 'Jetzt Futter entdecken!', href: '/contact' },
       { target: '_self', text: 'Mehr erfahren', href: '/about' },
     ]}
     image={{
       src: 'https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?q=80&w=2788&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'AstroWind Hero Image',
+      alt: 'NapfGenuss Hero Image',
     }}
   >
     <Fragment slot="title">
-      Zukunftsweisende Hundeernährung: <br /> individualisiert, <span class="text-accent dark:text-white highlight"
-        >einfach</span
-      > nachhaltig<br />
+      Zukunft des Hundefutters <br /><span class="text-accent dark:text-white highlight">individuell, einfach</span>
+      <span class="text-primary dark:text-white highlight">nachhaltig</span><br />
     </Fragment>
 
     <Fragment slot="subtitle">
       <span class="hidden sm:inline">
-        Ihr Hund ist einzigartig - genau wie sein <span class="font-semibold">Futter</span> sein sollte.
+        So einzigartig wie Ihr Hund - so sollte auch sein <span class="font-semibold">Futter</span> sein.
       </span>
-      Bei Dogly bieten wir eine vollständig personalisierte Ernährung, die perfekt auf die Bedürfnisse Ihres Vierbeiners
-      abgestimmt ist.
+      Bei uns erhält Ihr Vierbeiner eine komplett personalisierte Ernährung, perfekt abgestimmt auf seine Bedürfnisse.
     </Fragment>
   </Hero2>
 
   <!-- Content Widget **************** -->
 
   <Content
-    title="Warum Dogly?"
-    subtitle="Entdecken Sie, wie Dogly die Welt des Hundefutters revolutioniert, indem wir personalisierte und nachhaltige Ernährungslösungen anbieten, die den individuellen Bedürfnissen Ihres Hundes gerecht werden."
+    title="NapfGenuss"
+    subtitle="NapfGenuss steht für individuelle, hochwertige und nachhaltige Hundeernährung. Mit maßgeschneiderten Rezepturen, natürlichen Zutaten und umweltfreundlicher Verpackung machen wir Füttern einfach und unkompliziert."
     isReversed
     items={[
       {
-        title: 'Was bedeutet das?',
+        title: 'Individuell und flexibel',
         description:
-          'Mit Dogly bekommt Ihr Hund ein individuell angepasstes Futter, das perfekt auf seine Gesundheit, sein Alter, seine Aktivität und seine Geschmackspräferenzen abgestimmt ist.',
+          'Maßgeschneiderte Rezepte für die spezifischen Bedürfnisse Ihres Hundes (Alter, Rasse, Aktivitätsniveau).',
       },
       {
-        title: 'Vorteile',
-        description:
-          'Einzigartig gutes Hundefutter, perfekt auf die Bedürfnisse Ihres Hundes. Damit fördern Sie die Gesundheit ihres Hundes, leisten einen wichtigen Beitrag zur Nachhaltigkeit und das alles ohen Mehraufwand für Sie.',
+        title: 'Gesundheitsfördernd',
+        description: 'Unterstützt die optimale Gesundheit und das Wohlbefinden Ihres Hundes.',
+      },
+      {
+        title: '100% natürliche Zutaten & Transparenz',
+        description: 'Keine künstlichen Zusätze, nur transparent hochwertige, nachhaltige und frische Inhaltsstoffe.',
       },
     ]}
     image={{
@@ -72,7 +81,7 @@ const metadata = {
   >
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        Maßgeschneiderter Futterplan <br /><span class="text-2xl">Bestmögliche Ernährung durch Individualisierung</span>
+        Maßgeschneiderter Futterplan <br /><span class="text-2xl">Bestmögliche Ernährung für Ihren Vierbeiner</span>
       </h3>
     </Fragment>
 
@@ -83,70 +92,101 @@ const metadata = {
 
   <!-- Content Widget **************** -->
 
-  <Content
-    isAfterContent={true}
-    items={[
+
+  <!-- Testimonials Widget *********** -->
+
+  <Testimonials
+    title="Die Meinung unserer Kunden"
+    testimonials={[
       {
-        title: 'Was bedeutet das?',
-        description: `Das individualisierte Futtermittel bietet die optimale Gurndlage für eine gesunde Ernährung. Unsere Expteren von Dogly können dir zudem helfen, durch Nahrunsgergänzung und Medizin, deinen Hund munter zu machen.`,
+        testimonial: `Wir haben mit NapfGenuss endlich das perfekte Futter für unseren Hund gefunden. Die individuelle Beratung und die hochwertigen Zutaten haben uns überzeugt. Unser Hund liebt das Futter und wir sind froh, dass er endlich das bekommt, was er verdient.`,
+        name: 'Sarah Hansen',
+        job: 'mit Hund Lucky',
+        image: {
+          src: 'https://images.unsplash.com/photo-1618835962148-cf177563c6c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=930&q=80',
+          alt: 'Lucas Müller Image',
+        },
       },
       {
-        title: 'Vorteile',
-        description: `Ensuring a cohesive and user-centric design for your SaaS website. <br /> Effectively communicate complex SaaS features through visual aids, animations, and interactive elements. <br /> Prioritize user needs and pain points through well-structured layouts and clear navigation. <br /> Encourage visitors to take action with strategically placed CTAs. <br /> Ensures your SaaS website works seamlessly across all devices.`,
-      },
-    ]}
-    image={{
-      src: 'https://cdn.pixabay.com/photo/2022/10/20/19/31/dog-7535633_1280.jpg',
-      alt: 'SaaS Businesses Image',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        Beste Gesundheit<br /><span class="text-2xl">Einzigartig gutes Hundefutter</span>
-      </h3>
-    </Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isReversed
-    isAfterContent={true}
-    items={[
-      {
-        title: 'Was bedeutet das?',
-        description: `Your portfolio is your masterpiece, and AstroWind is your canvas. Whether you're a designer, photographer, artist, or any other creative professional, AstroWind empowers you to showcase your work with elegance and sophistication. Tailored to highlight your creative projects, AstroWind's templates offer a visually immersive experience that lets your portfolio shine.`,
+        testimonial: `Mein Hund Berta hat eine Allergie und wir haben lange nach dem richtigen Futter gesucht. Mit NapfGenuss haben wir endlich das perfekte Futter gefunden. Berta geht es besser und wir sind froh, dass wir uns für`,
+        name: 'Lucas Müller',
+        job: 'mit Hund Berta',
+        image: {
+          src: 'https://images.unsplash.com/photo-1561406636-b80293969660?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
+          alt: 'Sarah Hansen Image',
+        },
       },
       {
-        title: 'Vorteile',
-        description: `Serve as a captivating backdrop to showcase your creative work, capturing attention and leaving a lasting impression. <br /> Tailor your portfolio to reflect your unique style and artistic vision. <br /> Prioritizes visuals, allowing you to present your work in high-resolution detail that draws viewers into your creations. <br /> Enables seamless navigation for effortless portfolio exploration.`,
+        testimonial: `Ich bin selbstständig und habe wenig Zeit, mich um die Ernährung meines Hundes zu kümmern. Mit NapfGenuss habe ich endlich eine Lösung gefunden, die mir Zeit spart und meinem Hund gut tut.`,
+        name: 'Mark Friedrich',
+        job: 'mit Hund Max',
+        image: {
+          src: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=824&q=80',
+          alt: 'Mark Friedrich Image',
+        },
       },
     ]}
-    image={{
-      src: 'https://cdn.pixabay.com/photo/2022/05/30/14/05/paw-7231300_1280.jpg',
-      alt: 'Portfolio Image',
+    callToAction={{
+      target: '_blank',
+      text: 'Jetzt selbst überzeugen',
+      href: '/search',
+      icon: 'tabler:chevron-right',
     }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        Einfach & Zuverlässig <br /><span class="text-2xl">Alle Vorteile, kein Mehraufwand</span>
-      </h3>
-    </Fragment>
+  />
 
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
+  <!-- So funktioniert's ******************* -->
+
+  <Process
+    title="So funktioniert's"
+    subtitle="Erfahren Sie, wie einfach es ist, Ihren Hund mit NapfGenuss zu ernähren"
+    process={[
+      {
+        counter: '1',
+        subtitle: 'Profilerstellung',
+        tagline: 'Registrieren Sie sich und geben Sie die Daten Ihres Hundes ein.',
+        src: HandyMockUp,
+        alt: 'Log-In und Profil erstellen',
+      },
+      {
+        counter: '2',
+        subtitle: 'Analyse',
+        tagline: 'Unser System analysiert die Daten und erstellt einen idnividuellen Futterplan für Ihren Hund.',
+        src: 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?q=80&w=2212&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        alt: 'Analyse der Daten',
+      },
+      {
+        counter: '3',
+        subtitle: 'Lieferung',
+        tagline: 'Erhalten Sie Ihr individuelles Hundefutter bequem nach Hause geliefert.',
+        src: BagMockUp,
+        alt: 'Lieferung',
+      },
+    ]}
+    CTA="Mehr erfahren!"
+  />
+  
+  <!-- Brands Widget ******************* -->
+  <!-- <Brands 
+  title='Andere über uns'
+  tagline='Die Presse über NapfGenuss'
+  images={[
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Der_Spiegel_2022_logo.svg/2560px-Der_Spiegel_2022_logo.svg.png',
+      alt: 'Der Spiegel',
+      quote: '“Artgerechte Fütterung leicht gemacht”',
+    },
+    {
+      src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbvicIxjw_rRFYC9sifjAtH987g7PX9e5fjA&s',
+      alt: 'Die Zeit',
+      quote: '“Individuelles Hundefutter ohne Kompromisse”',
+    },
+  ]}
+  /> -->
 
   <!-- Examples Widget ******************* -->
-  <DynamicExamples/>
-  
+  <DynamicExamples />
 
-  <!-- Pricing Widget ******************* -->
+  <!-- Pricing Widget *******************
   <Prices
     title="Unsere Preise"
     subtitle="Zahle nur für das, was du brauchst"
@@ -229,7 +269,7 @@ const metadata = {
         },
       },
     ]}
-  />
+  /> -->
 
   <!-- FAQs Widget ******************* -->
 
@@ -237,25 +277,25 @@ const metadata = {
     title="Oft gestellte Fragen"
     items={[
       {
-        title: 'Is AstroWind compatible with the latest versions of Astro and Tailwind CSS?',
+        title: 'Warum macht es Sinn, einen Futterplan zu individualisieren?',
         description:
-          'Yes, AstroWind is designed to be compatible with the latest versions of both Astro and Tailwind CSS. This ensures that you can harness the full capabilities of these technologies while benefiting from the features offered by AstroWind.',
+          'Jeder Hund ist unterschiedlich. Ein individueller Futterplan berücksichtigt die spezifischen Bedürfnisse Ihres Hundes und sorgt für eine optimale Ernährung - sei es eine Unverträglichkeit oder eine Krankheit, die mithilfe der richtigen Ernährung gelindert werden kann.',
         icon: 'tabler:chevrons-right',
       },
       {
-        title: 'Can I use AstroWind for both personal and commercial projects?',
-        description: `Certainly! AstroWind is versatile and can be used for a wide range of projects, including both personal and commercial endeavors. Whether you're building a professional portfolio, launching a startup, or creating a marketing website, AstroWind has you covered.`,
+        title: 'Nach welchen Standards wird das Futter produziert?',
+        description: `Wir produzieren unser Futter nach den höchsten Qualitätsstandards. Unsere Zutaten sind regional und nachhaltig erzeugt und wir verzichten auf künstliche Zusätze. Bei Fragen kontaktieren Sie uns gerne und wir helfen Ihnen weiter.`,
         icon: 'tabler:chevrons-right',
       },
       {
-        title: 'What level of coding knowledge is required to use AstroWind?',
+        title: 'Kann ich auch ein Abo-Modell abschließen?',
         description:
-          'While some familiarity with HTML, CSS, and web development concepts is helpful, the user-friendly interface and customization options allow those with limited coding experience to create impressive websites. For more advanced users, AstroWind offers extensive customization capabilities.',
+          'Zur Zeit haben wir noch kein Abo-Modell. Allerdings können Sie ein Produkt nach Bedarf bestellen und die Lieferung individuell anpassen.',
         icon: 'tabler:chevrons-right',
       },
       {
-        title: 'Is customer support available for AstroWind users seeking guidance?',
-        description: `Absolutely, our dedicated customer support team is here to assist you with any questions or challenges you may encounter. Feel free to reach out to us through our support channels, and we'll be happy to provide the help you need.`,
+        title: 'Was passiert, wenn sich die Bedürfnisse meines Hundes ändern?',
+        description: `Kein Problem! Sie können die Daten Ihres Hundes jederzeit aktualisieren und wir passen den Futterplan entsprechend an.`,
         icon: 'tabler:chevrons-right',
       },
     ]}
@@ -268,27 +308,27 @@ const metadata = {
   <!-- Steps2 Widget ****************** -->
 
   <Steps2
-    title="Reach out to us"
-    subtitle="Have questions? Feel free to contact us using the form below. We're here to help!"
+    title="Sie haben Fragen?"
+    subtitle="Wir freuen uns auf Ihre Nachricht"
     callToAction={{
-      text: 'Contact us',
+      text: 'Jetzt kontaktieren',
       href: '/',
     }}
     items={[
       {
-        title: 'Email us',
-        description: 'contact@support.com',
+        title: 'E-Mail',
+        description: 'info@napfgenuss-shop.de',
         icon: 'tabler:mail',
       },
       {
-        title: 'Call us',
+        title: 'Anrufen',
         description: '+1 (234) 567-890',
         icon: 'tabler:headset',
       },
       {
-        title: 'Follow us',
-        description: '@example',
-        icon: 'tabler:brand-twitter',
+        title: 'Social Media',
+        description: '@napfgenuss-shop',
+        icon: 'tabler:brand-instagram',
       },
     ]}
   />
@@ -297,8 +337,8 @@ const metadata = {
 
   <BlogLatestPosts
     id="blog"
-    title="Stay informed with AstroWind's blog"
-    information={`Explore our collection of articles, guides, and tutorials on web development, design trends, and using AstroWind effectively for your projects.`}
+    title="Unser hundeernährungsblog"
+    information={`Lesen Sie die neuesten Beiträge zu Hundeernährung, Gesundheit und Wohlbefinden.`}
   >
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>

@@ -1,0 +1,48 @@
+---
+import Button from '../ui/Button.astro';
+import WidgetWrapper from '../ui/WidgetWrapper.astro';
+import Headline from '../blog/Headline.astro';
+import Image from '../common/Image.astro';
+
+const {
+  title,
+  subtitle,
+  process = [],
+  CTA,
+  classes = {},
+  isDark = false,
+  bg = await Astro.slots.render('bg'),
+} = Astro.props;
+---
+
+<WidgetWrapper isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
+  <Headline title={title} subtitle={subtitle} />
+  <div class="flex justify-center mb-10">
+    <div class="p-2 grid grid-cols-1 gap-4 dark:text-white sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+      {
+        process &&
+          process.map(({ subtitle, tagline, src, alt, counter }) => (
+            <div class="flex-col justify-self-center max-w-full">
+              <div class="relative top-5 flex justify-center justify-self-center items-center m-auto w-10 h-10 bg-primary rounded-full">
+                <div class="text-white text-center text-xl font-semibold">{counter}</div>
+              </div>
+              <Image
+                width={300}
+                height={300}
+                src={src}
+                alt={alt}
+                class="rounded-lg w-full mb-6 justify-self-center mx-auto"
+              />
+              <div class="text-center text-xl font-semibold leading-6 tracking-wider mb-2">{subtitle}</div>
+              <div class="text-center mt-2 md:mt-3 mx-auto text-l text-gray-400 dark:text-slate-400 font-medium">
+                {tagline}
+              </div>
+            </div>
+          ))
+      }
+    </div>
+  </div>
+  <div class="flex justify-center mx-auto mt-10">
+    <Button text={CTA} variant="secondary" class="mx-auto" href="/services" />
+  </div>
+</WidgetWrapper>

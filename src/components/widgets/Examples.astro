@@ -6,58 +6,59 @@ import Image from '~/components/common/Image.astro';
 const {
   examples = [],
 
-    // Add more props here
-
+  // Add more props here
 } = Astro.props;
 ---
 
-  <div class="flex items-stretch justify-center">
-    <div class="grid grid-cols-4 gap-4 dark:text-white sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
-      {
-        examples &&
-          examples.map(({ petname, subtitle, tagline, price, period, image, alt, hasRibbon = false, ribbonTitle }) => {
-            return (
-              <div class="col-span-3 mx-auto flex w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
-                {price && period && (
-                  <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center">
-                    {tagline && 
-                      <div class="absolute top-0 left-0 right-0 bg-primary text-white text-xs font-semibold uppercase py-1">
-                        {tagline}
-                      </div>
-                    }
-                    <div class="px-2 py-0">
-                      {petname && (
-                        <h3 class="text-center text-xl font-semibold uppercase leading-6 tracking-wider mb-2">
-                          {petname}
-                        </h3>
-                      )}
-                      {subtitle && <p class="font-light sm:text-lg text-gray-600 dark:text-slate-400">{subtitle}</p>}
+<div class="flex items-stretch justify-center">
+  <div class="grid grid-cols-3 gap-4 dark:text-white sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+    {
+      examples &&
+        examples.map(({ petname, subtitle, tagline, price, period, images, alt }) => {
+          return (
+            <div class="col-span-3 mx-auto flex w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
+              {price && period && (
+                <div class="rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow px-6 py-8 flex w-full max-w-sm flex-col justify-between text-center">
+                  <div class="px-2 py-0">
+                    {petname && (
+                      <h3
+                        data-petname={petname}
+                        class="petname text-center text-xl font-semibold uppercase leading-6 tracking-wider mb-2"
+                      >
+                        {petname}
+                      </h3>
+                    )}
+                    {subtitle && <p class="font-light sm:text-lg text-gray-600 dark:text-slate-400">{subtitle}</p>}
 
-                      {image && alt && (
-                        <div class="relative m-auto max-w-5xl intersect-once intercept-no-queue motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
-                          <Image
-                            class="mx-auto rounded-md w-full"
-                            widths={[400, 768, 1024, 2040]}
-                            sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
-                            loading="eager"
-                            src={image}
-                            alt={alt}
-                          />
-                        </div>
-                      )}
-                      <div class="my-8">
-                        <div class="flex align-baseline items-center justify-center text-center mb-1">
-                          <span class="text-3xl">€</span>
-                          <span class="text-4xl font-extrabold">{price}</span>
-                        </div>
-                        <span class="text-base leading-6 lowercase text-gray-600 dark:text-slate-400">{period}</span>
+                    {images &&
+                            <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
+                              <Image
+                                src={images.src}
+                                alt={images.alt || ''}
+                                class="max-h-12"
+                                width={500}
+                                height={500}
+                              />
+                            </div>
+                      }
+                    {tagline && <div class="text-s font-semibold m-1">{tagline}</div>}
+                    <div class="my-8">
+                      <div class="flex align-baseline items-center justify-center text-center mb-1">
+                        <span data-price={price} class="example-price text-4xl font-extrabold">
+                          {price}
+                        </span>
+                        <span class="text-3xl">€</span>
                       </div>
+                      <span class="example-period text-base leading-6 lowercase text-gray-600 dark:text-slate-400">
+                        {period}
+                      </span>
                     </div>
                   </div>
-                )}
-              </div>
-            );
-          })
-      }
-    </div>
+                </div>
+              )}
+            </div>
+          );
+        })
+    }
   </div>
+</div>

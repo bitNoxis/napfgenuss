@@ -4,30 +4,19 @@ import WidgetWrapper from '../ui/WidgetWrapper.astro';
 import Headline from '../ui/Headline.astro';
 import Button from '../ui/Button.astro';
 
-// Prices for calculation
-const LunaDayPrice = 1.12;
-const BaluDayPrice = 0.85;
-const FelixDayPrice = 1.29;
-const MaxDayPrice = 1.29;
+import Labradoodle from '../../assets/images/dogs/Labradoodle.png'
+import Rauhaar from '../../assets/images/dogs/Rauhaar.png'
+import Welpe from '../../assets/images/dogs/Welpe.png'
+import Senior from '../../assets/images/dogs/GoldenRetriever.png'
 
-function PriceCalculation(price, period) {
-  switch (period) {
-    case 'Preis pro Tag':
-      return price;
-    case 'Preis pro Monat':
-      return (price * 30).toFixed(2); // Monthly price calculation
-    case 'Preis pro Kilogram':
-      return (price / 2000).toFixed(2); // Kilogram-based price
-    default:
-      return price;
-  }
-}
-
-var currentPeriod = 'Preis pro Monat';
-
-function UpdatePeriod(text) {
-      text = currentPeriod;
-    }
+import {
+  PriceCalculation,
+  currentPeriod,
+  OttoDayPrice,
+  BaluDayPrice,
+  FieteDayPrice,
+  LunaDayPrice,
+} from '../../lib/PriceCalculation';
 
 const {
   title = 'Premium-Qualität muss nicht teuer sein',
@@ -48,77 +37,101 @@ const {
 <WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
   <Headline title={title} subtitle={subtitle} tagline={tagline} />
   <div class="flex items-stretch justify-center mb-10">
-    <div class="grid grid-cols-3 gap-4 dark:text-white sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
-      {buttons.map(({ text, id }) => (
-        <div class="col-span-4 mx-auto flex w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-          <Button
-            class="w-full"
-            variant="secondary"
-            text={text}
-            type="button"
-            id={id}
-            data-period={text}
-          />
-        </div>
-      ))}
+    <div class="border border-white sm:border-inherit rounded-lg sm:rounded-full md:rounded-full lg:rounded-full p-2 grid grid-cols-3 gap-4 dark:text-white sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+      {
+        buttons.map(({ text, id }) => (
+          <div class="col-span-4 mx-auto flex justify-center w-full sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+            <Button class="w-full" text={text} type="button" id={id} data-period={text} />
+          </div>
+        ))
+      }
     </div>
   </div>
   <div id="examples-container">
     <Examples
-      examples={[
-        {
-          petname: 'Luna',
-          subtitle: 'Labradoodle',
-          tagline: 'Sehr aktiv',
-          price: PriceCalculation(LunaDayPrice, currentPeriod),
-          period: currentPeriod,
-          image:
-            'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
-          alt: 'Luna Bild',
-        },
-        {
-          petname: 'Balu',
-          subtitle: 'Australian Shepherd',
-          tagline: 'im Wachstum',
-          price: PriceCalculation(BaluDayPrice, currentPeriod),
-          period: currentPeriod,
-          image:
-            'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
-          alt: 'Balu Bild',
-        },
-        {
-          petname: 'Otto',
-          subtitle: 'Rauhaar-Dackel',
-          tagline: 'Gelenkprobleme',
-          price: PriceCalculation(FelixDayPrice, currentPeriod),
-          period: currentPeriod,
-          image:
-            'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
-          alt: 'Felix Bild',
-        },
-        {
-          petname: 'Fiete',
-          subtitle: 'Golden Retriever',
-          tagline: 'Senior',
-          price: PriceCalculation(MaxDayPrice, currentPeriod),
-          period: currentPeriod,
-          image:
-            'https://images.unsplash.com/photo-1609620977477-30bebfbffb41?q=80&w=2940&auto=format&fit=crop',
-          alt: 'Max Bild',
-        },
-      ]}
-    />
+  examples={[
+    {
+      petname: 'Luna',
+      subtitle: 'Labradoodle',
+      tagline: 'Sehr aktiv',
+      price: PriceCalculation(LunaDayPrice, currentPeriod),
+      period: currentPeriod,
+      images: { src: Labradoodle, alt: "Labradoodle" }, // Corrected structure
+    },
+    {
+      petname: 'Balu',
+      subtitle: 'Australian Shepherd',
+      tagline: 'im Wachstum',
+      price: PriceCalculation(BaluDayPrice, currentPeriod),
+      period: currentPeriod,
+      images: { src: Welpe, alt: "Welpe" },
+    },
+    {
+      petname: 'Otto',
+      subtitle: 'Rauhaar-Dackel',
+      tagline: 'Gelenkprobleme',
+      price: PriceCalculation(OttoDayPrice, currentPeriod),
+      period: currentPeriod,
+      images: { src: Rauhaar, alt: "Rauhaar Dackel Otto" },
+    },
+    {
+      petname: 'Fiete',
+      subtitle: 'Golden Retriever',
+      tagline: 'Senior',
+      price: PriceCalculation(FieteDayPrice, currentPeriod),
+      period: currentPeriod,
+      images: { src: Senior, alt: "Senior Golden Retriever" },
+    },
+  ]}
+/>
   </div>
+  <div class="flex justify-center mx-auto mt-10">
+    <Button text="Jetzt Preise entdecken!" variant="primary" class="mx-auto" href="/products"/>
+</div>
 </WidgetWrapper>
 
 <script>
+  import { PriceCalculation } from '../../lib/PriceCalculation';
 
-    const buttonsQuery = document.querySelectorAll('button');
-  
-    buttonsQuery.forEach((button) => {
-      button.addEventListener('click', () => {
-        console.log(button.id);
-        UpdatePeriod(button.innerText);
+  let activeButton = '';
+
+  function UpdatePeriod(text) {
+    const example_price = document.querySelectorAll('.example-price');
+    const example_period = document.querySelectorAll('.example-period');
+    const example_petname = document.querySelectorAll('.petname');
+
+    example_price.forEach((price) => {
+      example_petname.forEach((petname) => {
+        petname = petname.getAttribute('data-petname');
+        price.innerHTML = PriceCalculation(parseFloat(price.getAttribute('data-price')), text, petname);
       });
     });
-  </script>
+
+    example_period.forEach((period) => {
+      period.innerHTML = text;
+      activeButton = text;
+    });
+  }
+
+  const buttonsQuery = document.querySelectorAll('button');
+
+  buttonsQuery.forEach((button) => {
+    button.addEventListener('click', () => {
+      // Wenn der Button bereits aktiv ist, nichts tun
+      if (button.innerText === activeButton) {
+        return;
+      }
+
+      // Andernfalls: Setze den neuen aktiven Button
+      UpdatePeriod(button.innerText);
+
+      // Entferne 'btn-primary' von allen Buttons und setze 'btn-secondary'
+      buttonsQuery.forEach((btn) => {
+        btn.classList.replace('btn-primary', 'btn-secondary');
+      });
+
+      // Füge dem geklickten Button 'btn-primary' hinzu
+      button.classList.replace('btn-secondary', 'btn-primary');
+    });
+  });
+</script>

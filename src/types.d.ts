@@ -91,6 +91,7 @@ export interface MetaDataTwitter {
 export interface Image {
   src: string;
   alt?: string;
+  quote?: string;
 }
 
 export interface Video {
@@ -166,7 +167,7 @@ export interface Examples {
   subtitle?: string;
   tagline?: string;
   description?: string;
-  image?: string;
+  images?: Image;
   alt?: string;
   price?: number | string;
   period?: string;
@@ -245,6 +246,7 @@ export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'isDark' |
   content?: string;
   actions?: string | CallToAction[];
   image?: string | unknown;
+  absolute_image?: string | unknown;
 }
 
 export interface Team extends Omit<Headline, 'classes'>, Widget {
@@ -275,6 +277,7 @@ export interface Testimonials extends Omit<Headline, 'classes'>, Widget {
 export interface Brands extends Omit<Headline, 'classes'>, Widget {
   icons?: Array<string>;
   images?: Array<Image>;
+  quote?: Array<string>;
 }
 
 export interface Features extends Omit<Headline, 'classes'>, Widget {
