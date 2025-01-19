@@ -18,7 +18,7 @@ const {
 <WidgetWrapper>
   <Headline title={title} subtitle={subtitle} />
   <div class="overflow-hidden">
-    <div class="scrollbar-hide snap-x snap-mandatory flex flex-row w-screen space-x-5 overflow-x-scroll px-4">
+    <div class="scrollbar-hide snap-x snap-mandatory flex flex-row w-full space-x-5 overflow-x-scroll px-4 ">
     {
       ingredients01 &&
         ingredients01.map(({ type, desc, img, color }) => (
@@ -39,7 +39,7 @@ const {
                   />
                 </svg>
               </div>
-              <Image src={img} width={300} height={300} alt="Kibble" class="relative z-10 mx-auto" />
+              <Image src={img} width={500} height={300} alt="Kibble" class="relative z-10 mx-auto" />
               {type && (
                 <div class="mt-4 font-bold text-center text-gray-800 dark:text-gray-100 text-xl">
                   {type}
@@ -51,7 +51,7 @@ const {
         ))
     }
     </div>
-  <div class="scrollbar-hide snap-x snap-mandatory flex flex-row w-screen space-x-5 overflow-x-scroll px-4">
+  <div class="scrollbar-hide snap-x snap-mandatory flex flex-row w-full space-x-5 overflow-x-scroll px-4">
     {
       ingredients02 &&
         ingredients02.map(({ type, desc, img, color }) => (
@@ -72,7 +72,7 @@ const {
                   />
                 </svg>
               </div>
-              <Image src={img} width={300} height={300} alt="Kibble" class="relative z-10 mx-auto" />
+              <Image src={img} width={500} height={300} alt="Kibble" class="relative z-10 mx-auto" />
               {type && (
                 <div class="mt-4 font-bold text-center text-gray-800 dark:text-gray-100 text-xl">
                   {type}

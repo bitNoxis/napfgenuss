@@ -27,13 +27,13 @@ const {
     {
       kibble &&
         kibble.map(({ title, desc, img }) => (
-          <div class="flex flex-row sm:flex-col group p-4 text-center md:border-r md:last:border-none dark:md:border-slate-500 intersect-once motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade intersect-quarter">
-            {img && <Image src={img} width={200} height={200} alt="Kibble" />}
+          <div class="flex flex-row group p-4 text-center md:border-r md:last:border-none dark:md:border-slate-500 intersect-once motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade intersect-quarter">
+            {img && <Image src={img} width={75} height={75} alt="Kibble" />}
             {title && (
-              <div class="align-middle text-lg font-bold text-gray-800 dark:text-slate-200 lg:text-xl opacity-100">
+              <div class="text-left text-lg font-bold text-gray-800 dark:text-slate-200 lg:text-xl opacity-100">
                 {title}
                 {desc && (
-                  <div class="text-sm font-medium uppercase tracking-widest text-gray-800 dark:text-slate-400 lg:text-base opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:animate-fade">
+                  <div class="text-sm font-medium uppercase tracking-widest text-gray-800 dark:text-slate-400 lg:text-base opacity-100">
                     {desc}
                   </div>
                 )}
