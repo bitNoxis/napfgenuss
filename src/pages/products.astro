@@ -15,7 +15,8 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie heißt dein Hund?</h2>
 
         <div class="flex space-x-4 mb-4">
-          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
             <input
               type="radio"
               name="dogGender"
@@ -25,7 +26,8 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
             >
             <span class="text-page group-hover:text-primary">Er heißt</span>
           </label>
-          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
             <input
               type="radio"
               name="dogGender"
@@ -94,7 +96,8 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         <h2 class="text-2xl font-heading font-bold mb-6 text-page">Rasse von <span class="dog-name"></span></h2>
 
         <div class="flex space-x-4 mb-6">
-          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
             <input
               type="radio"
               name="breedType"
@@ -104,7 +107,8 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
             >
             <span class="text-page group-hover:text-primary">Reinrassig</span>
           </label>
-          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
             <input
               type="radio"
               name="breedType"
@@ -114,7 +118,8 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
             >
             <span class="text-page group-hover:text-primary">Mischling</span>
           </label>
-          <label class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
             <input
               type="radio"
               name="breedType"
@@ -190,6 +195,118 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         </div>
       </div>
 
+      <!-- Schritt 5: Aktuelles Gewicht -->
+      <div class="step-5 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Wie schwer ist <span class="dog-name"></span> aktuell?
+        </h2>
+        <div class="flex items-center space-x-2">
+          <input
+            type="number"
+            name="currentWeight"
+            value="5"
+            min="0.1"
+            max="60"
+            step="0.1"
+            class="w-32 p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+            required
+          />
+          <span class="text-page">kg</span>
+        </div>
+      </div>
+
+      <!-- Schritt 6: Körperliche Verfassung -->
+      <div class="step-6 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Welche körperliche Verfassung beschreibt <span class="dog-name"></span> am Besten?
+        </h2>
+        <div class="space-y-4">
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="bodyCondition" value="very-underweight" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Stark untergewichtig</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="bodyCondition" value="underweight" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Untergewichtig</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="bodyCondition" value="ideal" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Ideal</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="bodyCondition" value="overweight" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Übergewichtig</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="bodyCondition" value="obese" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Fettleibig</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Schritt 7: Aktivitätslevel -->
+      <div class="step-7 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Wie aktiv ist <span class="dog-name"></span> am Tag?
+        </h2>
+        <div class="space-y-4">
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="activityLevel" value="very-low" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">< 30 Min</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="activityLevel" value="low" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">30 Min - 1 Stunde</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="activityLevel" value="medium" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">1 - 2 Stunden</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="activityLevel" value="high" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Mehr als 2 Stunden</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Schritt 8: Leckerlis -->
+      <div class="step-8 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Wie viele Leckerlis bekommt <span class="dog-name"></span>?
+        </h2>
+        <div class="space-y-4">
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="treats" value="none" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Keine</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="treats" value="few-weekly" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Ein paar pro Woche</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="treats" value="few-daily" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Ein paar pro Tag</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <input type="radio" name="treats" value="many-daily" required
+                   class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+            <span class="text-page group-hover:text-primary transition duration-200">Viele am Tag</span>
+          </label>
+        </div>
+      </div>
+
       <div class="flex justify-between pt-6">
         <button
           type="button"
@@ -248,11 +365,15 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
     breedType: '', // 'purebred', 'mixed', oder 'unknown'
     breed: '',
     breed2: '', // für Mischlinge
-    weight: '' // für unbekannte Rassen
+    weight: '', // für unbekannte Rassen
+    currentWeight: 5,
+    bodyCondition: '',
+    activityLevel: '',
+    treats: ''
   };
 
   // Hauptinitialisierungsfunktion
-  window.initializeDogConfigurator = function() {
+  window.initializeDogConfigurator = function () {
     const form = document.getElementById('dog-configurator');
     if (!form) return false;
 
@@ -277,10 +398,10 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       if (!validateStep()) {
         return;
       }
-      if (currentStep < 4) {
-        showStep(currentStep + 1);
+      if (currentStep === 8) {
+        finishConfiguration()
       } else {
-        finishConfiguration();
+        showStep(currentStep + 1);
       }
     });
 
@@ -318,7 +439,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       }
 
       newPrevButton.classList.toggle('hidden', step === 1);
-      newNextButton.textContent = step === 4 ? 'Fertig' : 'Weiter';
+      newNextButton.textContent = step === 6 ? 'Fertig' : 'Weiter';  // Änderung von 4 auf 6
       currentStep = step;
     }
 
@@ -347,7 +468,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
           unknownWeight?.classList.add('hidden');
 
           // Zeige die gewählte Option
-          switch(input.value) {
+          switch (input.value) {
             case 'purebred':
               purebredSelect?.classList.remove('hidden');
               break;
@@ -364,7 +485,6 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       });
     });
 
-    // Modifiziere die validateStep Funktion:
     function validateStep() {
       const currentStepEl = document.querySelector(`.step-${currentStep}`);
       if (!currentStepEl) return false;
@@ -374,29 +494,88 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
 
       currentStepEl.querySelectorAll('.error-message').forEach(msg => msg.remove());
 
-      if (currentStep === 1) {
-        const genderSelected = Array.from(genderInputs).some(input =>
-          input instanceof HTMLInputElement && input.checked
-        );
-        if (!genderSelected) {
-          isValid = false;
-          const err = document.createElement('div');
-          err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
-          err.textContent = 'Bitte wähle das Geschlecht aus';
-          genderInputs[0].parentElement?.parentElement?.appendChild(err);
+      switch(currentStep) {
+        case 1: {
+          const genderSelected = Array.from(genderInputs).some(input =>
+            input instanceof HTMLInputElement && input.checked
+          );
+          if (!genderSelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle das Geschlecht aus';
+            genderInputs[0].parentElement?.parentElement?.appendChild(err);
+          }
+          break;
         }
-      }
+        case 4: {
+          const breedTypeSelected = Array.from(breedTypeInputs).some(input =>
+            input instanceof HTMLInputElement && input.checked
+          );
+          if (!breedTypeSelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle eine Rassen-Option aus';
+            breedTypeInputs[0].parentElement?.parentElement?.appendChild(err);
+          }
+          break;
+        }
+        case 5: {
+          const weightInput = currentStepEl.querySelector('[name="currentWeight"]');
+          if (weightInput instanceof HTMLInputElement) {
+            const weight = parseFloat(weightInput.value || '0');
+            if (isNaN(weight) || weight < 0.1 || weight > 60) {
+              isValid = false;
+              const err = document.createElement('div');
+              err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+              err.textContent = 'Bitte gib ein gültiges Gewicht zwischen 0,1 und 60 kg ein';
+              weightInput.parentElement?.appendChild(err);
+            }
+          }
+          break;
+        }
+        case 6: {
+          const bodyConditionSelected = Array.from(
+            currentStepEl.querySelectorAll('[name="bodyCondition"]')
+          ).some(input => input instanceof HTMLInputElement && input.checked);
 
-      if (currentStep === 4) {
-        const breedTypeSelected = Array.from(breedTypeInputs).some(input =>
-          input instanceof HTMLInputElement && input.checked
-        );
-        if (!breedTypeSelected) {
-          isValid = false;
-          const err = document.createElement('div');
-          err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
-          err.textContent = 'Bitte wähle eine Rassen-Option aus';
-          breedTypeInputs[0].parentElement?.parentElement?.appendChild(err);
+          if (!bodyConditionSelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle eine körperliche Verfassung aus';
+            currentStepEl.querySelector('.space-y-4')?.appendChild(err);
+          }
+          break;
+        }
+        case 7: {
+          const activitySelected = Array.from(
+            currentStepEl.querySelectorAll('[name="activityLevel"]')
+          ).some(input => input instanceof HTMLInputElement && input.checked);
+
+          if (!activitySelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle ein Aktivitätslevel aus';
+            currentStepEl.querySelector('.space-y-4')?.appendChild(err);
+          }
+          break;
+        }
+        case 8: {
+          const treatsSelected = Array.from(
+            currentStepEl.querySelectorAll('[name="treats"]')
+          ).some(input => input instanceof HTMLInputElement && input.checked);
+
+          if (!treatsSelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle eine Option aus';
+            currentStepEl.querySelector('.space-y-4')?.appendChild(err);
+          }
+          break;
         }
       }
 
@@ -427,12 +606,13 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       dogData.isNeutered = formData.get('isNeutered') === 'yes';
       dogData.age.years = parseInt(formData.get('ageYears')?.toString() || '0');
       dogData.age.months = parseInt(formData.get('ageMonths')?.toString() || '0');
-
-      // Neue Daten
       dogData.gender = formData.get('dogGender')?.toString() || '';
       dogData.breedType = formData.get('breedType')?.toString() || '';
+      dogData.currentWeight = parseFloat(formData.get('currentWeight')?.toString() || '5');
+      dogData.bodyCondition = formData.get('bodyCondition')?.toString() || '';
+      dogData.activityLevel = formData.get('activityLevel')?.toString() || '';
+      dogData.treats = formData.get('treats')?.toString() || '';
 
-      // Rassen-spezifische Daten
       switch(dogData.breedType) {
         case 'purebred':
           dogData.breed = formData.get('breed')?.toString() || '';
@@ -447,7 +627,6 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       }
 
       let imageUrl = foodImages.default;
-      // Bestimme Bild basierend auf Rasse oder Gewicht
       if (dogData.breedType === 'unknown') {
         switch(dogData.weight) {
           case 'mini':
@@ -468,6 +647,28 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       const ageSummary = dogData.age.months
         ? `${dogData.age.years} Jahre und ${dogData.age.months} Monate`
         : `${dogData.age.years} Jahre`;
+
+      const bodyConditionTexts = {
+        'very-underweight': 'Stark untergewichtig',
+        'underweight': 'Untergewichtig',
+        'ideal': 'Ideal',
+        'overweight': 'Übergewichtig',
+        'obese': 'Fettleibig'
+      };
+
+      const activityTexts = {
+        'very-low': 'weniger als 30 Min',
+        'low': '30 Min - 1 Stunde',
+        'medium': '1 - 2 Stunden',
+        'high': 'Mehr als 2 Stunden'
+      };
+
+      const treatTexts = {
+        'none': 'Keine',
+        'few-weekly': 'Ein paar pro Woche',
+        'few-daily': 'Ein paar pro Tag',
+        'many-daily': 'Viele am Tag'
+      };
 
       // Erweiterte Zusammenfassung
       const breedSummary = (() => {
@@ -494,12 +695,32 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
     <p class="mb-2">Name: ${dogData.name} (${dogData.gender === 'male' ? 'männlich' : 'weiblich'})</p>
     <p class="mb-2">Alter: ${ageSummary}</p>
     <p class="mb-2">Rasse: ${breedSummary}</p>
+    <p class="mb-2">Aktuelles Gewicht: ${dogData.currentWeight} kg</p>
+    <p class="mb-2">Körperliche Verfassung: ${bodyConditionTexts[dogData.bodyCondition]}</p>
+    <p class="mb-2">Aktivität pro Tag: ${activityTexts[dogData.activityLevel]}</p>
+    <p class="mb-2">Leckerlis: ${treatTexts[dogData.treats]}</p>
     <p>${dogData.isNeutered ? 'Kastriert' : 'Nicht kastriert'}</p>
+    
+    <button
+      id="editAnswers"
+      class="btn btn-secondary mt-4"
+      type="button"
+    >
+      Antworten ändern
+    </button>
   `;
+
+      // Event Listener für den Edit-Button
+      document.getElementById('editAnswers')?.addEventListener('click', () => {
+        snipcartContainer.classList.add('hidden');
+        form.classList.remove('hidden');
+        showStep(currentStep - 1);
+      });
+
 
       const snipcartButton = document.querySelector('.snipcart-add-item');
       if (snipcartButton) {
-        const description = `Individuelles Hundefutter für ${dogData.name} (${ageSummary} alt, ${breedSummary})`;
+        const description = `Individuelles Hundefutter für ${dogData.name} (${ageSummary} alt, ${breedSummary}, ${dogData.currentWeight}kg, ${bodyConditionTexts[dogData.bodyCondition]})`;
         snipcartButton.setAttribute('data-item-name', `Hundefutter für ${dogData.name}`);
         snipcartButton.setAttribute('data-item-description', description);
         snipcartButton.setAttribute('data-item-image', imageUrl);
@@ -527,7 +748,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
   document.addEventListener('astro:after-swap', () => {
     setTimeout(setupConfigurator, 0);
   });
-  
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupConfigurator);
   } else {
