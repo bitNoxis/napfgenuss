@@ -1,5 +1,6 @@
 ---
 import CartIcon from '../icons/CartIcon.astro';
+import Button from './Button.astro';
 ---
 
 <body>
@@ -10,9 +11,71 @@ import CartIcon from '../icons/CartIcon.astro';
        strokeColor=var(--aw-color-secondary)
        />
        <span class="relative bottom-2 right-2 w-5 h-5 rounded-full bg-secondary flex items-center justify-center m-auto">
-        <span class="text-white snipcart-items-count"></span>
+        <span id="snipcart_count" class="text-white snipcart-items-count"></span>
       </span>
       
     </a>
-    
   </body> 
+  <div id="reminder" 
+     class="fixed bottom-10 transform -translate-x-1/2 w-80 bg-white shadow-lg border border-gray-300 rounded-lg p-4 flex items-center justify-between space-x-4">
+  <div class="text-gray-700">
+    <p class="font-semibold">Warenkorb</p>
+    <p class="text-sm text-gray-500">Es liegt Hundefutter in Ihrem Warenkorb!</p>
+  </div>
+  <Button variant="secondary" class="text-sm px-4 py-2 transition" href='/#/checkout'>Zur Kasse</Button>
+</div>
+
+
+
+  <script>
+    // Funktion, die ausgeführt wird, wenn der Counter aktualisiert wird
+    const handleSnipcartCountChange = () => {
+      document.addEventListener('scroll', () => {
+        const snipcartCountElement = document.getElementById('snipcart_count');
+        const snipcartCount = parseInt(snipcartCountElement?.innerHTML || '0', 10);
+        const reminder = document.getElementById('reminder');
+
+        if (!snipcartCountElement || !reminder) {
+        console.error('Required elements (#snipcart_count or #reminder) not found.');
+        return;
+      }
+
+        console.log('Aktueller Snipcart Count:', snipcartCount); // Debugging
+    
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+
+        if (snipcartCount > 0 && scrollY > viewportHeight) {
+          // User has scrolled below the fold and there are items in the cart
+          reminder.classList.remove('hidden');
+          reminder.classList.add('block');
+          console.log('Reminder anzeigen');
+        } else {
+          // Either no items in the cart or user is above the fold
+          reminder.classList.remove('block');
+          reminder.classList.add('hidden');
+          console.log('Reminder ausblenden');
+      }
+    })};
+
+    // Starte den MutationObserver, sobald die Seite geladen ist
+    document.addEventListener('DOMContentLoaded', () => {
+      const snipcartCountElement = document.getElementById('snipcart_count');
+  
+      if (snipcartCountElement) {
+        // MutationObserver für Änderungen am Counter-Element einrichten
+        const observer = new MutationObserver(() => {
+          handleSnipcartCountChange();
+        });
+  
+        observer.observe(snipcartCountElement, {
+          childList: true, // Beobachtet Änderungen an den direkten Kindknoten
+          characterData: true, // Beobachtet Änderungen am Textinhalt
+          subtree: true, // Beobachtet Änderungen in untergeordneten Elementen
+        });
+  
+        // Einmal beim Start die Funktion ausführen
+        handleSnipcartCountChange();
+      }
+    });
+  </script>

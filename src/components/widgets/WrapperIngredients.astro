@@ -1,0 +1,38 @@
+---
+import Ingredients from './Ingredients.astro';
+
+import Reis from '~/assets/images/ingredients/reis.png';
+import Sueßkartoffel from '~/assets/images/ingredients/suesskartoffel.png';
+import Fleisch01 from '~/assets/images/ingredients/fleisch1.png';
+import Fleisch02 from '~/assets/images/ingredients/fleisch2.png';
+import Fleisch03 from '~/assets/images/ingredients/fleisch3.png';
+import Huhn from '~/assets/images/ingredients/huhn.png';
+import Blaubeeren from '~/assets/images/ingredients/blaubeeren.png';
+import Spinat from '~/assets/images/ingredients/spinat.png';
+import Oel from '~/assets/images/ingredients/oel.png';
+import Karotten from '~/assets/images/ingredients/karotten.png';
+import Brokkoli from  '~/assets/images/ingredients/brokkoli.png';
+import BraunerReis from '~/assets/images/ingredients/brauner_reis.png';
+import Huhn2 from '~/assets/images/ingredients/huhn2.png';
+---
+
+<Ingredients
+ingredients01={[
+  {type: 'Weißer Reis', desc: 'Liefert natürliche Ballaststoffe, die eine gesunde Verdauung unterstützen.', color: "#31632F", img: Reis},
+  {type: 'Kartoffeln', desc: 'Reich an Vitamin A und Kalium – fördert gesunde Haut und kräftige Muskeln.', color: "#2A6EBB", img: Sueßkartoffel},
+  {type: 'Fleisch', desc: 'Eine ausgezeichnete Energiequelle, die essenzielle Nährstoffe für Vitalität liefert.', color: "#7EB5E2", img: Fleisch01},
+  {type: 'Huhn', desc: 'Hochwertiges Eiweiß mit Kalzium und Phosphor – unterstützt stabile Knochen und starke Zähne.', color: "#CB4E5B", img: Huhn},
+  {type: 'Brauner Reis', desc: 'Liefert langanhaltende Energie und essentielle B-Vitamine für einen aktiven Stoffwechsel.', color: "#2A6EBB", img: Sueßkartoffel},
+  {type: 'Brokkoli', desc: 'Ein ballaststoffreiches Gemüse, das die Verdauung und das Immunsystem stärkt.', color: "#A1C9F1", img: Brokkoli},
+  {type: 'Öl', desc: 'Eine wertvolle Energiequelle, die das Fell glänzend und die Haut geschmeidig hält.', color: "#A1C9F1", img: Oel},
+  {type: 'Blaubeeren', desc: 'Ein antioxidatives Superfood, das die Zellen schützt und das Immunsystem stärkt.', color: "#E2CFB5", img: Blaubeeren},
+]}
+ingredients02={[
+  {type: 'Spinat', desc: 'Vollgepackt mit Vitamin K, Folsäure und Eisen – fördert die Blutbildung und das Wachstum.', color: "#31632F", img: Spinat},
+  {type: 'Fleisch', desc: 'Liefert hochwertige Proteine und unterstützt Muskelaufbau und Regeneration.', color: "#D6A234", img: Fleisch02},
+  {type: 'Brauner Reis', desc: 'Eine reichhaltige Energiequelle mit wichtigen Nährstoffen für einen gesunden Stoffwechsel.', color: "#CAB585", img: BraunerReis},
+  {type: 'Karotten', desc: 'Fördern die Sehkraft und liefern wertvolle Ballaststoffe für die Verdauung.', color: "#2A6EBB", img: Karotten},
+  {type: 'Lamm', desc: 'Leicht verdaulich und besonders magenfreundlich für empfindliche Hunde.', color: "#2A6EBB", img: Fleisch03},
+  {type: 'Ente', desc: 'Proteinreich und voller B-Vitamine – ideal für Energie und den Aufbau kräftiger Muskeln.', color: "#E2CFB5", img: Huhn2},
+]}
+/>

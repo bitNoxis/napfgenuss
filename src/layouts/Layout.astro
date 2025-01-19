@@ -52,8 +52,9 @@ const { language, textDirection } = I18N;
         publicApiKey: 'MzNmMzc4MWMtMjZiZi00ZDBhLWI2NTAtMTllZmU1YjEwNDFhNjM4NzA0NTQ4MTEyNDgzMzE2',
         loadStrategy: 'on-user-interaction',
         modalStyle: 'side',
+        currency: 'eur',
+        // templatesUrl: "~/layouts/snipcart-template.html",
       };
-
       (() => {
         var c, d;
         (d = (c = window.SnipcartSettings).version) != null || (c.version = '3.0');
@@ -129,8 +130,8 @@ const { language, textDirection } = I18N;
 
       // Initialisierung nach jedem Seitenwechsel
       document.addEventListener('astro:after-swap', () => {
-        initializeSnipcart();
-      });
+         initializeSnipcart();
+       });
     </script>
   </head>
 

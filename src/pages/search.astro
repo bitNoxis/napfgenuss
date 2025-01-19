@@ -4,9 +4,16 @@ import Layout from '~/layouts/PageLayout.astro';
 import Header from '~/components/widgets/Header.astro';
 import Image from '~/components/common/Image.astro'
 
+
 import { headerData } from '~/navigation';
 
 import { readDocuments } from '~/lib/utilsDatabase';
+
+import Kibbles from '~/components/widgets/kibbles.astro';
+import Kibble01 from '../assets/images/kibbles/Kibble01.png';
+
+import WrapperIngredients from '~/components/widgets/WrapperIngredients.astro';
+
 
 const metadata = {
   title: 'Produkte',
@@ -27,6 +34,7 @@ const metadata = {
     />
   </Fragment>
 
+  <WrapperIngredients />
 
   <!-- Hero Image ******************* -->
 
@@ -37,4 +45,16 @@ const metadata = {
     height='600'
   /> -->
  
-  
+  <Kibbles
+    title="Die perfekte Mischung braucht's"
+    tagline="7 Sorten, alles was dein Hund braucht"
+    kibble={[
+      { title: 'Nummer 1', desc: '100% Gemüse Vitamin B', img: Kibble01 },
+      { title: 'Nummer 2', desc: '100% Gemüse Vitamin B', img: Kibble01 },
+      { title: 'Nummer 3', desc: '100% Gemüse Vitamin B', img: Kibble01 },
+      { title: 'Nummer 4', desc: '100% Gemüse Vitamin B', img: Kibble01 },
+      { title: 'Nummer 5', desc: '100% Gemüse Vitamin B', img: Kibble01 },
+      { title: 'Nummer 6', desc: '100% Gemüse Vitamin B', img: Kibble01 },
+      { title: 'Nummer 7', desc: '100% Gemüse Vitamin B', img: Kibble01 },
+    ]}
+  />

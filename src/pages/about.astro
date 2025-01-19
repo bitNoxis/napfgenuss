@@ -6,8 +6,6 @@ import Stats from '~/components/widgets/Stats.astro';
 import Steps2 from '~/components/widgets/Steps2.astro';
 import Layout from '~/layouts/PageLayout.astro';
 
-import Kibbles from '~/components/widgets/kibbles.astro';
-
 const metadata = {
   title: 'About us',
 };
@@ -34,20 +32,6 @@ const metadata = {
       Suspendisse vitae nisi eget tortor luctus maximus sed non lectus.
     </Fragment>
   </Hero>
-
-  <Kibbles
-    title="Die perfekte Mischung braucht's"
-    tagline="7 Sorten, alles was dein Hund braucht"
-    kibble={[
-      { title: 'Nummer 1', desc: '100% Gemüse Vitamin B', img: '../images/Kibble01.png' },
-      { title: 'Nummer 2', desc: '100% Gemüse Vitamin B', img: '../images/Kibble01.png' },
-      { title: 'Nummer 3', desc: '100% Gemüse Vitamin B', img: '../images/Kibble01.png' },
-      { title: 'Nummer 4', desc: '100% Gemüse Vitamin B', img: '../images/Kibble01.png' },
-      { title: 'Nummer 5', desc: '100% Gemüse Vitamin B', img: '../images/Kibble01.png' },
-      { title: 'Nummer 6', desc: '100% Gemüse Vitamin B', img: '../images/Kibble01.png' },
-      { title: 'Nummer 7', desc: '100% Gemüse Vitamin B', img: '../images/Kibble01.png' },
-    ]}
-  />
 
   <!-- Stats Widget ****************** -->
 

@@ -16,10 +16,13 @@ import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 
 import HandyMockUp from 'src/assets/images/MockUps/HandyMockUp.png';
 import BagMockUp from 'src/assets/images/MockUps/MockUpProductLucky.png';
+import BagsMockUp from 'src/assets/images/MockUps/MockupTriple.png';
 
 import Prices from '~/components/widgets/Pricing.astro';
 import { headerData } from '~/navigation';
 import { count, table } from 'console';
+
+// 'https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?q=80&w=2788&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
 
 const metadata = {
   title: 'NapfGenuss Hundefutter',
@@ -36,13 +39,13 @@ const metadata = {
       { target: '_self', text: 'Mehr erfahren', href: '/about' },
     ]}
     image={{
-      src: 'https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?q=80&w=2788&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      src: BagsMockUp,
       alt: 'NapfGenuss Hero Image',
     }}
   >
     <Fragment slot="title">
       Zukunft des Hundefutters <br /><span class="text-accent dark:text-white highlight">individuell, einfach</span>
-      <span class="text-primary dark:text-white highlight">nachhaltig</span><br />
+      <span class="text-secondary dark:text-white highlight">nachhaltig</span><br />
     </Fragment>
 
     <Fragment slot="subtitle">
@@ -57,7 +60,7 @@ const metadata = {
 
   <Content
     title="NapfGenuss"
-    subtitle="NapfGenuss steht für individuelle, hochwertige und nachhaltige Hundeernährung. Mit maßgeschneiderten Rezepturen, natürlichen Zutaten und umweltfreundlicher Verpackung machen wir Füttern einfach und unkompliziert."
+    subtitle="<span class='font-semibold'>Maßgeschneiderten Rezepturen, natürlichen Zutaten und umweltfreundlicher Verpackung</span> - so machen wir Füttern einfach und unkompliziert."
     isReversed
     items={[
       {
@@ -89,9 +92,6 @@ const metadata = {
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
   </Content>
-
-  <!-- Content Widget **************** -->
-
 
   <!-- Testimonials Widget *********** -->
 
@@ -165,24 +165,6 @@ const metadata = {
     CTA="Mehr erfahren!"
   />
   
-  <!-- Brands Widget ******************* -->
-  <!-- <Brands 
-  title='Andere über uns'
-  tagline='Die Presse über NapfGenuss'
-  images={[
-    {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Der_Spiegel_2022_logo.svg/2560px-Der_Spiegel_2022_logo.svg.png',
-      alt: 'Der Spiegel',
-      quote: '“Artgerechte Fütterung leicht gemacht”',
-    },
-    {
-      src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbvicIxjw_rRFYC9sifjAtH987g7PX9e5fjA&s',
-      alt: 'Die Zeit',
-      quote: '“Individuelles Hundefutter ohne Kompromisse”',
-    },
-  ]}
-  /> -->
-
   <!-- Examples Widget ******************* -->
   <DynamicExamples />
 
