@@ -2,16 +2,30 @@
 import PageLayout from '~/layouts/PageLayout.astro';
 import buddyImage from '../assets/images/MockUps/Buddy.png';
 import {getKibbleRecommendations} from '../lib/kibbleService';
+import {DogApiService} from "../services/dogApiService";
+import {HunderassenService} from '../lib/hunderassenService';
+
 
 
 const metadata = {
   title: 'Hundefutter Konfigurator',
-};
 
-const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Retriever'];
+};
+// Abrufen der Hundedaten (als Objekte vom Typ DogBreed)
+const hunderassenService = HunderassenService.getInstance();
+const hunderassen = await hunderassenService.fetchHunderassen();
 ---
 
 <PageLayout metadata={metadata}>
+  <head>
+    <!-- Für Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
+    <!-- Für Fuzzy Matching -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+    <title>{metadata.title}</title>
+  </head>
   <!-- Irgendwo in Products.astro, z.B. direkt nach dem snipcart-container -->
   <div id="loading-spinner" class="hidden flex flex-col items-center justify-center mt-8">
     <!-- Einfacher CSS-Spinner (Tailwind-Beispiel) -->
@@ -149,8 +163,10 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
             required
           >
             <option value="">Bitte Rasse wählen</option>
-            {dogBreeds.map(breed => (
-              <option value={breed}>{breed}</option>
+            {hunderassen.map(breed => (
+              <option value={breed.nameDE}>
+                {breed.nameDE}
+              </option>
             ))}
           </select>
         </div>
@@ -162,9 +178,11 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
             class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
             required
           >
-            <option value="">Erste Rasse wählen</option>
-            {dogBreeds.map(breed => (
-              <option value={breed}>{breed}</option>
+            <option value="">Bitte Rasse wählen</option>
+            {hunderassen.map(breed => (
+              <option value={breed.nameDE}>
+                {breed.nameDE}
+              </option>
             ))}
           </select>
           <select
@@ -172,9 +190,11 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
             class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
             required
           >
-            <option value="">Zweite Rasse wählen</option>
-            {dogBreeds.map(breed => (
-              <option value={breed}>{breed}</option>
+            <option value="">Bitte Rasse wählen</option>
+            {hunderassen.map(breed => (
+              <option value={breed.nameDE}>
+                {breed.nameDE}
+              </option>
             ))}
           </select>
         </div>
@@ -339,9 +359,18 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
               <span>Allergien</span>
             </label>
             <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="other" class="w-4 h-4">
+              <input type="checkbox" name="health[]" value="other" class="w-4 h-4" id="otherHealthIssue">
               <span>Sonstiges</span>
             </label>
+            <!-- Neues Textfeld für Sonstiges -->
+            <div id="otherHealthDetails" class="hidden ml-7">
+              <input
+                type="text"
+                name="otherHealthDescription"
+                class="w-full p-2 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+                placeholder="Bitte beschreiben..."
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -399,11 +428,11 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
 
       <button
         class="snipcart-add-item btn btn-primary w-full justify-center"
-        data-item-id="custom-dog-food"
+        data-item-id=""
         data-item-price="39.99"
         data-item-url="/produkte"
         data-item-description="Testeintrag"
-        data-item-image=
+        data-item-image={buddyImage.src}
         data-item-name=""
       >
         In den Warenkorb
@@ -432,7 +461,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
     default: '/images/MockUps/Buddy.png',
   };
 
-  function calculateDailyPrice(totalGrams, dogData) {
+  function calculateDailyPrice(totalGrams, kibbleGrams, dogData) {  // Änderung hier: kibbleGrams als Parameter
     // Basis-Preis pro 100g: 0.35€
     const basePrice = 0.35;
 
@@ -456,8 +485,8 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
     if (dogData.age.years <= 1) ageFactor = 1.15;  // Welpenfutter ist teurer
     else if (dogData.age.years >= 8) ageFactor = 1.1;  // Seniorenfutter ist teurer
 
-    // Berechnung des Tagespreises
-    let dailyPrice = (totalGrams / 100) * basePrice * sizeFactor * healthFactor * ageFactor;
+    // Berechnung des Tagespreises - WICHTIG: Nur auf Basis der Kibble-Menge!
+    let dailyPrice = (kibbleGrams / 100) * basePrice * sizeFactor * healthFactor * ageFactor;
 
     // Preisbegrenzung zwischen 0.35€ und 3€
     dailyPrice = Math.max(0.35, Math.min(3.0, dailyPrice));
@@ -470,8 +499,8 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       monthly: parseFloat(monthlyPrice.toFixed(2))
     };
   }
-  
-  
+
+
   function computeDailyCalories(dogData) {
     // Grundumsatz: 70 * (Gewicht^0.75)
     let base = 70 * Math.pow(dogData.currentWeight, 0.75);
@@ -479,27 +508,61 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
     // Aktivitäts-Faktoren
     let activityFactor = 1.3;
     switch (dogData.activityLevel) {
-      case 'very-low': activityFactor = 1.2; break;
-      case 'low':      activityFactor = 1.4; break;
-      case 'medium':   activityFactor = 1.6; break;
-      case 'high':     activityFactor = 1.8; break;
+      case 'very-low':
+        activityFactor = 1.2;
+        break;
+      case 'low':
+        activityFactor = 1.4;
+        break;
+      case 'medium':
+        activityFactor = 1.6;
+        break;
+      case 'high':
+        activityFactor = 1.8;
+        break;
     }
 
-    // Körperkonditions-Faktoren (Beispiel)
+    // Körperkonditions-Faktoren
     let conditionFactor = 1.0;
     switch (dogData.bodyCondition) {
-      case 'very-underweight': conditionFactor = 1.1; break;  // etwas mehr Kalorien
-      case 'underweight':      conditionFactor = 1.05; break;
-      case 'overweight':       conditionFactor = 0.9;  break; // etwas weniger Kalorien
-      case 'obese':           conditionFactor = 0.85; break;
+      case 'very-underweight':
+        conditionFactor = 1.1;
+        break;
+      case 'underweight':
+        conditionFactor = 1.05;
+        break;
+      case 'overweight':
+        conditionFactor = 0.9;
+        break;
+      case 'obese':
+        conditionFactor = 0.85;
+        break;
     }
 
-    // Tageskalorien ~ base * activityFactor * conditionFactor
-    const dailyCals = base * activityFactor * conditionFactor;
+    // Alters-Faktoren
+    let ageFactor = 1.0;
+    if (dogData.age.years <= 1) {
+      ageFactor = 1.2;  // Welpen brauchen mehr Energie
+    } else if (dogData.age.years >= 7) {
+      ageFactor = 0.9;  // Ältere Hunde haben niedrigeren Grundumsatz
+    }
+
+    // Gesundheits-Faktor
+    let healthFactor = 1.0;
+    if (dogData.hasHealthIssues && dogData.healthIssues.includes('digestion')) {
+      healthFactor = 1.1;  // Verdauungsprobleme können erhöhten Bedarf bedeuten
+    }
+    if (dogData.hasHealthIssues && dogData.healthIssues.includes('joints')) {
+      healthFactor = 0.95; // Gelenkprobleme evtl. weniger Kalorien 
+    }
+    // Weitere Anpassungen je nach Gesundheitsproblem...
+
+    // Tageskalorien ~ base * activityFactor * conditionFactor * ageFactor * healthFactor
+    const dailyCals = base * activityFactor * conditionFactor * ageFactor * healthFactor;
 
     return Math.round(dailyCals);
   }
-
+  
   /**
    * Beispiel: Umrechnung von Kalorien zu Gramm
    * (Hier annehmen: ~3.5 kcal pro Gramm Kibble)
@@ -517,11 +580,16 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
    */
   function getTreatsPercentage(treats) {
     switch (treats) {
-      case 'none':       return 0;
-      case 'few-weekly': return 5;
-      case 'few-daily':  return 10;
-      case 'many-daily': return 20;
-      default:           return 0;
+      case 'none':
+        return 0;
+      case 'few-weekly':
+        return 5;
+      case 'few-daily':
+        return 10;
+      case 'many-daily':
+        return 20;
+      default:
+        return 0;
     }
   }
 
@@ -585,6 +653,19 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       }
     });
 
+    const otherHealthCheckbox = document.getElementById('otherHealthIssue');
+    const otherHealthDetails = document.getElementById('otherHealthDetails');
+
+    if (otherHealthCheckbox && otherHealthDetails) {
+      otherHealthCheckbox.addEventListener('change', (e) => {
+        otherHealthDetails.classList.toggle('hidden', !e.target.checked);
+        const input = otherHealthDetails.querySelector('input');
+        if (input) {
+          input.required = e.target.checked;
+        }
+      });
+    }
+
     const nameInput = form.querySelector('[name="dogName"]');
     if (nameInput) {
       nameInput.addEventListener('input', updateDogName);
@@ -616,6 +697,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       newNextButton.textContent = step === 9 ? 'Fertig' : 'Weiter';  // Änderung von 4 auf 6
       currentStep = step;
     }
+
     const healthRadios = form.querySelectorAll('[name="hasHealthIssues"]');
     const healthDetails = document.getElementById('health-issues-details');
 
@@ -625,6 +707,34 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
           dogData.hasHealthIssues = radio.value === 'yes';
           if (healthDetails) {
             healthDetails.classList.toggle('hidden', !dogData.hasHealthIssues);
+
+            // Wenn "Nein" gewählt wurde, alle Checkboxen und das Sonstiges-Feld zurücksetzen
+            if (!dogData.hasHealthIssues) {
+              // Alle Checkboxen zurücksetzen
+              const checkboxes = healthDetails.querySelectorAll('input[type="checkbox"]');
+              checkboxes.forEach(checkbox => {
+                if (checkbox instanceof HTMLInputElement) {
+                  checkbox.checked = false;
+                }
+              });
+
+              // Sonstiges-Textfeld zurücksetzen
+              const otherInput = document.querySelector('[name="otherHealthDescription"]');
+              if (otherInput instanceof HTMLInputElement) {
+                otherInput.value = '';
+                otherInput.required = false;
+              }
+
+              // Sonstiges-Details verstecken
+              const otherDetails = document.getElementById('otherHealthDetails');
+              if (otherDetails) {
+                otherDetails.classList.add('hidden');
+              }
+
+              // Alle Fehlermeldungen entfernen
+              const errorMessages = healthDetails.querySelectorAll('.error-message');
+              errorMessages.forEach(msg => msg.remove());
+            }
           }
         }
       });
@@ -682,7 +792,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
 
       currentStepEl.querySelectorAll('.error-message').forEach(msg => msg.remove());
 
-      switch(currentStep) {
+      switch (currentStep) {
         case 1: {
           const genderSelected = Array.from(genderInputs).some(input =>
             input instanceof HTMLInputElement && input.checked
@@ -780,9 +890,18 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
               currentStepEl.querySelector('#health-issues-details')?.appendChild(err);
             }
           }
-
+          const otherCheckbox = currentStepEl.querySelector('#otherHealthIssue');
+          const otherInput = currentStepEl.querySelector('[name="otherHealthDescription"]');
+          if (otherCheckbox?.checked && otherInput && !otherInput.value.trim()) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte geben Sie die sonstigen Beschwerden an';
+            otherInput.parentElement?.appendChild(err);
+          }
           break;
         }
+
         case 9: {
           const treatsSelected = Array.from(
             currentStepEl.querySelectorAll('[name="treats"]')
@@ -840,7 +959,15 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         dogData.healthIssues = [];
       }
 
-      switch(dogData.breedType) {
+      if (dogData.hasHealthIssues) {
+        dogData.healthIssues = formData.getAll('health[]').map(issue => issue.toString());
+        const otherDescription = formData.get('otherHealthDescription')?.toString();
+        if (dogData.healthIssues.includes('other') && otherDescription) {
+          dogData.otherHealthDescription = otherDescription;
+        }
+      }
+
+      switch (dogData.breedType) {
         case 'purebred':
           dogData.breed = formData.get('breed')?.toString();
           dogData.breed2 = undefined;
@@ -868,7 +995,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         console.log('Starte Kibble-Berechnung...');
         const response = await fetch('/api/kibble-recommendations', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(dogData)
         });
 
@@ -894,27 +1021,23 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         const treatGrams = Math.round(totalGrams * (treatPerc / 100));
         const kibbleGrams = totalGrams - treatGrams;
 
-        // 6) Preisberechnung
-        const prices = calculateDailyPrice(totalGrams, dogData);
-
-        // Array-Prüfung
-        const empfohlenFuer = Array.isArray(topKibble["Empfohlen für"])
-          ? topKibble["Empfohlen für"].join(", ")
-          : "N/A";
+        // 6) Preisberechnung -Jetzt mit kibbleGrams!
+        const prices = calculateDailyPrice(totalGrams, kibbleGrams, dogData);
 
         // 7) HTML für Top-Kibble erstellen
         const topKibbleHtml = `
-      <div class="bg-white p-4 rounded-lg shadow-lg mb-4">
-        <h4 class="font-bold">Maßgeschneiderter Futterplan</h4>
-        <p class="text-sm mb-2"><strong>Proteinquelle:</strong> ${topKibble.Proteinquelle}</p>
-        <p class="text-sm mb-2"><strong>Kalorien pro Tag:</strong> ${dailyCals} kcal</p>
-        <p class="text-sm mb-2"><strong>Gesamt Futtermenge:</strong> ${totalGrams} g/Tag</p>
-        <p class="text-sm mb-2"><strong>Davon Leckerlis:</strong> ${treatGrams} g (${treatPerc}%)</p>
-        <p class="text-sm mb-2"><strong>Kibble-Portion:</strong> ${kibbleGrams} g/Tag</p>
-        <p class="text-sm mb-2"><strong>Tagespreis:</strong> ${prices.daily}€</p>
-        <p class="text-sm mb-2"><strong>Monatspreis:</strong> ${prices.monthly}€</p>
-      </div>
-    `;
+        <div class="bg-white p-4 rounded-lg shadow-lg mb-4">
+          <h4 class="font-bold">Maßgeschneiderter Futterplan</h4>
+          <p class="text-sm mb-2"><strong>Proteinquelle:</strong> ${topKibble.Proteinquelle}</p>
+          <p class="text-sm mb-2"><strong>Benötigte Kalorien pro Tag:</strong> ${dailyCals} kcal</p>
+          <p class="text-sm mb-2"><strong>Davon durch Leckerlis:</strong> ${Math.round(dailyCals * treatPerc / 100)} kcal (${treatPerc}%)</p>
+          <p class="text-sm mb-2"><strong>Verbleibende Kalorien durch Napfgenuss:</strong> ${Math.round(dailyCals * (100 - treatPerc) / 100)} kcal</p>
+          <p class="text-sm mb-2"><strong>Napfgenuss-Portion:</strong> ${kibbleGrams} g/Tag</p>
+          <p class="text-sm mb-2"><strong>Leckerli-Portion:</strong> ${treatGrams} g/Tag</p>
+          <p class="text-sm mb-2"><strong>Tagespreis:</strong> ${prices.daily}€</p>
+          <p class="text-sm mb-2"><strong>Monatspreis:</strong> ${prices.monthly}€</p>
+        </div>
+        `;
 
         // 8) Text-Mappings
         const healthIssuesTexts = {
@@ -975,7 +1098,12 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         })();
 
         const healthSummary = dogData.hasHealthIssues
-          ? dogData.healthIssues.map(issue => healthIssuesTexts[issue]).join(', ')
+          ? dogData.healthIssues.map(issue => {
+            if (issue === 'other') {
+              return `Sonstiges: ${dogData.otherHealthDescription || ''}`;
+            }
+            return healthIssuesTexts[issue];
+          }).join(', ')
           : 'Keine gesundheitlichen Probleme';
 
         // 9) summaryDiv zusammenbauen
@@ -1011,10 +1139,15 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         // 10) Snipcart Button
         const snipcartButton = document.querySelector('.snipcart-add-item');
         if (snipcartButton) {
+          const timestamp = new Date().getTime(); // Generiert einen Zeitstempel
+          const uniqueId = `custom-dog-food-${dogData.name}-${timestamp}`; // Eindeutige ID
           const description = `Individuelles Hundefutter für einen Monat für ${dogData.name}`;
+
+          snipcartButton.setAttribute('data-item-id', uniqueId);
           snipcartButton.setAttribute('data-item-name', `Hundefutter für ${dogData.name}`);
           snipcartButton.setAttribute('data-item-description', description);
           snipcartButton.setAttribute('data-item-price', prices.monthly.toString());
+          snipcartButton.setAttribute('data-item-image', buddyImagePath);
         }
 
         // Formular verstecken, Zusammenfassung zeigen
@@ -1045,7 +1178,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       document.getElementById('editAnswers')?.addEventListener('click', () => {
         snipcartContainer.classList.add('hidden');
         form.classList.remove('hidden');
-        showStep(currentStep - 1);
+        showStep(9)
       });
     }
 
