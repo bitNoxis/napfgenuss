@@ -1,6 +1,7 @@
 ---
 import PageLayout from '~/layouts/PageLayout.astro';
-import { getKibbleRecommendations } from '../lib/kibbleService';
+import buddyImage from '../assets/images/MockUps/Buddy.png';
+import {getKibbleRecommendations} from '../lib/kibbleService';
 
 
 const metadata = {
@@ -11,6 +12,13 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
 ---
 
 <PageLayout metadata={metadata}>
+  <!-- Irgendwo in Products.astro, z.B. direkt nach dem snipcart-container -->
+  <div id="loading-spinner" class="hidden flex flex-col items-center justify-center mt-8">
+    <!-- Einfacher CSS-Spinner (Tailwind-Beispiel) -->
+    <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-2 text-blue-500">Lade Daten ...</p>
+  </div>
+
   <div class="max-w-4xl mx-auto p-4 bg-page">
     <form id="dog-configurator" class="space-y-8">
       <div class="step-1">
@@ -394,11 +402,9 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         data-item-id="custom-dog-food"
         data-item-price="39.99"
         data-item-url="/produkte"
-        data-item-description=""
-        data-item-image=""
+        data-item-description="Testeintrag"
+        data-item-image=
         data-item-name=""
-        data-item-custom1-name="Portiongröße"
-        data-item-custom1-options="Klein|Mittel[+10.00]|Groß[+20.00]"
       >
         In den Warenkorb
       </button>
@@ -406,13 +412,118 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
   </div>
 </PageLayout>
 
-<script is:inline>
+<script is:inline define:vars={{buddyImagePath: buddyImage.src}}>
+  function showLoadingSpinner() {
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) {
+      spinner.classList.remove('hidden');
+    }
+  }
+
+  function hideLoadingSpinner() {
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) {
+      spinner.classList.add('hidden');
+    }
+  }
+
   // Globale Konstanten und Datenstrukturen
   const foodImages = {
-    default: '/images/Kibble01.png',
-    small: '/images/Kibble01-small.png',
-    large: '/images/Kibble01-large.png'
+    default: '/images/MockUps/Buddy.png',
   };
+
+  function calculateDailyPrice(totalGrams, dogData) {
+    // Basis-Preis pro 100g: 0.35€
+    const basePrice = 0.35;
+
+    // Größenfaktor basierend auf Gewicht
+    let sizeFactor = 1.0;
+    if (dogData.currentWeight <= 5) sizeFactor = 1.2;  // Kleine Hunde = teureres Spezialfutter
+    else if (dogData.currentWeight <= 10) sizeFactor = 1.1;
+    else if (dogData.currentWeight <= 25) sizeFactor = 1.0;
+    else if (dogData.currentWeight <= 45) sizeFactor = 0.9;
+    else sizeFactor = 0.85;  // Mengenrabatt für sehr große Hunde
+
+    // Gesundheitsfaktor
+    let healthFactor = 1.0;
+    if (dogData.hasHealthIssues) {
+      // Jedes Gesundheitsproblem erhöht den Preis um 5%
+      healthFactor += (dogData.healthIssues.length * 0.05);
+    }
+
+    // Alter-Faktor
+    let ageFactor = 1.0;
+    if (dogData.age.years <= 1) ageFactor = 1.15;  // Welpenfutter ist teurer
+    else if (dogData.age.years >= 8) ageFactor = 1.1;  // Seniorenfutter ist teurer
+
+    // Berechnung des Tagespreises
+    let dailyPrice = (totalGrams / 100) * basePrice * sizeFactor * healthFactor * ageFactor;
+
+    // Preisbegrenzung zwischen 0.35€ und 3€
+    dailyPrice = Math.max(0.35, Math.min(3.0, dailyPrice));
+
+    // Monatspreis (30 Tage)
+    const monthlyPrice = dailyPrice * 30;
+
+    return {
+      daily: parseFloat(dailyPrice.toFixed(2)),
+      monthly: parseFloat(monthlyPrice.toFixed(2))
+    };
+  }
+  
+  
+  function computeDailyCalories(dogData) {
+    // Grundumsatz: 70 * (Gewicht^0.75)
+    let base = 70 * Math.pow(dogData.currentWeight, 0.75);
+
+    // Aktivitäts-Faktoren
+    let activityFactor = 1.3;
+    switch (dogData.activityLevel) {
+      case 'very-low': activityFactor = 1.2; break;
+      case 'low':      activityFactor = 1.4; break;
+      case 'medium':   activityFactor = 1.6; break;
+      case 'high':     activityFactor = 1.8; break;
+    }
+
+    // Körperkonditions-Faktoren (Beispiel)
+    let conditionFactor = 1.0;
+    switch (dogData.bodyCondition) {
+      case 'very-underweight': conditionFactor = 1.1; break;  // etwas mehr Kalorien
+      case 'underweight':      conditionFactor = 1.05; break;
+      case 'overweight':       conditionFactor = 0.9;  break; // etwas weniger Kalorien
+      case 'obese':           conditionFactor = 0.85; break;
+    }
+
+    // Tageskalorien ~ base * activityFactor * conditionFactor
+    const dailyCals = base * activityFactor * conditionFactor;
+
+    return Math.round(dailyCals);
+  }
+
+  /**
+   * Beispiel: Umrechnung von Kalorien zu Gramm
+   * (Hier annehmen: ~3.5 kcal pro Gramm Kibble)
+   */
+  function calsToGrams(dailyCals) {
+    return Math.round(dailyCals / 3.5);
+  }
+
+  /**
+   * Wie viel % geht an Leckerlis je nach dogData.treats
+   * - none => 0%
+   * - few-weekly => 5%
+   * - few-daily => 10%
+   * - many-daily => 20%
+   */
+  function getTreatsPercentage(treats) {
+    switch (treats) {
+      case 'none':       return 0;
+      case 'few-weekly': return 5;
+      case 'few-daily':  return 10;
+      case 'many-daily': return 20;
+      default:           return 0;
+    }
+  }
 
   const dogData = {
     gender: '',
@@ -424,7 +535,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
     },
     breedType: '',
     breed: '',
-    breed2: '', 
+    breed2: '',
     weight: '',
     currentWeight: 5,
     bodyCondition: '',
@@ -467,7 +578,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         await finishConfiguration();
       }
     });
-    
+
     newPrevButton.addEventListener('click', () => {
       if (currentStep > 1) {
         showStep(currentStep - 1);
@@ -518,7 +629,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         }
       });
     });
-    
+
     // Geschlechts-Handler
     const genderInputs = form.querySelectorAll('[name="dogGender"]');
     genderInputs.forEach(input => {
@@ -560,7 +671,7 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         }
       });
     });
-    
+
 
     function validateStep() {
       const currentStepEl = document.querySelector(`.step-${currentStep}`);
@@ -721,9 +832,8 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
       dogData.bodyCondition = formData.get('bodyCondition')?.toString() || '';
       dogData.activityLevel = formData.get('activityLevel')?.toString() || '';
       dogData.treats = formData.get('treats')?.toString() || '';
-
-      // Gesundheitsprobleme sammeln
       dogData.hasHealthIssues = formData.get('hasHealthIssues') === 'yes';
+
       if (dogData.hasHealthIssues) {
         dogData.healthIssues = formData.getAll('health[]').map(issue => issue.toString());
       } else {
@@ -750,13 +860,15 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
 
       console.log('Gesammelte Hundedaten:', dogData);
 
+      // 2) Spinner zeigen + Button deaktivieren
+      showLoadingSpinner();
+      newNextButton.disabled = true;
+
       try {
         console.log('Starte Kibble-Berechnung...');
         const response = await fetch('/api/kibble-recommendations', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(dogData)
         });
 
@@ -764,19 +876,56 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        // 3) Kibble-Empfehlung
         const recommendations = await response.json();
         console.log('Erhaltene Empfehlungen:', recommendations);
 
-        // Bisherige Zusammenfassung
+        const topKibble = recommendations[0];
+        if (!topKibble) {
+          throw new Error('Keine Empfehlung erhalten!');
+        }
+
+        // 4) Erste Berechnungen
+        const dailyCals = computeDailyCalories(dogData);
+        const totalGrams = calsToGrams(dailyCals);
+
+        // 5) Leckerlis-Abzug
+        const treatPerc = getTreatsPercentage(dogData.treats);
+        const treatGrams = Math.round(totalGrams * (treatPerc / 100));
+        const kibbleGrams = totalGrams - treatGrams;
+
+        // 6) Preisberechnung
+        const prices = calculateDailyPrice(totalGrams, dogData);
+
+        // Array-Prüfung
+        const empfohlenFuer = Array.isArray(topKibble["Empfohlen für"])
+          ? topKibble["Empfohlen für"].join(", ")
+          : "N/A";
+
+        // 7) HTML für Top-Kibble erstellen
+        const topKibbleHtml = `
+      <div class="bg-white p-4 rounded-lg shadow-lg mb-4">
+        <h4 class="font-bold">Maßgeschneiderter Futterplan</h4>
+        <p class="text-sm mb-2"><strong>Proteinquelle:</strong> ${topKibble.Proteinquelle}</p>
+        <p class="text-sm mb-2"><strong>Kalorien pro Tag:</strong> ${dailyCals} kcal</p>
+        <p class="text-sm mb-2"><strong>Gesamt Futtermenge:</strong> ${totalGrams} g/Tag</p>
+        <p class="text-sm mb-2"><strong>Davon Leckerlis:</strong> ${treatGrams} g (${treatPerc}%)</p>
+        <p class="text-sm mb-2"><strong>Kibble-Portion:</strong> ${kibbleGrams} g/Tag</p>
+        <p class="text-sm mb-2"><strong>Tagespreis:</strong> ${prices.daily}€</p>
+        <p class="text-sm mb-2"><strong>Monatspreis:</strong> ${prices.monthly}€</p>
+      </div>
+    `;
+
+        // 8) Text-Mappings
         const healthIssuesTexts = {
-          'digestion': 'Verdauung',
-          'joints': 'Gelenkprobleme',
-          'skin': 'Haut & Fell',
-          'bladder': 'Blasenprobleme',
-          'behavior': 'Stress / Aggression',
-          'dental': 'Zahnprobleme',
-          'allergies': 'Allergien',
-          'other': 'Sonstiges'
+          digestion: 'Verdauung',
+          joints: 'Gelenkprobleme',
+          skin: 'Haut & Fell',
+          bladder: 'Blasenprobleme',
+          behavior: 'Stress / Aggression',
+          dental: 'Zahnprobleme',
+          allergies: 'Allergien',
+          other: 'Sonstiges'
         };
 
         const ageSummary = dogData.age.months
@@ -799,14 +948,14 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         };
 
         const treatTexts = {
-          'none': 'Keine',
+          none: 'Keine',
           'few-weekly': 'Ein paar pro Woche',
           'few-daily': 'Ein paar pro Tag',
           'many-daily': 'Viele am Tag'
         };
 
         const breedSummary = (() => {
-          switch(dogData.breedType) {
+          switch (dogData.breedType) {
             case 'purebred':
               return dogData.breed;
             case 'mixed':
@@ -829,36 +978,25 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
           ? dogData.healthIssues.map(issue => healthIssuesTexts[issue]).join(', ')
           : 'Keine gesundheitlichen Probleme';
 
-        // HTML für Empfehlungen erstellen
-        const recommendationsHtml = recommendations.map((kibble, index) => `
-      <div class="bg-white p-4 rounded-lg shadow-lg mb-4">
-        <div class="flex justify-between items-start">
-          <h4 class="font-bold">Empfehlung ${index + 1}</h4>
-          <span class="text-sm text-gray-500">Übereinstimmung: ${Math.round((kibble.score || 0) * 10)}%</span>
-        </div>
-        <p class="text-sm mb-2">Protein: ${kibble.Proteinquelle}</p>
-        <p class="text-sm mb-2">Empfohlen für: ${kibble["Empfohlen für"].join(", ")}</p>
-        <p class="text-sm">Besondere Eigenschaften: ${kibble["Ziel"].join(", ")}</p>
-      </div>
-    `).join('');
-
-        // Zusammenfassung anzeigen
+        // 9) summaryDiv zusammenbauen
         summaryDiv.innerHTML = `
+      <div class="flex flex-col items-center mb-8">
+         <img src="${buddyImagePath}" alt="Hundefutter" class="w-48 h-48 object-contain mb-6">
+      </div>
       <div class="mb-6">
         <p class="mb-2">Name: ${dogData.name} (${dogData.gender === 'male' ? 'männlich' : 'weiblich'})</p>
         <p class="mb-2">${dogData.isNeutered ? 'Kastriert' : 'Nicht kastriert'}</p>
         <p class="mb-2">Alter: ${ageSummary}</p>
         <p class="mb-2">Rasse: ${breedSummary}</p>
         <p class="mb-2">Aktuelles Gewicht: ${dogData.currentWeight} kg</p>
-        <p class="mb-2">Körperliche Verfassung: ${bodyConditionTexts[dogData.bodyCondition]}</p>
-        <p class="mb-2">Aktivität pro Tag: ${activityTexts[dogData.activityLevel]}</p>
-        <p class="mb-2">Leckerlis: ${treatTexts[dogData.treats]}</p>
+        <p class="mb-2">Körperliche Verfassung: ${bodyConditionTexts[dogData.bodyCondition] || ''}</p>
+        <p class="mb-2">Aktivität pro Tag: ${activityTexts[dogData.activityLevel] || ''}</p>
+        <p class="mb-2">Leckerlis: ${treatTexts[dogData.treats] || ''}</p>
         <p class="mb-4">Gesundheitliche Probleme: ${healthSummary}</p>
       </div>
-      
+
       <div class="mt-6">
-        <h3 class="text-xl font-bold mb-4">Unsere Empfehlungen</h3>
-        ${recommendationsHtml}
+        ${topKibbleHtml}
       </div>
       
       <button
@@ -869,6 +1007,19 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         Antworten ändern
       </button>
     `;
+
+        // 10) Snipcart Button
+        const snipcartButton = document.querySelector('.snipcart-add-item');
+        if (snipcartButton) {
+          const description = `Individuelles Hundefutter für einen Monat für ${dogData.name}`;
+          snipcartButton.setAttribute('data-item-name', `Hundefutter für ${dogData.name}`);
+          snipcartButton.setAttribute('data-item-description', description);
+          snipcartButton.setAttribute('data-item-price', prices.monthly.toString());
+        }
+
+        // Formular verstecken, Zusammenfassung zeigen
+        form.classList.add('hidden');
+        snipcartContainer.classList.remove('hidden');
 
       } catch (error) {
         console.error('Fehler bei der Berechnung:', error);
@@ -884,26 +1035,18 @@ const dogBreeds = ['Deutscher Schäferhund', 'Rottweiler', 'Dackel', 'Golden Ret
         Zurück
       </button>
     `;
+      } finally {
+        // Spinner ausblenden, Button wieder aktivieren
+        hideLoadingSpinner();
+        newNextButton.disabled = false;
       }
 
-      // Event Listener für den Edit-Button
+      // Edit-Button Event Listener
       document.getElementById('editAnswers')?.addEventListener('click', () => {
         snipcartContainer.classList.add('hidden');
         form.classList.remove('hidden');
         showStep(currentStep - 1);
       });
-
-      // Update Snipcart Button
-      const snipcartButton = document.querySelector('.snipcart-add-item');
-      if (snipcartButton) {
-        const description = `Individuelles Hundefutter für ${dogData.name}`;
-        snipcartButton.setAttribute('data-item-name', `Hundefutter für ${dogData.name}`);
-        snipcartButton.setAttribute('data-item-description', description);
-        snipcartButton.setAttribute('data-item-image', foodImages.default);
-      }
-
-      form.classList.add('hidden');
-      snipcartContainer.classList.remove('hidden');
     }
 
     // Initialisiere ersten Schritt

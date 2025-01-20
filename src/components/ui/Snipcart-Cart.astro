@@ -42,8 +42,6 @@ import Button from './Button.astro';
         return;
       }
 
-        console.log('Aktueller Snipcart Count:', snipcartCount); // Debugging
-    
         const scrollY = window.scrollY;
         const viewportHeight = window.innerHeight;
 
@@ -56,7 +54,6 @@ import Button from './Button.astro';
           // Either no items in the cart or user is above the fold
           reminder.classList.remove('opacity-100', 'pointer-events-auto');
           reminder.classList.add('opacity-0', 'pointer-events-none');
-          console.log('Reminder ausblenden');
       }
     })})};
 
