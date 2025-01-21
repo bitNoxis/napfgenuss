@@ -1,5 +1,6 @@
 ---
 import Ingredients from './Ingredients.astro';
+import Button from '~/components/ui/Button.astro'
 
 import Reis from '~/assets/images/ingredients/reis.png';
 import Suesskartoffel from '~/assets/images/ingredients/suesskartoffel.png';
@@ -35,3 +36,7 @@ ingredients02={[
   {type: 'Ente', desc: 'Proteinreich und voller B-Vitamine – ideal für Energie und den Aufbau kräftiger Muskeln.', color: "#E2CFB5", img: Huhn2},
 ]}
 />
+
+<div class="flex justify-center mb-20 mx-auto">
+  <Button variant="primary", target="_self", text="Jetzt zusammenstellen!", href="/products"/>
+</div>

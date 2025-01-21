@@ -1,16 +1,18 @@
 ---
-import Hero from '~/components/widgets/Hero.astro';
+import Hero2 from '~/components/widgets/Hero2.astro';
 import Layout from '~/layouts/PageLayout.astro';
 import Header from '~/components/widgets/Header.astro';
 import Image from '~/components/common/Image.astro'
 
-
 import { headerData } from '~/navigation';
+import { Icon } from 'astro-icon/components';
 
 import { readDocuments } from '~/lib/utilsDatabase';
 
 import Kibbles from '~/components/widgets/kibbles.astro';
 import Kibble01 from '../assets/images/kibbles/Kibble01.png';
+
+import Bowl from '../assets/images/kibbles/Bowl.png'
 
 import WrapperIngredients from '~/components/widgets/WrapperIngredients.astro';
 
@@ -34,18 +36,44 @@ const metadata = {
     />
   </Fragment>
 
+  <!-- HERO -->
+
+  <Hero2
+    actions={[
+      { target: '_self', text: 'Jetzt zusammenstellen', href: '/about' },
+    ]}
+    image={{
+      src: Bowl,
+      alt: 'NapfGenuss Hero Image',
+    }}
+  >
+    <Fragment slot="title">
+      <span class="text-secondary dark:text-white highlight">NapfGenuss</span>
+      <span class="text-accent dark:text-white highlight">Futter</span><br />
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      <span class="hidden sm:inline">
+        Das steckt in unserem <span class="font-semibold">Hundefutter</span> drin - überzeugen Sie sich selbst.
+      </span>
+    </Fragment>
+  </Hero2>
+  
+  <div class="">
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+      <div class="flex items-center justify-center w-12 h-12 bg-accent rounded-full shadow-lg animate-bounce">
+        <Icon name="tabler:chevron-down" class="text-primary w-6 h-6" />
+      </div>
+      <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-gray-500 text-xs">
+        Zutaten
+      </div>
+    </div>
+  </div>
+
   <WrapperIngredients />
 
-  <!-- Hero Image ******************* -->
-
-  <!-- <Image
-    src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
-    alt='Picture',
-    layout='cover',
-    height='600'
-  /> -->
- 
-  <Kibbles
+  <!-- <Kibbles
     title="Die perfekte Mischung braucht's"
     tagline="7 Sorten, alles was dein Hund braucht"
     kibble={[
@@ -57,4 +85,4 @@ const metadata = {
       { title: 'Nummer 6', desc: '100% Gemüse Vitamin B', img: Kibble01 },
       { title: 'Nummer 7', desc: '100% Gemüse Vitamin B', img: Kibble01 },
     ]}
-  />
+  /> -->

@@ -6,10 +6,10 @@ export const OttoDayPrice = 0.74;
 export const FieteDayPrice = 1.18;
 
 const dogSizeConsumption = {
-  Luna: 7,  // Hohe energetische Nahrung
-  Balu: 6,  // im Wachstum
-  Otto: 7, // Gelenkprobleme
-  Fiete: 4,   // Senioren
+  Luna: 11,  // Hohe energetische Nahrung
+  Balu: 8,  // im Wachstum
+  Otto: 8, // Gelenkprobleme
+  Fiete: 12,   // Senioren
 };
 
 export function PriceCalculation(price, period, dogName) {

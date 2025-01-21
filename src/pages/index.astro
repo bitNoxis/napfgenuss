@@ -7,11 +7,12 @@ import Content from '~/components/widgets/Content.astro';
 import Testimonials from '~/components/widgets/Testimonials.astro';
 
 import Process from '~/components/widgets/Process.astro';
-import Brands from '~/components/widgets/Brands.astro';
 
 import DynamicExamples from '~/components/widgets/DynamicExamples.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
+
+import Rating from '~/components/ui/rating.astro'
 
 
 import HandyMockUp from 'src/assets/images/MockUps/HandyMockUp.png';
@@ -55,6 +56,11 @@ const metadata = {
       Bei uns erhält Ihr Vierbeiner eine komplett personalisierte Ernährung, perfekt abgestimmt auf seine Bedürfnisse.
     </Fragment>
   </Hero2>
+
+  <Rating 
+  bg = 'bg-accent',
+  fullStars = 4.23
+  />
 
   <!-- Content Widget **************** -->
 
