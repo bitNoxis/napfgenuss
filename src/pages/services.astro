@@ -1,14 +1,27 @@
 ---
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import Content from '~/components/widgets/Content.astro';
+import ContentModify from '~/components/widgets/ContentModify.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import Testimonials from '~/components/widgets/Testimonials.astro';
 import Layout from '~/layouts/PageLayout.astro';
 import Steps from '~/components/widgets/Steps.astro';
-import Timeline from '~/components/ui/Timeline.astro';
+import Features from '~/components/widgets/Features.astro';
+
+import HowTo from '~/components/widgets/HowTo.astro';
+import Explanation from '~/components/widgets/Explanation.astro';
 
 import KibbleRawFood from 'src/assets/images/kibbles/RawFood01.png';
+import Features3 from '~/components/widgets/Features3.astro';
+import { title } from 'process';
+
+import {Content as Table} from '../content/table_compare.md'
+import { getEntry, render } from 'astro:content';
+
+import VerticalKibbleBowl from '~/assets/images/kibbles/VerticalKibbleBowl.jpg';
+import KibbleStack from '~/assets/images/kibbles/Kibbles02.png'
+import FAQs from '~/components/widgets/FAQs.astro';
+import { text } from 'stream/consumers';
 
 const metadata = {
   title: 'Services',
@@ -22,45 +35,79 @@ const metadata = {
     tagline="So funktioniert's"
     title="Transparenz und Technik"
     subtitle="<span class='font-bold'>Der Weg zu maßgeschneidertem Hundefutter</span> <br> Unsere Plattform kombiniert modernste Technologie mit wissenschaftlich fundierten Erkenntnissen, um eine perfekt abgestimmte Ernährung für deinen Hund zu entwickeln."
-
     actions={[{ variant: 'primary', target: '_blank', text: 'Jetzt zusammenstellen', href: '/search' }]}
     image={{
       src: KibbleRawFood,
       alt: 'So funktioniert NapfGenuss',
     }}
   />
-   <!-- Features2 Widget ************** -->
+  <!-- Features2 Widget ************** -->
 
-   <Features2
-   title="So macht <span class='text-primary'> NapfGenuss </span> dein Leben einfacher"
-   subtitle="Diese 3 Schritte erklären wir auf dieser Seite"
-   columns={3}
-   items={[
-     {
-       title: 'Profilerstellung',
-       description:
-         'Unser benutzerfreundlicher Konfigurator erfasst präzise Details über Ihren Hund, um ein ...',
-       icon: 'tabler:user-circle',
-       callToAction: {text:'Mehr lesen', variant:'link', href:"#"}
-     },
-     {
-       title: 'Der Algorithmus',
-       description:
-         'Sobald das Profil deines Hundes erstellt ist, analysiert...',
-       icon: 'tabler:adjustments-filled',
-       callToAction: {text:'Mehr lesen', variant:'link', href:"#"}
-     },
-     {
-       title: 'Produktion',
-       description:
-         'Sobald die Rezeptur feststeht, beginnt die Herstellung in einem ...',
-       icon: 'tabler:settings-spark',
-       callToAction: {text:'Mehr lesen', variant:'link', href:"#"}
-     },
-   ]}
- />
-<!-- Timeline -->
-<Steps
+  <Features2
+    title="So macht <span class='text-primary'> NapfGenuss </span> dein Leben einfacher"
+    subtitle="Diese 3 Schritte erklären wir auf dieser Seite"
+    columns={3}
+    items={[
+      {
+        title: 'Profilerstellung',
+        description: 'Unser benutzerfreundlicher Konfigurator erfasst präzise Details über Ihren Hund, um ein ...',
+        icon: 'tabler:user-circle',
+        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#' },
+      },
+      {
+        title: 'Der Algorithmus',
+        description: 'Sobald das Profil deines Hundes erstellt ist, analysiert...',
+        icon: 'tabler:adjustments-filled',
+        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#' },
+      },
+      {
+        title: 'Produktion',
+        description: 'Sobald die Rezeptur feststeht, beginnt die Herstellung in einem ...',
+        icon: 'tabler:settings-spark',
+        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#' },
+      },
+    ]}
+  />
+  <Features
+    title="Profilerstellung"
+    tagline=""
+    subtitle="Alle relevanten Informationen auf einen Blick"
+    items={[
+      {
+        title: 'Kastrationsstatus',
+        description: 'Kastrierte Hunde haben oft einen veränderten Stoffwechsel und Hormonhaushalt.',
+        icon: 'healthicons:contraceptive-voucher-24px',
+      },
+      {
+        title: 'Alter',
+        description: 'Vom aktiven Welpen bis zum ruhigen Senior – wir passen die Nährstoffzusammensetzung an.',
+        icon: 'tabler:square-number-3-filled',
+      },
+      {
+        title: 'Rasse',
+        description: 'Jede Hunderasse hat spezifische Anforderungen, die wir individuell berücksichtigen.',
+        icon: 'healthicons:guide-dog',
+      },
+      {
+        title: 'Gewicht und körperliche Verfassung',
+        description: 'Für Hunde mit Unter- oder Übergewicht wird die Kalorienzufuhr präzise angepasst.',
+        icon: 'healthicons:weight',
+      },
+      {
+        title: 'Aktivitätsgrad',
+        description: 'Ob weniger als 1 Stunde Bewegung oder besonders aktiv – der Energiebedarf variiert.',
+        icon: 'tabler:activity',
+      },
+      {
+        title: 'Leckerli-Menge',
+        description: 'Selbst die Anzahl der Snacks wird einbezogen, um eine Überversorgung zu vermeiden.',
+        icon: 'tabler:dog-bowl',
+      },
+    ]}
+  />
+
+  <!-- Timeline -->
+  <Steps
     title="Gesundheitliche Probleme"
     tagline="Unser Sysmtem berücksichtigt individuelle"
     subtitle="Für eine optimale Gesundheit integriert der Konfigurator eine große Vielzahl an gesundheitlichen Problemen, die bei Hunden oftmals vorkommen."
@@ -96,103 +143,223 @@ const metadata = {
       },
     ]}
     image={{
-      src: 'https://images.unsplash.com/photo-1536816579748-4ecb3f03d72a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
+      src: VerticalKibbleBowl,
       alt: 'Steps image',
     }}
   />
 
+  <HowTo
+    title="Wie funktioniert die Profilerstellung?"
+    subtilte=""
+    description="Ein intuitives Formular führt dich Schritt für Schritt durch die Eingabe aller relevanten Daten. So stellen wir sicher, dass dein Hund die bestmögliche Ernährung erhält."
+  />
+
   <!-- Content Widget **************** -->
 
-  <Content
+  <Explanation
+    title="Der Algorithmus"
+    subtitle="Wissenschaftliche Präzision trifft auf smarte Technologie"
+    description="Sobald das Profil deines Hundes erstellt ist, analysiert unser Algorithmus alle Eingaben, um die optimale Rezeptur zu ermitteln."
+    columns={3}
+    items={[
+      {
+        title: 'Berechnung des Nährstoffbedarfs',
+        description:
+          'Basierend auf den Daten deines Hundes ermitteln wir den individuellen Energiebedarf sowie die ideale Nährstoffzusammensetzung.',
+        icon: 'tabler:brand-envato',
+      },
+      {
+        title: 'Individuelle Mischung',
+        description:
+          'Unsere sieben speziell entwickelten Kibbles werden in einem optimalen Mischverhältnis kombiniert, um auf die Bedürfnisse deines Hundes einzugehen. Jedes Kibble hat eine spezifische Funktion, z. B.: <br><br><span class="font-bold text-2xl text-black dark:text-white dark:text-white">Gelenkgesundheit</span><br>Glucosamin und Omega-3-Fettsäuren <br><br><span class="font-bold text-2xl text-black dark:text-white">Verdauung</span><br>Präbiotika und Ballaststoffe<br><br><span class="font-bold text-2xl text-black dark:text-white">Immunsystem</span><br>Antioxidantien wie Vitamin E<br><br><span class="font-bold text-2xl text-black dark:text-white">Haut und Fell</span><br>Zink und hochwertige Fettsäuren',
+        icon: 'tabler:adjustments-filled',
+      },
+      {
+        title: 'Technische Grundlage',
+        description: 'Unser Algorithmus basiert auf wissenschaftlichen Modellen, die von Tierärzten und Ernährungsexperten entwickelt wurden. Die Kombination aus datenwissenschaftlichem Know-how und neuesten Forschungsergebnissen gewährleistet eine präzise, gesundheitsfördernde Mischung.',
+        icon: 'tabler:bolt-filled',
+      },
+    ]}
+    classes={{
+      container: 'gap-4 md:gap-6',
+      panel:
+        'rounded-lg shadow-[0_4px_30px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur border border-[#ffffff29] bg-white dark:bg-slate-900 p-6',
+      // panel:
+      //   "text-center bg-page items-center md:text-left rtl:md:text-right md:items-start p-6 p-6 rounded-md shadow-xl dark:shadow-none dark:border dark:border-slate-800",
+      icon: 'w-12 h-12 mb-6 text-primary',
+    }}
+  />
+
+  <ContentModify
     isReversed
     items={[
       {
-        title: 'Optimale Versorgung mit Vitaminen und Nährstoffen',
+        title: 'Frische und Qualität',
         description:
-          'Fördert die Gesundheit von Haut, Fell und Immunsystem. Unsere Rezepturen sind reich an Vitaminen und Nährstoffen, die die Gesundheit Ihres Hundes unterstützen.',
-        icon: 'tabler:wand',
+          'Jede Zutat wird sorgfältig abgewogen und in modernen Anlagen frisch gemischt.',
+        icon: 'tabler:award-filled',
       },
       {
-        title: 'Vorbeugend gegen Beschwerden',
+        title: 'Nachhaltige Verpackung',
         description:
-          'Unterstützt Gelenke, Verdauung und allgemeine Vitalität. Unsere Rezepturen sind speziell entwickelt, um die Gesundheit Ihres Hundes zu fördern und Beschwerden vorzubeugen.',
-        icon: 'tabler:settings',
-      },
-      {
-        title: 'Für Jung und Alt',
-        description:
-          'Angepasste Rezepturen für jede Lebensphase deines Hundes',
-        icon: 'tabler:presentation',
-      },
-      {
-        title: 'Individuell abgestimmt',
-        description:
-          'Berücksichtigt Allergien, Unverträglichkeiten und besondere Bedürfnisse. Unsere Rezepturen sind individuell abgestimmt auf die spezifischen Bedürfnisse Ihres Hundes.',
+          'Unsere Verpackungen bestehen aus recycelbaren Materialien und schonen die Umwelt.',
         icon: 'tabler:carousel-horizontal',
+      },
+      {
+        title: 'Lieferzeit und Frische',
+        description: 'Unser Futter wird in der Regel innerhalb von 2–4 Werktagen geliefert. Spezielle Vakuumverpackungen sorgen dafür, dass die Frische erhalten bleibt.',
+        icon: 'tabler:truck-delivery',
       },
     ]}
     image={{
-      src: 'https://images.unsplash.com/photo-1525909002-1b05e0c869d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
+      src: KibbleStack,
       alt: 'Features Image',
     }}
   >
     <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Main Features</h3>
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Produktion und Lieferung</h3>
+      <h2 class="text-xl mt-2 text-muted font-semibold">Frisch, nachhaltig, unkompliziert</h2>
+      <p class="mt-4 text-base text-muted">Sobald die Rezeptur feststeht, beginnt die Herstellung in einem spezialisierten Verfahren.</p>
     </Fragment>
-  </Content>
+  </ContentModify>
+
+  <Features2
+    title="Vergleich - <span class='text-primary'> NapfGenuss </span> vs. Haustierfachmarkt"
+    subtitle="Was sind die Vorteile von individualisiertem Hundefutter?"
+    columns={3}
+    items={[
+      {
+        title: 'Merkmal',
+        description: '',
+      },
+      {
+        title: 'NapfGenuss Futter',
+        description: '',
+      },
+      {
+        title: 'Herkömmliches Futter',
+        description: '',
+      },
+      // 1
+      {
+        title: 'Nährstoffzusammensetzung',
+        description: 'Wie ist das Futter zusammengesetzt?',
+      },
+      {
+        title: 'Perfekt für deinen Hund abgestimmt',
+        description: '',
+        icon: 'tabler:circle-plus-filled',
+      },
+      {
+        title: 'Standardisierte Rezepturen',
+        description: '',
+        icon: 'tabler:backslash',
+      },
+      // 2
+      {
+        title: 'Gesundheitliche Vorteile',
+        description: 'Bietet das Hundefutter optimale Unterstützung?',
+      },
+      {
+        title: 'Fördert gezielt Gesundheit und Wohlbefinden',
+        description: '',
+        icon: 'tabler:circle-plus-filled',
+      },
+      {
+        title: 'Allgemeine Gesundheitsunterstützung',
+        description: '',
+        icon: 'tabler:backslash',
+      },
+      // 3
+      {
+        title: 'Flexibilität',
+        description: 'Kann das Futtermittel auf verschiedene Situationen angepasst werden?',
+      },
+      {
+        title: 'Anpassbar an Veränderungen wie Allergien',
+        description: '',
+        icon: 'tabler:circle-plus-filled',
+      },
+      {
+        title: 'Allgemeine Gesundheitsunterstützung',
+        description: '',
+        icon: 'tabler:backslash',
+      },
+      // 4
+      {
+        title: 'Nachhaltigkeit',
+        description: 'Werden wichtige Aspekte außen vor gelassen?',
+      },
+      {
+        title: 'Lokale Zulieferung, nachhaltige Verpackung...',
+        description: '',
+        icon: 'tabler:circle-plus-filled',
+      },
+      {
+        title: 'Unterschiedlich',
+        description: '',
+        icon: 'tabler:backslash',
+      },
+      // 5
+      {
+        title: 'Preis-Leistungs-Verhältnis',
+        description: 'Wieviel bezahlen Sie für welchen Wert?',
+      },
+      {
+        title: 'Transparent, anpassbar und personalisiert',
+        description: '',
+        icon: 'tabler:circle-plus-filled',
+      },
+      {
+        title: 'Oft nicht auf individuelle Bedürfnisse zugeschnitten',
+        description: '',
+        icon: 'tabler:backslash',
+      },
+    ]}
+  />
   
-  <!-- Testimonials Widget *********** -->
 
-  <Testimonials
-    title="Words from real customers"
-    testimonials={[
-      {
-        testimonial: `The designs are not only visually appealing but also highly professional. The templates have saved me a significant amount of time while helping me make a lasting impression on my clients.`,
-        name: 'Emily Kennedy',
-        job: 'Front-end developer',
-        image: {
-          src: 'https://images.unsplash.com/photo-1618835962148-cf177563c6c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=930&q=80',
-          alt: 'Emily Kennedy Image',
-        },
-      },
-      {
-        testimonial: `It beautifully showcases my work, with its clean and elegant design that lets my photographs shine. Customization was a breeze, even for a non-tech person like me. The result is a professional and immersive portfolio that's garnered numerous compliments.`,
-        name: 'Sarah Hansen',
-        job: 'Photographer',
-        image: {
-          src: 'https://images.unsplash.com/photo-1561406636-b80293969660?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          alt: 'Sarah Hansen Image',
-        },
-      },
-      {
-        testimonial: `I discovered these templates and I'm impressed by their variety and quality. They've helped me establish a consistent brand image across my marketing and social platforms, elevating my business's overall appearance.`,
-        name: 'Mark Wilkinson',
-        job: 'Small business owner',
-        image: {
-          src: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=824&q=80',
-          alt: 'Mark Wilkinson Image',
-        },
-      },
-    ]}
-    callToAction={{
-      target: '_blank',
-      text: 'More testimonials...',
-      href: 'https://github.com/onwidget/astrowind',
-      icon: 'tabler:chevron-right',
-    }}
-  />
+<CallToAction
+actions={[
+  {
+    variant: 'primary',
+    text: 'Jetzt losfüttern!',
+    href: '/products',
+  },
+]}
+title="Starte jetzt – Füttere deinen Hund besser!"
+subtitle="Beginne noch heute mit der Erstellung eines individuellen Ernährungsplans und erlebe, wie maßgeschneidertes Futter das Leben deines Hundes verbessert."
+/>
 
-  <!-- CallToAction Widget *********** -->
-
-  <CallToAction
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Start exploring',
-        href: '/',
-      },
-    ]}
-    title="Dive into our template collection"
-    subtitle="Whether you're in business, design, or education, our templates are here to elevate your projects."
-  />
+  <FAQs
+  title="Oft gestellte Fragen"
+  items={[
+    {
+      title: 'Warum wird nach Parametern wie Kastrationsstatus oder Leckerli-Menge gefragt?',
+      description:
+        'Diese Informationen sind entscheidend, um den Energiebedarf und die Nährstoffzufuhr deines Hundes exakt zu berechnen. So stellen wir sicher, dass dein Hund weder unter- noch überversorgt wird.',
+      icon: 'tabler:chevrons-right',
+    },
+    {
+      title: 'Was passiert, wenn mein Hund Allergien entwickelt oder sich seine Bedürfnisse ändern?',
+      description: `Du kannst dein Hundeprofil jederzeit aktualisieren. Unser Algorithmus passt die Rezeptur automatisch an die neuen Anforderungen an.`,
+      icon: 'tabler:chevrons-right',
+    },
+    {
+      title: 'Wie schnell wird das Futter geliefert, und wie bleibt es frisch?',
+      description:
+        'In der Regel erhältst du deine Lieferung innerhalb von 2–4 Werktagen. Unsere speziellen Verpackungen halten das Futter länger frisch.',
+      icon: 'tabler:chevrons-right',
+    },
+    {
+      title: 'Gibt es eine Möglichkeit, Proben zu bestellen?',
+      description: `Ja, wir bieten Probierpakete an, damit du sicherstellen kannst, dass das Futter den Geschmack deines Hundes trifft.`,
+      icon: 'tabler:chevrons-right',
+    },
+  ]}
+>
+  <Fragment slot="bg">
+    <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+  </Fragment>
+</FAQs>
 </Layout>

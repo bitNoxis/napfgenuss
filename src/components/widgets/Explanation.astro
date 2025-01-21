@@ -1,0 +1,82 @@
+---
+import WidgetWrapper from '../ui/WidgetWrapper.astro';
+import Timeline from '../ui/Timeline.astro';
+import { Icon } from 'astro-icon/components';
+import { twMerge } from 'tailwind-merge';
+import Button from '../ui/Button.astro';
+
+const {
+  title = '',
+  subtitle = await Astro.slots.render('subtitle'),
+  description = '',
+  items = [], // Ensure items is defined
+  defaultIcon = '',
+  classes = {},
+  
+} = Astro.props;
+
+const {
+    panel: panelClass = '',
+    container: containerClass = 'max-w-3xl',
+    title: titleClass = 'text-3xl md:text-4xl',
+    subtitle: subtitleClass = 'text-xl',
+    description: descriptionClass = 'text-base',
+    icon: defaultIconClass = 'text-primary',
+    item: itemClasses = ''
+} = classes;
+---
+
+<WidgetWrapper containerClass="max-w-5xl">
+  <div class="text-left">
+    <!-- Header -->
+    <div class="flex flex-box gap-2 align-middle mx-auto items-center">
+      <!-- Icon -->
+      <!-- <div class="bg-primary w-12 h-12 rounded-full flex justify-center align-middle items-center">
+        <Icon name="tabler:calculator-filled" class="text-white" />
+      </div> -->
+      <!-- Title -->
+      <div class="font-bold leading-tighter tracking-tighter font-heading text-heading text-3xl">
+        {title}
+      </div>
+    </div>
+
+    <!-- Subtitle -->
+    {subtitle && (
+      <p class={twMerge('mt-2 text-muted font-semibold', subtitleClass)} set:html={subtitle} />
+    )}
+
+    <!-- Description -->
+    {description && <div class="text-muted mt-2">{description}</div>}
+  </div>
+
+  <!-- Timeline or Items -->
+  <div class="mt-6 flex flex-col gap-5">
+    {items.map(({ title, description, icon, callToAction }) => (
+      <div
+        class={twMerge(
+          'relative flex flex-col intersect-once intersect-quarter intercept-no-queue motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade',
+          panelClass,
+        )}
+      >
+        <!-- Icon -->
+        {(icon || defaultIcon) && (
+          <Icon name={icon || defaultIcon} class={twMerge('w-10 h-10', defaultIconClass)} />
+        )}
+        <!-- Title -->
+        <div class={twMerge('text-xl font-bold flex items-center', titleClass)}>
+          {title}
+        </div>
+        <!-- Description -->
+        {description && (
+          <p class={twMerge('text-muted mt-2', descriptionClass)} set:html={description} />
+        )}
+        <!-- Call to Action -->
+        {callToAction && (
+          <div class="mt-2">
+            <Button {...callToAction} />
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</WidgetWrapper>
