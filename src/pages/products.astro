@@ -4,6 +4,11 @@ import buddyImage from '../assets/images/MockUps/Buddy.png';
 import {getKibbleRecommendations} from '../lib/kibbleService';
 import {DogApiService} from "../services/dogApiService";
 import {HunderassenService} from '../lib/hunderassenService';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import BagMockUpImage from '../assets/images/MockUps/BagMockUp.png';
+import dogPlaceholder from '../assets/images/dog02.jpg';
+import cupHolder from '../assets/images/CupMockUp.svg';
 
 
 
@@ -18,19 +23,29 @@ const hunderassen = await hunderassenService.fetchHunderassen();
 
 <PageLayout metadata={metadata}>
   <head>
-    <!-- Für Select2 -->
+    <!-- Deine bestehenden Scripts -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
-
-    <!-- Für Fuzzy Matching -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+
+    <!-- React Scripts korrigieren - nicht-minifizierte Version für bessere Fehlermeldungen -->
+    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+
+    <!-- React Client Script hinzufügen -->
+    <script is:inline>
+      if (typeof window !== 'undefined') {
+        window.React = React;
+        window.ReactDOM = ReactDOM;
+      }
+    </script>
     <title>{metadata.title}</title>
   </head>
   <!-- Irgendwo in Products.astro, z.B. direkt nach dem snipcart-container -->
   <div id="loading-spinner" class="hidden flex flex-col items-center justify-center mt-8">
     <!-- Einfacher CSS-Spinner (Tailwind-Beispiel) -->
-    <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-    <p class="mt-2 text-blue-500">Lade Daten ...</p>
+    <div class="w-16 h-16 border-4 border-green-900 border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-2 text-green-700">Futter wird zusammengestellt...</p>
   </div>
 
   <div class="max-w-3xl mx-auto p-4 bg-page">
@@ -520,7 +535,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
           </div>
         </div>
       </div>
-      
+
       <!-- Schritt 9: Leckerlis -->
       <div class="step-9 hidden">
         <h2 class="text-2xl font-heading font-bold mb-6 text-page">
@@ -606,7 +621,72 @@ const hunderassen = await hunderassenService.fetchHunderassen();
   </div>
 </PageLayout>
 
-<script is:inline define:vars={{buddyImagePath: buddyImage.src}}>
+<script is:inline define:vars={{
+  buddyImagePath: buddyImage.src,
+  hunderassenData: hunderassen,
+  bagMockUpImageSrc: BagMockUpImage.src,
+  dogPlaceholderPath: dogPlaceholder.src,
+  cupHolderPath: cupHolder.src,
+  BagMockUpComponent: `
+    window.BagMockUpComponent = function({ dogName, breedName, breedImage }) {
+  
+      return React.createElement('div', { className: 'relative w-full' },
+        React.createElement('img', {
+          src: bagMockUpImageSrc,
+          alt: 'Dog Food Bag',
+          className: 'relative w-90 mx-auto'
+        }),
+        React.createElement('div', { 
+          className: 'absolute inset-0 flex flex-col items-center justify-center text-center space-y-4'
+        }, [
+          // Kreisförmiger Container für das Rassebild
+          React.createElement('div', {
+            className: 'w-32 h-32 rounded-full overflow-hidden bg-white mb-4',
+            style: {
+              border: '4px solid #ffffff'
+            }
+          }, 
+            React.createElement('img', {
+              src: breedImage?.url || dogPlaceholderPath,
+              alt: breedName,
+              className: 'w-full h-full object-cover'
+            })
+          ),
+          // Name des Hundes
+          React.createElement('h2', { 
+            className: 'text-4xl font-bold text-white' 
+          }, dogName),
+          // Rasse des Hundes
+          React.createElement('p', { 
+            className: 'text-2xl text-white' 
+          }, breedName),
+          // Portionen-Box
+          React.createElement('div', {
+            className: 'bg-white rounded-lg p-4 mt-4 max-w-xs mx-auto'
+          }, [
+            React.createElement('p', {
+              className: 'text-green-900 font-semibold'
+            }, '2 Portionen pro Tag'),
+            React.createElement('div', {
+              className: 'flex items-center justify-center space-x-2 text-green-900'
+            }, [
+              React.createElement('span', {}, '0,5'),
+              React.createElement('span', {}, 'x'),
+              React.createElement('div', {
+                className: 'w-8 h-8 bg-contain bg-no-repeat bg-center',
+                style: {
+                    backgroundImage: "url(" + cupHolderPath + ")"
+                }
+              }),
+              React.createElement('span', {}, '='),
+              React.createElement('span', {}, '1 Portion')
+            ])
+          ])
+        ])
+      );
+    };
+  `
+}}>
   function showLoadingSpinner() {
     const spinner = document.getElementById('loading-spinner');
     if (spinner) {
@@ -848,6 +928,74 @@ const hunderassen = await hunderassenService.fetchHunderassen();
         });
       }
     }
+
+    /*// Fügen Sie diese Funktion zu Ihrem bestehenden Skript hinzu
+    function generateProductImage(dogName, breedName, breedImage) {
+      return new Promise((resolve, reject) => {
+        // Erstellen Sie ein Canvas-Element
+        const canvas = document.createElement('canvas');
+        canvas.width = 400;  // Breite Ihres Mockups
+        canvas.height = 600; // Höhe Ihres Mockups
+
+        const ctx = canvas.getContext('2d');
+
+        // Laden des Hintergrund-Mockup-Bildes
+        const backgroundImage = new Image();
+        backgroundImage.src = bagMockUpImageSrc;
+        backgroundImage.onload = () => {
+          // Zeichnen des Hintergrundbildes
+          ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+          // Laden des Hundebildes
+          const dogImageSrc = breedImage?.url || dogPlaceholderPath;
+          const dogImage = new Image();
+          dogImage.src = dogImageSrc;
+          dogImage.onload = () => {
+            // Kreisförmiger Ausschnitt für Hundebild
+            const circleX = canvas.width / 2;
+            const circleY = canvas.height / 2 - 50;
+            const circleRadius = 100;
+
+            // Kreisförmige Maske erstellen
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(circleX, circleY, circleRadius, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+
+            // Hund zentriert zeichnen
+            ctx.drawImage(
+              dogImage,
+              circleX - circleRadius,
+              circleY - circleRadius,
+              circleRadius * 2,
+              circleRadius * 2
+            );
+            ctx.restore();
+
+            // Hundenamen zeichnen
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 36px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(dogName, canvas.width / 2, canvas.height / 2 + 100);
+
+            // Rassenamen zeichnen
+            ctx.fillStyle = 'white';
+            ctx.font = '24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(breedName, canvas.width / 2, canvas.height / 2 + 150);
+
+            // Canvas als Bild exportieren
+            const imageDataUrl = canvas.toDataURL('image/png');
+            resolve(imageDataUrl);
+          };
+
+          dogImage.onerror = reject;
+        };
+
+        backgroundImage.onerror = reject;
+      });
+    }*/
 
     const conditionTexts = {
       "very-underweight": "Die Rippen sind deutlich sichtbar und leicht zu fühlen, keine Fettschicht. Die Oberansicht zeigt eine sehr deutliche Sanduhrform.",
@@ -1134,10 +1282,16 @@ const hunderassen = await hunderassenService.fetchHunderassen();
       return isValid;
     }
 
+    const foodImages = {
+      default: '/images/MockUps/Buddy.png',
+    };
+
+    const hunderassen = hunderassenData;
+
     async function finishConfiguration() {
       const formData = new FormData(form);
 
-      // Bisherige Daten
+      // Bisherige Daten sammeln (dein bestehender Code)...
       dogData.name = formData.get('dogName')?.toString() || '';
       dogData.isNeutered = formData.get('isNeutered') === 'yes';
       dogData.age.years = parseInt(formData.get('ageYears')?.toString() || '0');
@@ -1150,20 +1304,18 @@ const hunderassen = await hunderassenService.fetchHunderassen();
       dogData.treats = formData.get('treats')?.toString() || '';
       dogData.hasHealthIssues = formData.get('hasHealthIssues') === 'yes';
 
-      if (dogData.hasHealthIssues) {
-        dogData.healthIssues = formData.getAll('health[]').map(issue => issue.toString());
-      } else {
-        dogData.healthIssues = [];
-      }
-
+      // Gesundheitsprobleme verarbeiten...
       if (dogData.hasHealthIssues) {
         dogData.healthIssues = formData.getAll('health[]').map(issue => issue.toString());
         const otherDescription = formData.get('otherHealthDescription')?.toString();
         if (dogData.healthIssues.includes('other') && otherDescription) {
           dogData.otherHealthDescription = otherDescription;
         }
+      } else {
+        dogData.healthIssues = [];
       }
 
+      // Rassentyp verarbeiten...
       switch (dogData.breedType) {
         case 'purebred':
           dogData.breed = formData.get('breed')?.toString();
@@ -1182,191 +1334,114 @@ const hunderassen = await hunderassenService.fetchHunderassen();
           break;
       }
 
-      console.log('Gesammelte Hundedaten:', dogData);
-
-      // 2) Spinner zeigen + Button deaktivieren
+      // Spinner zeigen und Button deaktivieren
       showLoadingSpinner();
       newNextButton.disabled = true;
 
       try {
-        console.log('Starte Kibble-Berechnung...');
+        // API-Aufruf und Berechnungen...
         const response = await fetch('/api/kibble-recommendations', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(dogData)
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-        // 3) Kibble-Empfehlung
         const recommendations = await response.json();
-        console.log('Erhaltene Empfehlungen:', recommendations);
-
         const topKibble = recommendations[0];
-        if (!topKibble) {
-          throw new Error('Keine Empfehlung erhalten!');
-        }
+        if (!topKibble) throw new Error('Keine Empfehlung erhalten!');
 
-        // 4) Erste Berechnungen
+        // Berechnungen durchführen
         const dailyCals = computeDailyCalories(dogData);
         const totalGrams = calsToGrams(dailyCals);
-
-        // 5) Leckerlis-Abzug
         const treatPerc = getTreatsPercentage(dogData.treats);
         const treatGrams = Math.round(totalGrams * (treatPerc / 100));
         const kibbleGrams = totalGrams - treatGrams;
-
-        // 6) Preisberechnung -Jetzt mit kibbleGrams!
         const prices = calculateDailyPrice(totalGrams, kibbleGrams, dogData);
 
-        // 7) HTML für Top-Kibble erstellen
         const topKibbleHtml = `
-        <div class="bg-white p-4 rounded-lg shadow-lg mb-4">
-          <h4 class="font-bold">Maßgeschneiderter Futterplan</h4>
-          <p class="text-sm mb-2"><strong>Proteinquelle:</strong> ${topKibble.Proteinquelle}</p>
-          <p class="text-sm mb-2"><strong>Benötigte Kalorien pro Tag:</strong> ${dailyCals} kcal</p>
-          <p class="text-sm mb-2"><strong>Davon durch Leckerlis:</strong> ${Math.round(dailyCals * treatPerc / 100)} kcal (${treatPerc}%)</p>
-          <p class="text-sm mb-2"><strong>Verbleibende Kalorien durch Napfgenuss:</strong> ${Math.round(dailyCals * (100 - treatPerc) / 100)} kcal</p>
-          <p class="text-sm mb-2"><strong>Napfgenuss-Portion:</strong> ${kibbleGrams} g/Tag</p>
-          <p class="text-sm mb-2"><strong>Leckerli-Portion:</strong> ${treatGrams} g/Tag</p>
-          <p class="text-sm mb-2"><strong>Tagespreis:</strong> ${prices.daily}€</p>
-          <p class="text-sm mb-2"><strong>Monatspreis:</strong> ${prices.monthly}€</p>
-        </div>
+          <div class="bg-white p-4 rounded-lg shadow-lg mb-4">
+            <h4 class="font-bold">Maßgeschneiderter Futterplan</h4>
+            <p class="text-sm mb-2"><strong>Proteinquelle:</strong> ${topKibble.Proteinquelle}</p>
+            <p class="text-sm mb-2"><strong>Benötigte Kalorien pro Tag:</strong> ${dailyCals} kcal</p>
+            <p class="text-sm mb-2"><strong>Davon durch Leckerlis:</strong> ${Math.round(dailyCals * treatPerc / 100)} kcal (${treatPerc}%)</p>
+            <p class="text-sm mb-2"><strong>Verbleibende Kalorien durch Napfgenuss:</strong> ${Math.round(dailyCals * (100 - treatPerc) / 100)} kcal</p>
+            <p class="text-sm mb-2"><strong>Napfgenuss-Portion:</strong> ${kibbleGrams} g/Tag</p>
+            <p class="text-sm mb-2"><strong>Leckerli-Portion:</strong> ${treatGrams} g/Tag</p>
+            <p class="text-sm mb-2"><strong>Tagespreis:</strong> ${prices.daily}€</p>
+            <p class="text-sm mb-2"><strong>Monatspreis:</strong> ${prices.monthly}€</p>
+          </div>
         `;
 
-        // 8) Text-Mappings
-        const healthIssuesTexts = {
-          digestion: 'Verdauung',
-          joints: 'Gelenkprobleme',
-          skin: 'Haut & Fell',
-          bladder: 'Blasenprobleme',
-          behavior: 'Stress / Aggression',
-          dental: 'Zahnprobleme',
-          allergies: 'Allergien',
-          other: 'Sonstiges'
-        };
-
-        const ageSummary = dogData.age.months
-          ? `${dogData.age.years} Jahre und ${dogData.age.months} Monate`
-          : `${dogData.age.years} Jahre`;
-
-        const bodyConditionTexts = {
-          'very-underweight': 'Stark untergewichtig',
-          'underweight': 'Untergewichtig',
-          'ideal': 'Ideal',
-          'overweight': 'Übergewichtig',
-          'obese': 'Fettleibig'
-        };
-
-        const activityTexts = {
-          'very-low': 'weniger als 30 Min',
-          'low': '30 Min - 1 Stunde',
-          'medium': '1 - 2 Stunden',
-          'high': 'Mehr als 2 Stunden'
-        };
-
-        const treatTexts = {
-          none: 'Keine',
-          'few-weekly': 'Ein paar pro Woche',
-          'few-daily': 'Ein paar pro Tag',
-          'many-daily': 'Viele am Tag'
-        };
-
-        const breedSummary = (() => {
-          switch (dogData.breedType) {
-            case 'purebred':
-              return dogData.breed;
-            case 'mixed':
-              return `Mischling (${dogData.breed} / ${dogData.breed2})`;
-            case 'unknown':
-              const weightTexts = {
-                mini: 'Mini (unter 5kg)',
-                small: 'Klein (5-10kg)',
-                medium: 'Mittel (10-25kg)',
-                large: 'Groß (25-45kg)',
-                giant: 'Riese (über 45kg)'
-              };
-              return `Unbekannte Rasse - ${weightTexts[dogData.weight] || ''}`;
-            default:
-              return '';
-          }
-        })();
-
-        const healthSummary = dogData.hasHealthIssues
-          ? dogData.healthIssues.map(issue => {
-            if (issue === 'other') {
-              return `Sonstiges: ${dogData.otherHealthDescription || ''}`;
-            }
-            return healthIssuesTexts[issue];
-          }).join(', ')
-          : 'Keine gesundheitlichen Probleme';
-
-        // 9) summaryDiv zusammenbauen
+        // HTML für die Zusammenfassung generieren
+        // Zuerst den Container für das BagMockup
         summaryDiv.innerHTML = `
-      <div class="flex flex-col items-center mb-8">
-         <img src="${buddyImagePath}" alt="Hundefutter" class="w-90 h-90 object-contain mb-6">
-      </div>
-      <div class="mb-6">
-        <p class="mb-2">Name: ${dogData.name} (${dogData.gender === 'male' ? 'männlich' : 'weiblich'})</p>
-        <p class="mb-2">${dogData.isNeutered ? 'Kastriert' : 'Nicht kastriert'}</p>
-        <p class="mb-2">Alter: ${ageSummary}</p>
-        <p class="mb-2">Rasse: ${breedSummary}</p>
-        <p class="mb-2">Aktuelles Gewicht: ${dogData.currentWeight} kg</p>
-        <p class="mb-2">Körperliche Verfassung: ${bodyConditionTexts[dogData.bodyCondition] || ''}</p>
-        <p class="mb-2">Aktivität pro Tag: ${activityTexts[dogData.activityLevel] || ''}</p>
-        <p class="mb-2">Leckerlis: ${treatTexts[dogData.treats] || ''}</p>
-        <p class="mb-4">Gesundheitliche Probleme: ${healthSummary}</p>
-      </div>
+          <div class="flex flex-col items-center mb-8">
+            <div id="bag-mockup-container"></div>
+          </div>
+          <!-- Rest deiner Zusammenfassung -->
+          <div class="mb-6">
+            <!-- Dein bestehendes HTML für die Zusammenfassung -->
+          </div>
+          <div class="mt-6">
+            ${topKibbleHtml}
+          </div>
+          <button id="editAnswers" class="btn btn-secondary mt-4" type="button">
+            Antworten ändern
+          </button>
+        `;
 
-      <div class="mt-6">
-        ${topKibbleHtml}
-      </div>
-      
-      <button
-        id="editAnswers"
-        class="btn btn-secondary mt-4"
-        type="button"
-      >
-        Antworten ändern
-      </button>
-    `;
+        const selectedBreed = hunderassenData.find(breed => breed.nameDE === dogData.breed);
+        const breedImage = selectedBreed?.image || dogPlaceholderPath
 
-        // 10) Snipcart Button
-        const snipcartButton = document.querySelector('.snipcart-add-item');
-        if (snipcartButton) {
-          const timestamp = new Date().getTime(); // Generiert einen Zeitstempel
-          const uniqueId = `custom-dog-food-${dogData.name}-${timestamp}`; // Eindeutige ID
-          const description = `Individuelles Hundefutter für einen Monat für ${dogData.name}`;
-
-          snipcartButton.setAttribute('data-item-id', uniqueId);
-          snipcartButton.setAttribute('data-item-name', `Hundefutter für ${dogData.name}`);
-          snipcartButton.setAttribute('data-item-description', description);
-          snipcartButton.setAttribute('data-item-price', prices.monthly.toString());
-          snipcartButton.setAttribute('data-item-image', buddyImagePath);
+        const bagMockupContainer = document.getElementById('bag-mockup-container');
+        if (bagMockupContainer && window.React && window.ReactDOM) {
+          try {
+            eval(BagMockUpComponent);
+            const root = window.ReactDOM.createRoot(bagMockupContainer);
+            root.render(
+              window.React.createElement(window.BagMockUpComponent, {
+                dogName: dogData.name,
+                breedName: dogData.breed || '',
+                breedImage: breedImage
+              })
+            );
+          } catch (error) {
+            console.error('React rendering error:', error);
+          }
         }
 
-        // Formular verstecken, Zusammenfassung zeigen
+
+        // Snipcart Button aktualisieren
+        const snipcartButton = document.querySelector('.snipcart-add-item');
+        if (snipcartButton) {
+          const nameForId = dogData.name.trim() || "unknown";
+          const timestamp = new Date().getTime();
+          const uniqueId = `custom-dog-food-${nameForId}-${timestamp}`;
+          snipcartButton.setAttribute('data-item-id', uniqueId);
+          snipcartButton.setAttribute('data-item-name', `Hundefutter für ${dogData.name}`);
+          snipcartButton.setAttribute('data-item-description',
+            `Individuelles Hundefutter für einen Monat für ${dogData.name}`);
+          snipcartButton.setAttribute('data-item-price', prices.monthly.toString());
+        }
+
+        
+        // UI-Status aktualisieren
         form.classList.add('hidden');
         snipcartContainer.classList.remove('hidden');
 
       } catch (error) {
         console.error('Fehler bei der Berechnung:', error);
         summaryDiv.innerHTML = `
-      <div class="text-red-500">
-        Es ist ein Fehler bei der Berechnung aufgetreten. Bitte versuche es später erneut.
-      </div>
-      <button
-        id="editAnswers"
-        class="btn btn-secondary mt-4"
-        type="button"
-      >
-        Zurück
-      </button>
-    `;
+          <div class="text-red-500">
+            Es ist ein Fehler bei der Berechnung aufgetreten. Bitte versuche es später erneut.
+          </div>
+          <button id="editAnswers" class="btn btn-secondary mt-4" type="button">
+            Zurück
+          </button>
+        `;
       } finally {
-        // Spinner ausblenden, Button wieder aktivieren
         hideLoadingSpinner();
         newNextButton.disabled = false;
       }
@@ -1375,7 +1450,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
       document.getElementById('editAnswers')?.addEventListener('click', () => {
         snipcartContainer.classList.add('hidden');
         form.classList.remove('hidden');
-        showStep(9)
+        showStep(9);
       });
     }
 
