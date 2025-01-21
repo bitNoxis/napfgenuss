@@ -207,7 +207,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
         <div id="purebred-select" class="hidden">
           <select
             name="breed"
-            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
             required
           >
             <option value="">Bitte Rasse wählen</option>
@@ -223,7 +223,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
         <div id="mixed-select" class="hidden space-y-4">
           <select
             name="breed1"
-            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
             required
           >
             <option value="">Bitte Rasse wählen</option>
@@ -235,7 +235,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
           </select>
           <select
             name="breed2"
-            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
             required
           >
             <option value="">Bitte Rasse wählen</option>
@@ -515,10 +515,20 @@ const hunderassen = await hunderassenService.fetchHunderassen();
               <input type="checkbox" name="health[]" value="dental" class="w-4 h-4">
               <span>Zahnprobleme</span>
             </label>
+            <!-- Allergien mit Detailangabe -->
             <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="allergies" class="w-4 h-4">
+              <input type="checkbox" name="health[]" value="allergies" class="w-4 h-4" id="allergyCheckbox">
               <span>Allergien</span>
             </label>
+            <!-- Textfeld für detaillierte Angabe zu Allergien -->
+            <div id="allergyDetails" class="hidden ml-7">
+              <input
+                type="text"
+                name="allergyDescription"
+                class="w-full p-2 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+                placeholder="Bitte Allergie(en) genauer beschreiben..."
+              />
+            </div>
             <label class="flex items-center space-x-3">
               <input type="checkbox" name="health[]" value="other" class="w-4 h-4" id="otherHealthIssue">
               <span>Sonstiges</span>
@@ -733,7 +743,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
     let dailyPrice = (kibbleGrams / 100) * basePrice * sizeFactor * healthFactor * ageFactor;
 
     // Preisbegrenzung zwischen 0.35€ und 3€
-    dailyPrice = Math.max(0.44, Math.min(3.0, dailyPrice));
+    dailyPrice = Math.max(0.54, Math.min(5.0, dailyPrice));
 
     // Monatspreis (30 Tage)
     const monthlyPrice = dailyPrice * 30;
@@ -904,6 +914,20 @@ const hunderassen = await hunderassenService.fetchHunderassen();
       otherHealthCheckbox.addEventListener('change', (e) => {
         otherHealthDetails.classList.toggle('hidden', !e.target.checked);
         const input = otherHealthDetails.querySelector('input');
+        if (input) {
+          input.required = e.target.checked;
+        }
+      });
+    }
+
+    // Neuer Event-Listener für Allergien
+    const allergyCheckbox = document.getElementById('allergyCheckbox');
+    const allergyDetails = document.getElementById('allergyDetails');
+
+    if (allergyCheckbox && allergyDetails) {
+      allergyCheckbox.addEventListener('change', (e) => {
+        allergyDetails.classList.toggle('hidden', !e.target.checked);
+        const input = allergyDetails.querySelector('input');
         if (input) {
           input.required = e.target.checked;
         }
