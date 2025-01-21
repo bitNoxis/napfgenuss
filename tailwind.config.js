@@ -37,9 +37,5 @@ export default {
       addVariant('intersect', '&:not([no-intersect])');
     }),
   ],
-  // Einfach weg damit:
-  // darkMode: 'class',
-
-  // Oder explizit deaktivieren:
-  darkMode: false,
+  
 };
