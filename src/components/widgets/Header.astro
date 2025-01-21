@@ -49,7 +49,8 @@ const {
 const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 ---
 
-<header style="z-index: 1;"
+<header
+  style="z-index: 1;"
   class:list={[
     { sticky: isSticky, relative: !isSticky, dark: isDark },
     'top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity] ease-in-out',
@@ -74,10 +75,10 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
   >
     <div class:list={[{ 'mr-auto rtl:mr-0 rtl:ml-auto': position === 'right' }, 'flex justify-between']}>
       <a class="flex items-center" href={getHomePermalink()}>
-        <Logo 
-        color="#385317"/>
+        <Logo color="#385317" />
       </a>
       <div class="flex items-center md:hidden">
+        <SnipcartCart />
         <ToggleMenu />
       </div>
     </div>
@@ -90,55 +91,58 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
       >
         {
           links.map(({ text, href, links }) => (
-          <li class={links?.length ? (links.length > 1 ? 'dropdown' : '') : ''}>
-            {links?.length ? (
-              links.length > 1 ? (
-                <>
-                  <button
-                    type="button"
+            <li class={links?.length ? (links.length > 1 ? 'dropdown' : '') : ''}>
+              {links?.length ? (
+                links.length > 1 ? (
+                  <>
+                    <button
+                      type="button"
+                      class="hover:text-link dark:hover:text-white px-4 py-3 flex items-center whitespace-nowrap"
+                    >
+                      {text}{' '}
+                      <Icon
+                        name="tabler:chevron-down"
+                        class="w-3.5 h-3.5 ml-0.5 rtl:ml-0 rtl:mr-0.5 hidden md:inline"
+                      />
+                    </button>
+                    <ul class="dropdown-menu md:backdrop-blur-md dark:md:bg-dark rounded md:absolute pl-4 md:pl-0 md:hidden font-medium md:bg-white/90 md:min-w-[200px] drop-shadow-xl">
+                      {links.map(({ text: text2, href: href2 }) => (
+                        <li>
+                          <a
+                            class:list={[
+                              'first:rounded-t last:rounded-b md:hover:bg-gray-100 hover:text-link dark:hover:text-white dark:hover:bg-gray-700 py-2 px-5 block whitespace-no-wrap',
+                              { 'aw-link-active': href2 === currentPath },
+                            ]}
+                            href={href2}
+                          >
+                            {text2}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  // Render a direct link if links.length === 1
+                  <a
                     class="hover:text-link dark:hover:text-white px-4 py-3 flex items-center whitespace-nowrap"
+                    href={links[0].href}
                   >
-                    {text}{' '}
-                    <Icon name="tabler:chevron-down" class="w-3.5 h-3.5 ml-0.5 rtl:ml-0 rtl:mr-0.5 hidden md:inline" />
-                  </button>
-                  <ul class="dropdown-menu md:backdrop-blur-md dark:md:bg-dark rounded md:absolute pl-4 md:pl-0 md:hidden font-medium md:bg-white/90 md:min-w-[200px] drop-shadow-xl">
-                    {links.map(({ text: text2, href: href2 }) => (
-                      <li>
-                        <a
-                          class:list={[
-                            'first:rounded-t last:rounded-b md:hover:bg-gray-100 hover:text-link dark:hover:text-white dark:hover:bg-gray-700 py-2 px-5 block whitespace-no-wrap',
-                            { 'aw-link-active': href2 === currentPath },
-                          ]}
-                          href={href2}
-                        >
-                          {text2}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </>
+                    {links[0].text}
+                  </a>
+                )
               ) : (
-                // Render a direct link if links.length === 1
                 <a
-                  class="hover:text-link dark:hover:text-white px-4 py-3 flex items-center whitespace-nowrap"
-                  href={links[0].href}
+                  class:list={[
+                    'hover:text-link dark:hover:text-white px-4 py-3 flex items-center whitespace-nowrap',
+                    { 'aw-link-active': href === currentPath },
+                  ]}
+                  href={href}
                 >
-                  {links[0].text}
+                  {text}
                 </a>
-              )
-            ) : (
-              <a
-                class:list={[
-                  'hover:text-link dark:hover:text-white px-4 py-3 flex items-center whitespace-nowrap',
-                  { 'aw-link-active': href === currentPath },
-                ]}
-                href={href}
-              >
-                {text}
-              </a>
-            )}
-          </li>
-        ))
+              )}
+            </li>
+          ))
         }
       </ul>
     </nav>
@@ -150,6 +154,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
     >
       <div class="items-center flex justify-between w-full md:w-auto relative">
         <div class="flex">
+          <!-- Toggle Theme  -->
           {showToggleTheme && <ToggleTheme iconClass="w-6 h-6 md:w-5 md:h-5 md:inline-block" />}
           {
             showRssFeed && (
@@ -162,10 +167,16 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
               </a>
             )
           }
-            <SnipcartCart />
-          <div class="snipcart-summary">
-            <Button class="snipcart-customer-signin ml-2 py-2.5 px-5.5 md:px-6 font-semibold shadow-none text-sm w-auto">Log In</Button>
+          <div class="hidden md:flex items-center justify-between w-full md:w-auto relative">
+            <div class="flex">
+              <SnipcartCart />
+            </div>
           </div>
+        </div>
+        <div class="snipcart-summary">
+          <Button class="snipcart-customer-signin ml-2 py-2.5 px-5.5 md:px-6 font-semibold shadow-none text-sm w-auto"
+            >Log In</Button
+          >
         </div>
         <!-- {
           actions?.length ? (

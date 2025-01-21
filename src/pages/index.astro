@@ -7,16 +7,18 @@ import Content from '~/components/widgets/Content.astro';
 import Testimonials from '~/components/widgets/Testimonials.astro';
 
 import Process from '~/components/widgets/Process.astro';
-import Brands from '~/components/widgets/Brands.astro';
 
 import DynamicExamples from '~/components/widgets/DynamicExamples.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 
+import Rating from '~/components/ui/rating.astro'
+
 
 import HandyMockUp from 'src/assets/images/MockUps/HandyMockUp.png';
 import BagMockUp from 'src/assets/images/MockUps/MockUpProductLucky.png';
 import BagsMockUp from 'src/assets/images/MockUps/MockupTriple.png';
+import LuckyMockUp from 'src/assets/images/dogs/Lucky.png'
 
 import Prices from '~/components/widgets/Pricing.astro';
 import { headerData } from '~/navigation';
@@ -35,8 +37,8 @@ const metadata = {
   <Hero2
     tagline="Unsere Vision"
     actions={[
-      { variant: 'primary', target: '_self', text: 'Jetzt Futter entdecken!', href: '/contact' },
-      { target: '_self', text: 'Mehr erfahren', href: '/about' },
+      { variant: 'primary', target: '_self', text: 'Jetzt zusammenstellen', href: '/products' },
+      { target: '_self', text: 'Mehr erfahren', href: '/search' },
     ]}
     image={{
       src: BagsMockUp,
@@ -50,23 +52,28 @@ const metadata = {
 
     <Fragment slot="subtitle">
       <span class="hidden sm:inline">
-        So einzigartig wie Ihr Hund - so sollte auch sein <span class="font-semibold">Futter</span> sein.
+        Weil dein Hund individuell ist - Genau wie sein <span class="font-semibold">Futter.</span>
       </span>
       Bei uns erhält Ihr Vierbeiner eine komplett personalisierte Ernährung, perfekt abgestimmt auf seine Bedürfnisse.
     </Fragment>
   </Hero2>
 
+  <Rating 
+  bg = 'bg-accent',
+  fullStars = 4.23
+  />
+
   <!-- Content Widget **************** -->
 
   <Content
     title="NapfGenuss"
-    subtitle="<span class='font-semibold'>Maßgeschneiderten Rezepturen, natürlichen Zutaten und umweltfreundlicher Verpackung</span> - so machen wir Füttern einfach und unkompliziert."
+    subtitle="<span class='font-semibold'>Maßgeschneiderte Rezepturen, natürliche Zutaten und umweltfreundliche Verpackungen</span> - so machen wir Füttern einfach und unkompliziert."
     isReversed
     items={[
       {
         title: 'Individuell und flexibel',
         description:
-          'Maßgeschneiderte Rezepte für die spezifischen Bedürfnisse Ihres Hundes (Alter, Rasse, Aktivitätsniveau).',
+          'Maßgeschneiderte Rezepte für die spezifischen Bedürfnisse Ihres Hundes (Alter, Rasse, Aktivitätsniveau, etc.).',
       },
       {
         title: 'Gesundheitsfördernd',
@@ -78,7 +85,7 @@ const metadata = {
       },
     ]}
     image={{
-      src: 'https://cdn.pixabay.com/photo/2020/05/13/21/03/dog-food-5168940_1280.jpg',
+      src: LuckyMockUp,
       alt: 'Startup Image',
     }}
   >
@@ -109,7 +116,7 @@ const metadata = {
       },
       {
         testimonial: `Mein Hund Berta hat eine Allergie und wir haben lange nach dem richtigen Futter gesucht. Mit NapfGenuss haben wir endlich das perfekte Futter gefunden. Berta geht es besser und wir sind froh, dass wir uns für`,
-        name: 'Lucas Müller',
+        name: 'Lukas Müller',
         job: 'mit Hund Berta',
         image: {
           src: 'https://images.unsplash.com/photo-1561406636-b80293969660?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
@@ -294,7 +301,7 @@ const metadata = {
     subtitle="Wir freuen uns auf Ihre Nachricht"
     callToAction={{
       text: 'Jetzt kontaktieren',
-      href: '/',
+      href: '/contact',
     }}
     items={[
       {
@@ -319,7 +326,7 @@ const metadata = {
 
   <BlogLatestPosts
     id="blog"
-    title="Unser hundeernährungsblog"
+    title="Unser Hundeernährungslog"
     information={`Lesen Sie die neuesten Beiträge zu Hundeernährung, Gesundheit und Wohlbefinden.`}
   >
     <Fragment slot="bg">

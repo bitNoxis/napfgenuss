@@ -4,77 +4,97 @@ import Button from './Button.astro';
 ---
 
 <body>
-    <a transition:persist transition:persist-props id="event_listener" class="flex flex-row snipcart-checkout snipcart-summary" style="text-decoration: none;">
-      <CartIcon 
-      width="24"
-       height="24" 
-       strokeColor=var(--aw-color-secondary)
-       />
-       <span class="relative bottom-2 right-2 w-5 h-5 rounded-full bg-secondary flex items-center justify-center m-auto">
-        <span id="snipcart_count" class="text-white snipcart-items-count"></span>
-      </span>
-      
-    </a>
-  </body> 
-  <div id="reminder" 
-     class="opacity-0 transition ease-in-out duration-300 pointer-events-none fixed bottom-10 transform -translate-x-1/2 w-80 bg-white shadow-lg border border-gray-300 rounded-lg p-4 flex items-center justify-between space-x-4">
+  <a
+    transition:persist
+    transition:persist-props
+    id="event_listener"
+    class="flex flex-row snipcart-checkout snipcart-summary"
+    style="text-decoration: none;"
+  >
+    <CartIcon width="24" height="24" strokeColor="var(--aw-color-secondary)" />
+    <span class="relative bottom-2 right-2 w-5 h-5 rounded-full bg-secondary flex items-center justify-center m-auto">
+      <span id="snipcart_count" class="text-white snipcart-items-count"></span>
+    </span>
+  </a>
+</body>
+<div
+  id="reminder"
+  class="opacity-0 pointer-events-none fixed inset-x-0 bottom-10 mx-auto w-80 rounded-lg shadow-lg bg-white border border-gray-300 p-4 flex items-center justify-between space-x-4"
+>
   <div class="text-gray-700">
     <p class="font-semibold">Warenkorb</p>
     <p class="text-sm text-gray-500">Es liegt Hundefutter in Ihrem Warenkorb!</p>
   </div>
-  <Button variant="secondary" class="text-sm px-4 py-2 transition" href='/#/checkout'>Zur Kasse</Button>
+  <Button variant="secondary" class="text-sm px-4 py-2 transition" href="/#/checkout">Zur Kasse</Button>
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const snipcartCountElement = document.getElementById('snipcart_count');
+    const reminder = document.getElementById('reminder');
 
+    if (!snipcartCountElement || !reminder) {
+      console.error('Required elements (#snipcart_count or #reminder) not found.');
+      return;
+    }
 
-  <script>
-    // Funktion, die ausgeführt wird, wenn der Counter aktualisiert wird
-    const handleSnipcartCountChange = () => {
-      document.addEventListener('snipcart.ready', () => {
+    let reminderVisible = false; // Status: ob der Reminder sichtbar ist
+    let lastScrollPosition = 0; // Letzte bekannte Scrollposition
 
-      document.addEventListener('scroll', () => {
-        const snipcartCountElement = document.getElementById('snipcart_count');
-        const snipcartCount = parseInt(snipcartCountElement?.innerHTML || '0', 10);
-        const reminder = document.getElementById('reminder');
+    // Funktion zur Aktualisierung der Reminder-Sichtbarkeit
+    const updateReminderVisibility = () => {
+      const snipcartCount = parseInt(snipcartCountElement.textContent || '0', 10);
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
 
-        if (!snipcartCountElement || !reminder) {
-        console.error('Required elements (#snipcart_count or #reminder) not found.');
-        return;
+      // Reminder nur anzeigen, wenn Warenkorb nicht leer ist und 100vh gescrollt wurde
+      if (snipcartCount > 0 && scrollY > viewportHeight && !reminderVisible) {
+        reminder.classList.replace('opacity-0', 'opacity-100');
+        reminder.classList.replace('pointer-events-none', 'pointer-events-auto');
+
+        console.log(reminder.classList)
+
+        reminderVisible = true; // Status setzen
+        console.log('Reminder anzeigen: Klassen aktualisiert auf opacity-100 und pointer-events-auto.');
+      } else if ((snipcartCount === 0 || scrollY <= viewportHeight) && reminderVisible) {
+
+        reminder.classList.replace('opacity-100', 'opacity-0');
+        reminder.classList.replace('pointer-events-auto', 'pointer-events-none');
+
+        console.log(reminder.classList)
+
+        reminderVisible = false; // Status zurücksetzen
+        console.log('Reminder ausblenden: Klassen aktualisiert auf opacity-0 und pointer-events-none.');
       }
+    };
 
-        const scrollY = window.scrollY;
-        const viewportHeight = window.innerHeight;
+    // Scroll-Event-Listener hinzufügen
+    const onScroll = () => {
+      const currentScrollPosition = window.scrollY;
 
-        if (snipcartCount > 0 && scrollY > viewportHeight) {
-          // User has scrolled below the fold and there are items in the cart
-          reminder.classList.remove('opacity-0', 'pointer-events-none');
-          reminder.classList.add('opacity-100', 'pointer-events-auto');
-          console.log('Reminder anzeigen');
-        } else {
-          // Either no items in the cart or user is above the fold
-          reminder.classList.remove('opacity-100', 'pointer-events-auto');
-          reminder.classList.add('opacity-0', 'pointer-events-none');
+      // Nur ausführen, wenn mindestens 100px Bewegung seit der letzten Prüfung
+      if (Math.abs(currentScrollPosition - lastScrollPosition) > 100) {
+        lastScrollPosition = currentScrollPosition;
+        updateReminderVisibility();
       }
-    })})};
+    };
 
-    // Starte den MutationObserver, sobald die Seite geladen ist
-    document.addEventListener('DOMContentLoaded', () => {
-      const snipcartCountElement = document.getElementById('snipcart_count');
-  
-      if (snipcartCountElement) {
-        // MutationObserver für Änderungen am Counter-Element einrichten
-        const observer = new MutationObserver(() => {
-          handleSnipcartCountChange();
-        });
-  
-        observer.observe(snipcartCountElement, {
-          childList: true, // Beobachtet Änderungen an den direkten Kindknoten
-          characterData: true, // Beobachtet Änderungen am Textinhalt
-          subtree: true, // Beobachtet Änderungen in untergeordneten Elementen
-        });
-  
-        // Einmal beim Start die Funktion ausführen
-        handleSnipcartCountChange();
-      }
+    // MutationObserver für Änderungen im Warenkorb
+    const observer = new MutationObserver(() => {
+      console.log('MutationObserver ausgelöst: Warenkorb-Count geändert.');
+      updateReminderVisibility();
     });
-  </script>
+
+    observer.observe(snipcartCountElement, {
+      childList: true,
+      characterData: true,
+    });
+
+    // Initial einmal die Sichtbarkeit prüfen
+    console.log('Initiale Ausführung von updateReminderVisibility.');
+    updateReminderVisibility();
+
+    // Scroll-Event-Listener starten
+    window.addEventListener('scroll', onScroll);
+  });
+</script>

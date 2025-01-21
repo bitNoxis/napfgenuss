@@ -1,11 +1,12 @@
 ---
 import Ingredients from './Ingredients.astro';
+import Button from '~/components/ui/Button.astro'
 
 import Reis from '~/assets/images/ingredients/reis.png';
 import Suesskartoffel from '~/assets/images/ingredients/suesskartoffel.png';
-import Fleisch01 from '~/assets/images/ingredients/Fleisch1.png';
-import Fleisch02 from '~/assets/images/ingredients/Fleisch2.png';
-import Fleisch03 from '~/assets/images/ingredients/Fleisch3.png';
+import Fleisch01 from '~/assets/images/ingredients/Fleisch_01.png';
+import Fleisch02 from '~/assets/images/ingredients/Fleisch_02.png';
+import Fleisch03 from '~/assets/images/ingredients/Fleisch_03.png';
 import Huhn from '~/assets/images/ingredients/huhn.png';
 import Blaubeeren from '~/assets/images/ingredients/blaubeeren.png';
 import Spinat from '~/assets/images/ingredients/spinat.png';
@@ -13,7 +14,7 @@ import Oel from '~/assets/images/ingredients/oel.png';
 import Karotten from '~/assets/images/ingredients/karotten.png';
 import Brokkoli from  '~/assets/images/ingredients/brokkoli.png';
 import BraunerReis from '~/assets/images/ingredients/brauner_reis.png';
-import Huhn2 from '~/assets/images/ingredients/Huhn2.png';
+import Huhn2 from '~/assets/images/ingredients/Huhn_02.png';
 ---
 
 <Ingredients
@@ -21,7 +22,7 @@ ingredients01={[
   {type: 'Weißer Reis', desc: 'Liefert natürliche Ballaststoffe, die eine gesunde Verdauung unterstützen.', color: "#31632F", img: Reis},
   {type: 'Kartoffeln', desc: 'Reich an Vitamin A und Kalium – fördert gesunde Haut und kräftige Muskeln.', color: "#2A6EBB", img: Suesskartoffel},
   {type: 'Fleisch', desc: 'Eine ausgezeichnete Energiequelle, die essenzielle Nährstoffe für Vitalität liefert.', color: "#7EB5E2", img: Fleisch01},
-  {type: 'Huhn', desc: 'Hochwertiges Eiweiß mit Kalzium und Phosphor – unterstützt stabile Knochen und starke Zähne.', color: "#CB4E5B", img: Huhn2},
+  {type: 'Huhn', desc: 'Hochwertiges Eiweiß mit Kalzium und Phosphor – unterstützt stabile Knochen und starke Zähne.', color: "#CB4E5B", img: Huhn},
   {type: 'Brokkoli', desc: 'Ein ballaststoffreiches Gemüse, das die Verdauung und das Immunsystem stärkt.', color: "#A1C9F1", img: Brokkoli},
   {type: 'Öl', desc: 'Eine wertvolle Energiequelle, die das Fell glänzend und die Haut geschmeidig hält.', color: "#A1C9F1", img: Oel},
   {type: 'Blaubeeren', desc: 'Ein antioxidatives Superfood, das die Zellen schützt und das Immunsystem stärkt.', color: "#E2CFB5", img: Blaubeeren},
@@ -35,3 +36,7 @@ ingredients02={[
   {type: 'Ente', desc: 'Proteinreich und voller B-Vitamine – ideal für Energie und den Aufbau kräftiger Muskeln.', color: "#E2CFB5", img: Huhn2},
 ]}
 />
+
+<div class="flex justify-center mb-20 mx-auto">
+  <Button variant="primary", target="_self", text="Jetzt zusammenstellen!", href="/products"/>
+</div>
