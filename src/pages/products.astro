@@ -51,7 +51,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
   <div class="max-w-3xl mx-auto p-4 bg-page">
     <form id="dog-configurator" class="space-y-8">
       <div class="step-1">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie heißt dein Hund?</h2>
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie heißt Ihr Hund?</h2>
 
         <div class="flex space-x-4 mb-4">
           <label
@@ -120,8 +120,8 @@ const hunderassen = await hunderassenService.fetchHunderassen();
         </div>
         <div class="bg-green-100 p-4 rounded-lg mt-4 flex items-center space-x-4 shadow-md">
           <div>
-            <p class="text-sm text-page font-medium">
-              "Eine Kastration kann den Stoffwechsel deines Hundes beeinflussen. Mit diesem wichtigen Detail können wir
+            <p class="text-sm text-gray-800 font-medium">
+              "Eine Kastration kann den Stoffwechsel Ihres Hundes beeinflussen. Mit diesem wichtigen Detail können wir
               ein
               perfekt angepasstes Rezept erstellen."
             </p>
@@ -157,8 +157,8 @@ const hunderassen = await hunderassenService.fetchHunderassen();
         </div>
         <!-- Container für den zusätzlichen Text -->
         <div class="bg-green-100 p-4 rounded-lg mt-4 shadow-md">
-          <p class="text-sm text-page font-medium">
-            Der Nährstoffbedarf deines Hundes ändert sich im Laufe seines Lebens. In jeder Phase werden wir das Rezept
+          <p class="text-sm text-gray-800 font-medium">
+            Der Nährstoffbedarf Ihres Hundes ändert sich im Laufe seines Lebens. In jeder Phase werden wir das Rezept
             an seine Bedürfnisse anpassen.
           </p>
         </div>
@@ -602,7 +602,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
 
     <div id="snipcart-container" class="hidden mt-8 space-y-6">
       <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h3 class="text-xl font-heading font-bold mb-4 text-page">Deine Auswahl</h3>
+        <h3 class="text-xl font-heading font-bold mb-4 text-page">Ihre Auswahl</h3>
         <div id="summary" class="text-muted"></div>
       </div>
 
@@ -612,7 +612,6 @@ const hunderassen = await hunderassenService.fetchHunderassen();
         data-item-price="39.99"
         data-item-url="/produkte"
         data-item-description="Testeintrag"
-        data-item-image={buddyImage.src}
         data-item-name=""
       >
         In den Warenkorb
@@ -1291,7 +1290,6 @@ const hunderassen = await hunderassenService.fetchHunderassen();
     async function finishConfiguration() {
       const formData = new FormData(form);
 
-      // Bisherige Daten sammeln (dein bestehender Code)...
       dogData.name = formData.get('dogName')?.toString() || '';
       dogData.isNeutered = formData.get('isNeutered') === 'yes';
       dogData.age.years = parseInt(formData.get('ageYears')?.toString() || '0');
@@ -1420,7 +1418,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
           const timestamp = new Date().getTime();
           const uniqueId = `custom-dog-food-${nameForId}-${timestamp}`;
           snipcartButton.setAttribute('data-item-id', uniqueId);
-          snipcartButton.setAttribute('data-item-name', `Hundefutter für ${dogData.name}`);
+          snipcartButton.setAttribute('data-item-name', `Hundefutter für einen Monat für ${dogData.name}`);
           snipcartButton.setAttribute('data-item-description',
             `Individuelles Hundefutter für einen Monat für ${dogData.name}`);
           snipcartButton.setAttribute('data-item-price', prices.monthly.toString());
