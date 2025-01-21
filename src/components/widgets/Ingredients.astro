@@ -17,87 +17,110 @@ const {
 
 <WidgetWrapper bg="white">
   <Headline title={title} subtitle={subtitle} />
-  <div class="overflow-hidden">
-    <div class="scrollbar-hide snap-x snap-mandatory flex flex-row w-full space-x-5 overflow-x-scroll px-4 ">
-    {
-      ingredients01 &&
-        ingredients01.map(({ type, desc, img, color }) => (
-          <div class="flex-none w-[350px] snap-center">
-            <div class="flex flex-col h-[400px]">
-              <div class="relative -bottom-28 w-full h-screen mx-auto">
-                <svg
-                  width={300}
-                  height={150}
-                  viewBox="0 0 300 150"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="absolute inset-0 mx-auto z-0 opacity-90 bottom-0"
-                  fill="none"
-                >
-                  <path
-                    d="M4.29436 13.2896C15.1562 -7.88463 150.098 -0.605149 218.033 13.2896C285.968 27.1844 227.444 132.019 111.164 128.28C-5.11636 124.542 -6.5675 34.4638 4.29436 13.2896Z"
-                    fill={color}
-                  />
-                </svg>
-              </div>
-              <Image src={img} width={500} height={300} alt="Kibble" class="relative z-10 mx-auto" />
-              {type && (
-                <div class="mt-4 font-bold text-center text-gray-800 dark:text-gray-100 text-xl">
-                  {type}
-                  {desc && <p class="mt-1 text-gray-600 dark:text-blue-200 font-light text-sm">{desc}</p>}
-                </div>
-              )}
-            </div>
-          </div>
-        ))
-    }
+  <div class="relative">
+    <div class="absolute inset-y-0 -right-20 top-40 m-auto">
+      <div class="relative flex items-center justify-center w-12 h-12 bg-primary rounded-full shadow-lg">
+        <Icon name="tabler:chevron-right" class="text-white w-6 h-6" />
+      </div>
     </div>
-  <div class="scrollbar-hide snap-x snap-mandatory flex flex-row w-full space-x-5 overflow-x-scroll px-4">
-    {
-      ingredients02 &&
-        ingredients02.map(({ type, desc, img, color }) => (
-          <div class="flex-none w-[350px] snap-center">
-            <div class="flex flex-col h-[400px]">
-              <div class="relative -bottom-28 w-full h-screen mx-auto">
-                <svg
-                  width={300}
-                  height={150}
-                  viewBox="0 0 300 150"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="absolute inset-0 mx-auto z-0 opacity-90 bottom-0"
-                  fill="none"
-                >
-                  <path
-                    d="M4.29436 13.2896C15.1562 -7.88463 150.098 -0.605149 218.033 13.2896C285.968 27.1844 227.444 132.019 111.164 128.28C-5.11636 124.542 -6.5675 34.4638 4.29436 13.2896Z"
-                    fill={color}
-                  />
-                </svg>
-              </div>
-              <Image src={img} width={500} height={300} alt="Kibble" class="relative z-10 mx-auto" />
-              {type && (
-                <div class="mt-4 font-bold text-center text-gray-800 dark:text-gray-100 text-xl">
-                  {type}
-                  {desc && <p class="mt-1 text-gray-600 dark:text-blue-200 font-light text-sm">{desc}</p>}
+    <div class="absolute inset-y-0 -left-20 top-40 m-auto">
+      <div class="relative flex items-center justify-center w-12 h-12 bg-primary rounded-full shadow-lg">
+        <Icon name="tabler:chevron-left" class="text-white w-6 h-6" />
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -right-20 bottom-20 m-auto">
+        <div class="relative flex items-center justify-center w-12 h-12 bg-primary rounded-full shadow-lg">
+          <Icon name="tabler:chevron-right" class="text-white w-6 h-6" />
+        </div>
+      </div>
+      <div class="absolute -left-20 bottom-20 m-auto">
+        <div class="relative flex items-center justify-center w-12 h-12 bg-primary rounded-full shadow-lg">
+          <Icon name="tabler:chevron-left" class="text-white w-6 h-6" />
+        </div>
+      </div>
+
+
+    <div class="overflow-hidden">
+    <div class="relative scrollbar-hide snap-x snap-mandatory flex flex-row w-full h-content space-x-5 overflow-x-scroll px-4">
+      {
+        ingredients01 &&
+          ingredients01.map(({ type, desc, img, color }) => (
+            <div class="flex-none w-[350px] snap-center snap-mandatory">
+              <div class="flex flex-col h-[400px]">
+                <div class="relative -bottom-28 w-full h-screen mx-auto">
+                  <svg
+                    width={300}
+                    height={150}
+                    viewBox="0 0 300 150"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="absolute inset-0 mx-auto z-0 opacity-90 bottom-0"
+                    fill="none"
+                  >
+                    <path
+                      d="M4.29436 13.2896C15.1562 -7.88463 150.098 -0.605149 218.033 13.2896C285.968 27.1844 227.444 132.019 111.164 128.28C-5.11636 124.542 -6.5675 34.4638 4.29436 13.2896Z"
+                      fill={color}
+                    />
+                  </svg>
                 </div>
-              )}
+                <Image src={img} width={500} height={300} alt="Kibble" class="relative z-10 mx-auto" />
+                {type && (
+                  <div class="mt-4 font-bold text-center text-gray-800 dark:text-gray-100 text-xl">
+                    {type}
+                    {desc && <p class="mt-1 text-gray-600 dark:text-blue-200 font-light text-sm">{desc}</p>}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))
-    }
-    
+          ))
+      }
+    </div>
+    <div class="scrollbar-hide snap-x snap-mandatory flex flex-row w-full space-x-5 overflow-x-scroll px-4">
+      {
+        ingredients02 &&
+          ingredients02.map(({ type, desc, img, color }) => (
+            <div class="flex-none w-[350px] snap-center snap-mandatory">
+              <div class="flex flex-col h-[400px]">
+                <div class="relative -bottom-28 w-full h-screen mx-auto">
+                  <svg
+                    width={300}
+                    height={150}
+                    viewBox="0 0 300 150"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="absolute inset-0 mx-auto z-0 opacity-90 bottom-0"
+                    fill="none"
+                  >
+                    <path
+                      d="M4.29436 13.2896C15.1562 -7.88463 150.098 -0.605149 218.033 13.2896C285.968 27.1844 227.444 132.019 111.164 128.28C-5.11636 124.542 -6.5675 34.4638 4.29436 13.2896Z"
+                      fill={color}
+                    />
+                  </svg>
+                </div>
+                <Image src={img} width={500} height={300} alt="Kibble" class="relative z-10 mx-auto" />
+                {type && (
+                  <div class="mt-4 font-bold text-center text-gray-800 dark:text-gray-100 text-xl">
+                    {type}
+                    {desc && <p class="mt-1 text-gray-600 dark:text-blue-200 font-light text-sm">{desc}</p>}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+      }
+    </div>
   </div>
-</div>
 </WidgetWrapper>
 
-
 <style>
-    /* For Webkit-based browsers (Chrome, Safari and Opera) */
+  /* For Webkit-based browsers (Chrome, Safari and Opera) */
   .scrollbar-hide::-webkit-scrollbar {
-      display: none;
+    display: none;
   }
 
   /* For IE, Edge and Firefox */
   .scrollbar-hide {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 </style>

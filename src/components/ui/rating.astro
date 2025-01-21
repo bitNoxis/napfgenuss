@@ -23,7 +23,7 @@ const hollowStars = maxStars - fullStars - (hasHalfStar ? 1 : 0); // Verbleibend
     ))}
     <!-- Halber Stern -->
     {hasHalfStar && (
-      <Icon name="tabler:star-half" class="text-primary w-6 h-6" />
+      <Icon name="tabler:star-half-filled" class="text-primary w-6 h-6" />
     )}
     <!-- Leere Sterne -->
     {Array.from({ length: hollowStars }).map(() => (

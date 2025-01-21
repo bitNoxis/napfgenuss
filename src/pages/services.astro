@@ -5,6 +5,8 @@ import Features2 from '~/components/widgets/Features2.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import Testimonials from '~/components/widgets/Testimonials.astro';
 import Layout from '~/layouts/PageLayout.astro';
+import Steps from '~/components/widgets/Steps.astro';
+import Timeline from '~/components/ui/Timeline.astro';
 
 import KibbleRawFood from 'src/assets/images/kibbles/RawFood01.png';
 
@@ -18,42 +20,86 @@ const metadata = {
 
   <Hero
     tagline="So funktioniert's"
-    title="Optimales Futter für Ihren Hund"
-    subtitle="Dein Hund ist einzigartig – genauso sollte sein Futter sein! Mit unserem intelligenten Algorithmus und nur sieben speziell entwickelten Kibbles bieten wir deinem Vierbeiner eine Ernährung, die perfekt auf seine individuellen Bedürfnisse abgestimmt ist"
-    actions={[{ variant: 'primary', target: '_blank', text: 'Jetzt entdecken', href: '/search' }]}
+    title="Transparenz und Technik"
+    subtitle="<span class='font-bold'>Der Weg zu maßgeschneidertem Hundefutter</span> <br> Unsere Plattform kombiniert modernste Technologie mit wissenschaftlich fundierten Erkenntnissen, um eine perfekt abgestimmte Ernährung für deinen Hund zu entwickeln."
+
+    actions={[{ variant: 'primary', target: '_blank', text: 'Jetzt zusammenstellen', href: '/search' }]}
     image={{
       src: KibbleRawFood,
-      alt: 'AstroWind Hero Image',
+      alt: 'So funktioniert NapfGenuss',
     }}
   />
    <!-- Features2 Widget ************** -->
 
    <Features2
-   title="Individuelles Hundefutter: Wissenschaft trifft Einfachheit"
-   subtitle="Discover our selection below to streamline and elevate your projects."
+   title="So macht <span class='text-primary'> NapfGenuss </span> dein Leben einfacher"
+   subtitle="Diese 3 Schritte erklären wir auf dieser Seite"
    columns={3}
    items={[
      {
-       title: 'Optimale Versorgung mit Vitaminen und Nährstoffen',
+       title: 'Profilerstellung',
        description:
-         'Fördert die Gesundheit von Haut, Fell und Immunsystem. Unsere Rezepturen sind reich an Vitaminen und Nährstoffen, die die Gesundheit Ihres Hundes unterstützen.',
-       icon: 'tabler:wand',
+         'Unser benutzerfreundlicher Konfigurator erfasst präzise Details über Ihren Hund, um ein ...',
+       icon: 'tabler:user-circle',
+       callToAction: {text:'Mehr lesen', variant:'link', href:"#"}
      },
      {
-       title: 'Für Jung und Alt',
+       title: 'Der Algorithmus',
        description:
-         'Angepasste Rezepturen für jede Lebensphase deines Hundes. Unsere Rezepturen sind individuell abgestimmt auf die spezifischen Bedürfnisse Ihres Hundes.',
-       icon: 'tabler:calendar',
+         'Sobald das Profil deines Hundes erstellt ist, analysiert...',
+       icon: 'tabler:adjustments-filled',
+       callToAction: {text:'Mehr lesen', variant:'link', href:"#"}
      },
      {
-       title: 'Individuell abgestimmt',
+       title: 'Produktion',
        description:
-         'Berücksichtigt Allergien, Unverträglichkeiten und besondere Bedürfnisse. Unsere Rezepturen sind individuell abgestimmt auf die spezifischen Bedürfnisse Ihres Hundes.',
-       icon: 'tabler:settings',
+         'Sobald die Rezeptur feststeht, beginnt die Herstellung in einem ...',
+       icon: 'tabler:settings-spark',
+       callToAction: {text:'Mehr lesen', variant:'link', href:"#"}
      },
    ]}
  />
-
+<!-- Timeline -->
+<Steps
+    title="Gesundheitliche Probleme"
+    tagline="Unser Sysmtem berücksichtigt individuelle"
+    subtitle="Für eine optimale Gesundheit integriert der Konfigurator eine große Vielzahl an gesundheitlichen Problemen, die bei Hunden oftmals vorkommen."
+    isReversed={true}
+    items={[
+      {
+        title: 'Verdauungsprobleme',
+        icon: 'healthicons:kidneys',
+      },
+      {
+        title: 'Gelenkprobleme',
+        icon: 'healthicons:joints',
+      },
+      {
+        title: 'Haut- und Fellprobleme',
+        icon: 'healthicons:cancerous-cell-nuclei',
+      },
+      {
+        title: 'Blasenprobleme',
+        icon: 'healthicons:blood-drop-24px',
+      },
+      {
+        title: 'Stress und Aggression',
+        icon: 'tabler:flame-filled',
+      },
+      {
+        title: 'Zahnprobleme',
+        icon: 'healthicons:artificial-intelligence',
+      },
+      {
+        title: 'Allergien',
+        icon: 'healthicons:gluten',
+      },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1536816579748-4ecb3f03d72a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
+      alt: 'Steps image',
+    }}
+  />
 
   <!-- Content Widget **************** -->
 

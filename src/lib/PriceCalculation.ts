@@ -1,8 +1,8 @@
 export var currentPeriod = 'Preis pro Tag';
 
 export const LunaDayPrice = 1.25;
-export const BaluDayPrice = 1.05;
-export const OttoDayPrice = 0.74;
+export const BaluDayPrice = 0.78;
+export const OttoDayPrice = 0.89;
 export const FieteDayPrice = 1.18;
 
 const dogSizeConsumption = {

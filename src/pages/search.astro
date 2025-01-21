@@ -40,7 +40,7 @@ const metadata = {
 
   <Hero2
     actions={[
-      { target: '_self', text: 'Jetzt zusammenstellen', href: '/about' },
+      { target: '_self', text: 'Jetzt zusammenstellen', href: '/products' },
     ]}
     image={{
       src: Bowl,
@@ -59,19 +59,20 @@ const metadata = {
     </Fragment>
   </Hero2>
   
-  <div class="">
     <!-- Scroll Indicator -->
-    <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+    <div class="hidden md:inline absolute bottom-20 left-1/2 transform -translate-x-1/2">
+      <a href="#scroll">
       <div class="flex items-center justify-center w-12 h-12 bg-accent rounded-full shadow-lg animate-bounce">
         <Icon name="tabler:chevron-down" class="text-primary w-6 h-6" />
       </div>
       <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-gray-500 text-xs">
         Zutaten
       </div>
+    </a>
     </div>
-  </div>
 
-  <WrapperIngredients />
+  <div id="scroll"><WrapperIngredients />
+  </div>
 
   <!-- <Kibbles
     title="Die perfekte Mischung braucht's"
