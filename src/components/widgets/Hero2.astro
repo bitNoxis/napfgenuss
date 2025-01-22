@@ -4,6 +4,8 @@ import Button from '~/components/ui/Button.astro';
 
 import type { Hero as Props } from '~/types';
 
+import Kibbles02 from '~/assets/images/Kibbles/Kibbles02.png';
+
 const {
   title = await Astro.slots.render('title'),
   subtitle = await Astro.slots.render('subtitle'),
@@ -92,6 +94,9 @@ const {
             </div>
           )
         }
+      </div>
+      <div>
+        <!-- <Image src={Kibbles02} alt="Kibbles02" class="absolute hidden drop-shadow-2xl right-1 lg:block max-h-screen justify-self-center scale-75" width={500} height={500}/> -->
       </div>
     </div>
   </div>

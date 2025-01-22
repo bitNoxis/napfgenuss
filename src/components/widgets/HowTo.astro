@@ -1,0 +1,58 @@
+---
+import WidgetWrapper from '../ui/WidgetWrapper.astro';
+import Headline from '../ui/Headline.astro';
+import Button from '../ui/Button.astro';
+import Image from 'astro/components/Image.astro';
+
+import LogIn from '~/assets/images/ProfilErstellung.jpg';
+
+const { title = '', subtilte = '', description = '', image = '', button = '' } = Astro.props;
+---
+
+<WidgetWrapper containerClass={`max-w-5xl`}>
+  <div class="text-left">
+    <div class="font-bold leading-tighter tracking-tighter font-heading text-heading text-3xl">
+      {title}
+      <div class="mt-4 text-muted">{subtilte}</div>
+    </div>
+    <div class="text-muted">{description}</div>
+    
+    <!-- Beispiel Form -->
+    <form class="space-y-6 max-w-3xl mx-auto mt-5 px-7 py-5 rounded-lg shadow-lg border">
+      <!-- Überschrift -->
+      <h2 class="text-xl font-bold">Wie heißt dein Hund?</h2>
+
+      <!-- Auswahl: Er heißt / Sie heißt -->
+      <div class="flex flex-col md:flex-row justify-between gap-4">
+        <label
+          class="flex items-center justify-center w-full p-4 border rounded-lg cursor-pointer hover:border-gray-400"
+        >
+          <input type="radio" name="gender" value="er" class="mr-2" />
+          <span class="text-sm font-medium text-muted">Er heißt</span>
+        </label>
+        <label
+          class="flex items-center justify-center w-full p-4 border rounded-lg cursor-pointer hover:border-gray-400"
+        >
+          <input type="radio" name="gender" value="sie" class="mr-2" />
+          <span class="text-sm font-medium text-muted">Sie heißt</span>
+        </label>
+      </div>
+
+      <!-- Eingabefeld: Name -->
+      <div>
+        <input
+          type="text"
+          name="name"
+          placeholder="Name eingeben"
+          class="flex items-center justify-center w-full p-4 border rounded-lg cursor-pointer hover:border-gray-400"
+          required
+        />
+      </div>
+      <div class="flex flex-box w-full gap-x-10 align-middle">
+      <Button text="Weiter" variant='primary' href="/products"></Button>
+      <div class="text-xs text-muted text-right my-auto">* Dies ist nur ein Beispielformular</div>
+    </div>
+    </form>
+    
+  </div>
+</WidgetWrapper>

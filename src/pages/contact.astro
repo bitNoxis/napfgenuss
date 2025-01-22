@@ -1,149 +1,81 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+import ContactUs from '~/components/widgets/Contact.astro';
 import Features2 from '~/components/widgets/Features2.astro';
-import UserRegistrationWidget from '~/components/widgets/UserRegistrationWidget.astro';
-import Button from '~/components/widgets/Testimonials.astro';
-
-import { createDocument } from '../lib/utilsDatabase';
-import { isValidPhone, isValidEmail, isRegistered } from '../lib/utilsValidation';
-import type { Input } from '~/types';
 
 const metadata = {
-  title: 'Kontakt',
+  title: 'Contact',
 };
-
-const errors = { firstName: '', lastName: '', email: '', phone: '', password: '', registered: '' };
-const inputs: Input[] = [
-  { type: 'text', name: 'firstName', label: 'Vorname', required: true },
-  { type: 'text', name: 'lastName', label: 'Nachname', required: true },
-  { type: 'email', name: 'email', label: 'E-Mail Adresse', required: true },
-  { type: 'tel', name: 'phone', label: 'Telefonnummer', required: true },
-  { type: 'password', name: 'password', label: 'Passwort', required: true },
-  { type: 'password', name: 'confirmPassword', label: 'Passwort erneut eingeben', required: true },
-];
-
-if (Astro.request.method === 'POST') {
-  console.log('Post request');
-
-  try {
-    const data = await Astro.request.formData();
-    const firstName = data.get('firstName');
-    const lastName = data.get('lastName');
-    const email = data.get('email');
-    const phone = data.get('phone');
-    const password = data.get('password');
-    const confirmPassword = data.get('confirmPassword');
-
-    const userExists = await isRegistered(firstName, lastName, email);
-
-    // Validation checks
-    if (typeof firstName !== 'string' || firstName.length < 1) {
-      errors.firstName += 'Bitte trage einen korrekten Vornamen ein. ';
-    }
-
-    if (typeof lastName !== 'string' || lastName.length < 1) {
-      errors.lastName += 'Bitte trage einen Nachnamen ein. ';
-    }
-
-    if (typeof email !== 'string' || !isValidEmail(email)) {
-      errors.email += 'Inkorrekte E-Mail Adresse ';
-    } else if (userExists) {
-      errors.registered += 'Nutzer schon registriert';
-      console.log('index');
-      return Astro.redirect('/index');
-    }
-
-    if (typeof phone !== 'string' || !isValidPhone(phone)) {
-      errors.phone += 'Telefonnummer ist nicht korrekt. ';
-    }
-
-    if (typeof password !== 'string' || password.length < 6) {
-      errors.password += 'Passwort muss mindestens sechs Zeichen haben. ';
-    }
-
-    if (password !== confirmPassword) {
-      errors.password += 'Abgleich fehlgeschlagen. ';
-    }
-
-    const hasErrors = Object.values(errors).some((msg) => msg);
-    if (hasErrors) {
-      // preserve already filled form fields when errors occured
-      inputs
-        .filter((input) => input.name != 'password' && input.name != 'confirmPassword')
-        .forEach((input) => (input.value = data.get(input.name)?.toString()));
-    } else {
-      await createDocument('users', {
-        firstName,
-        lastName,
-        email,
-        phone,
-        password,
-      });
-      return Astro.redirect('../index');
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-  }
-}
 ---
 
 <Layout metadata={metadata}>
-  <UserRegistrationWidget
-    title="Registrieren"
-    subtitle="Bitte fülle die Felder aus"
-    tagline="Schnelle Registrierung"
-    button={{ text: 'Registrieren' }}
-    inputs={inputs}
-    errors={errors}
-    disclaimer={{
-      label: 'Mit dem Absenden akzeptierst du unsere Datenschutzerklärung.',
+  <!-- HeroText Widget ******************* -->
+
+  <HeroText tagline="Wir helfen Ihnen gerne weiter" title="Kontakt" />
+
+  <ContactUs
+    id="form"
+    title="Schreiben Sie uns Ihr Anliegen"
+    subtitle="Unser Expertenteam steht Ihnen bei Problemen oder Fragen jeglicher Art immer zur Verfügung."
+    inputs={[
+      {
+        type: 'text',
+        name: 'name',
+        label: 'Name',
+      },
+      {
+        type: 'email',
+        name: 'email',
+        label: 'Email',
+      },
+    ]}
+    textarea={{
+      label: 'Nachricht',
     }}
+    disclaimer={{
+      label:
+        "Bitte akzeptieren Sie unsere Datenschutzbedingungen",
+    }}
+    button={{
+      text:'Absenden', variant: 'primary', 
+    }}
+    description="Unser Team antwortet Ihnen innerhalb von 24 Stunden"
+    errors={{}},
   />
 
-  <Button title="Schon ein Konto" ; tagline="jetzt Anmelden"
-  
-  callToAction={{
-    target: '_self',
-    text: 'Anmelden',
-    href: '../login',
-    icon: 'tabler:chevron-right',
-  }}
-
-  />
+  <!-- Features2 Widget ************** -->
 
   <Features2
-    title="We are here to help!"
+    title="Wir sind da, um Ihnen zu helfen!"
     items={[
       {
-        title: 'General support',
-        description:
-          "Chat with us for inquiries related to account management, website navigation, payment issues, accessing purchased templates or general questions about the website's functionality.",
+        title: 'Allgemeine Unterstützung',
+        description: `Schreiben Sie mit uns - sei es, ein Problem bei der Zusammenstellung, Fragen zu den Inhaltstoffen oder tierärtzliche Anliegen. `,
       },
       {
-        title: 'Contact sales',
+        title: 'Tierärtzliche Unterstzützung',
         description:
-          'Chat with us for questions about purchases, customization options, licensing for commercial use, inquiries about specific template, etc.',
+          'Wir helfen Ihnen bei Tierärtzlichen Anliegen gerne weiter und finden Zusammen mit Ihnen eine Parnter-Praxis in Ihrer Nähe, die Ihnen so schnell wie möglich helfen wird.',
       },
       {
-        title: 'Technical support',
+        title: 'Technische Unterstützung',
         description:
-          'Chat with us when facing issues like template installation, problems editing difficulties, compatibility issues with software or download errors, or other technical challenges related to using the templates.',
+          'Haben Sie Probleme bei der Zusammenstellung Ihres Futters? Rufen oder Schreiben Sie uns gerne an. Viele der Fragen werden auch schon in den "Oft gestellten Fragen" geklärt.',
       },
       {
-        title: 'Phone',
-        description: '+1 (234) 567-890',
+        title: 'Telefon',
+        description: '+49 123 456789',
         icon: 'tabler:headset',
       },
       {
-        title: 'Email',
-        description: 'contact@support.com',
+        title: 'Schreiben Sie mit uns!',
+        description: 'info@napfgenuss-shop.de',
         icon: 'tabler:mail',
       },
       {
-        title: 'Location',
-        description: '1234 Lorem Ipsum St, 12345, Miami, EEUU',
+        title: 'Firmensitz',
+        description: 'Universitätsallee 1B, 21335 Lüneburg',
         icon: 'tabler:map-pin',
       },
     ]}
