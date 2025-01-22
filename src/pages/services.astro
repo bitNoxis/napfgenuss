@@ -34,7 +34,7 @@ const metadata = {
   <Hero
     tagline="So funktioniert's"
     title="Transparenz und Technik"
-    subtitle="<span class='font-bold'>Der Weg zu maßgeschneidertem Hundefutter</span> <br> Unsere Plattform kombiniert modernste Technologie mit wissenschaftlich fundierten Erkenntnissen, um eine perfekt abgestimmte Ernährung für deinen Hund zu entwickeln."
+    subtitle="<span class='font-bold'>Der Weg zu maßgeschneidertem Hundefutter</span> <br> Unsere Plattform kombiniert modernste Technologie mit wissenschaftlich fundierten Erkenntnissen, um eine perfekt abgestimmte Ernährung für Ihren Hund zu entwickeln."
     actions={[{ variant: 'primary', target: '_blank', text: 'Jetzt zusammenstellen', href: '/search' }]}
     image={{
       src: KibbleRawFood,
@@ -44,7 +44,7 @@ const metadata = {
   <!-- Features2 Widget ************** -->
 
   <Features2
-    title="So macht <span class='text-primary'> NapfGenuss </span> dein Leben einfacher"
+    title="So macht <span class='text-primary'> NapfGenuss </span> Ihr Leben einfacher"
     subtitle="Diese 3 Schritte erklären wir auf dieser Seite"
     columns={3}
     items={[
@@ -52,22 +52,23 @@ const metadata = {
         title: 'Profilerstellung',
         description: 'Unser benutzerfreundlicher Konfigurator erfasst präzise Details über Ihren Hund, um ein ...',
         icon: 'tabler:user-circle',
-        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#' },
+        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#profile' },
       },
       {
         title: 'Der Algorithmus',
-        description: 'Sobald das Profil deines Hundes erstellt ist, analysiert...',
+        description: 'Sobald das Profil Ihres Hundes erstellt ist, analysiert...',
         icon: 'tabler:adjustments-filled',
-        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#' },
+        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#algo' },
       },
       {
         title: 'Produktion',
         description: 'Sobald die Rezeptur feststeht, beginnt die Herstellung in einem ...',
         icon: 'tabler:settings-spark',
-        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#' },
+        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#pro' },
       },
     ]}
   />
+  <div id="profile">
   <Features
     title="Profilerstellung"
     tagline=""
@@ -105,6 +106,7 @@ const metadata = {
       },
     ]}
   />
+</div>
 
   <!-- Timeline -->
   <Steps
@@ -151,27 +153,27 @@ const metadata = {
   <HowTo
     title="Wie funktioniert die Profilerstellung?"
     subtilte=""
-    description="Ein intuitives Formular führt dich Schritt für Schritt durch die Eingabe aller relevanten Daten. So stellen wir sicher, dass dein Hund die bestmögliche Ernährung erhält."
+    description="Ein intuitives Formular führt dich Schritt für Schritt durch die Eingabe aller relevanten Daten. So stellen wir sicher, dass Ihr Hund die bestmögliche Ernährung erhält."
   />
 
   <!-- Content Widget **************** -->
-
+  <div id="algo">
   <Explanation
     title="Der Algorithmus"
     subtitle="Wissenschaftliche Präzision trifft auf smarte Technologie"
-    description="Sobald das Profil deines Hundes erstellt ist, analysiert unser Algorithmus alle Eingaben, um die optimale Rezeptur zu ermitteln."
+    description="Sobald das Profil Ihres Hundes erstellt ist, analysiert unser Algorithmus alle Eingaben, um die optimale Rezeptur zu ermitteln."
     columns={3}
     items={[
       {
         title: 'Berechnung des Nährstoffbedarfs',
         description:
-          'Basierend auf den Daten deines Hundes ermitteln wir den individuellen Energiebedarf sowie die ideale Nährstoffzusammensetzung.',
+          'Basierend auf den Daten Ihres Hundes ermitteln wir den individuellen Energiebedarf sowie die ideale Nährstoffzusammensetzung.',
         icon: 'tabler:brand-envato',
       },
       {
         title: 'Individuelle Mischung',
         description:
-          'Unsere sieben speziell entwickelten Kibbles werden in einem optimalen Mischverhältnis kombiniert, um auf die Bedürfnisse deines Hundes einzugehen. Jedes Kibble hat eine spezifische Funktion, z. B.: <br><br><span class="font-bold text-2xl text-black dark:text-white dark:text-white">Gelenkgesundheit</span><br>Glucosamin und Omega-3-Fettsäuren <br><br><span class="font-bold text-2xl text-black dark:text-white">Verdauung</span><br>Präbiotika und Ballaststoffe<br><br><span class="font-bold text-2xl text-black dark:text-white">Immunsystem</span><br>Antioxidantien wie Vitamin E<br><br><span class="font-bold text-2xl text-black dark:text-white">Haut und Fell</span><br>Zink und hochwertige Fettsäuren',
+          'Unsere sieben speziell entwickelten Kibbles werden in einem optimalen Mischverhältnis kombiniert, um auf die Bedürfnisse Ihres Hundes einzugehen. Jedes Kibble hat eine spezifische Funktion, z. B.: <br><br><span class="font-bold text-2xl text-black dark:text-white dark:text-white">Gelenkgesundheit</span><br>Glucosamin und Omega-3-Fettsäuren <br><br><span class="font-bold text-2xl text-black dark:text-white">Verdauung</span><br>Präbiotika und Ballaststoffe<br><br><span class="font-bold text-2xl text-black dark:text-white">Immunsystem</span><br>Antioxidantien wie Vitamin E<br><br><span class="font-bold text-2xl text-black dark:text-white">Haut und Fell</span><br>Zink und hochwertige Fettsäuren',
         icon: 'tabler:adjustments-filled',
       },
       {
@@ -189,6 +191,7 @@ const metadata = {
       icon: 'w-12 h-12 mb-6 text-primary',
     }}
   />
+</div>
 
   <ContentModify
     isReversed
@@ -216,43 +219,45 @@ const metadata = {
       alt: 'Features Image',
     }}
   >
+  <div id="pro">
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Produktion und Lieferung</h3>
       <h2 class="text-xl mt-2 text-muted font-semibold">Frisch, nachhaltig, unkompliziert</h2>
       <p class="mt-4 text-base text-muted">Sobald die Rezeptur feststeht, beginnt die Herstellung in einem spezialisierten Verfahren.</p>
     </Fragment>
   </ContentModify>
+</div>
 
   <Features2
     title="Vergleich - <span class='text-primary'> NapfGenuss </span> vs. Haustierfachmarkt"
     subtitle="Was sind die Vorteile von individualisiertem Hundefutter?"
     columns={3}
     items={[
-      {
-        title: 'Merkmal',
-        description: '',
-      },
-      {
-        title: 'NapfGenuss Futter',
-        description: '',
-      },
-      {
-        title: 'Herkömmliches Futter',
-        description: '',
-      },
+      // {
+      //   title: 'Merkmal',
+      //   description: '',
+      // },
+      // {
+      //   title: 'NapfGenuss Futter',
+      //   description: '',
+      // },
+      // {
+      //   title: 'Herkömmliches Futter',
+      //   description: '',
+      // },
       // 1
       {
         title: 'Nährstoffzusammensetzung',
         description: 'Wie ist das Futter zusammengesetzt?',
       },
       {
-        title: 'Perfekt für deinen Hund abgestimmt',
-        description: '',
+        title: 'Perfekt für Ihren Hund abgestimmt',
+        description: 'NapfGenuss Futter',
         icon: 'tabler:circle-plus-filled',
       },
       {
         title: 'Standardisierte Rezepturen',
-        description: '',
+        description: 'Herkömmliches Futter',
         icon: 'tabler:backslash',
       },
       // 2
@@ -262,12 +267,12 @@ const metadata = {
       },
       {
         title: 'Fördert gezielt Gesundheit und Wohlbefinden',
-        description: '',
+        description: 'NapfGenuss Futter',
         icon: 'tabler:circle-plus-filled',
       },
       {
         title: 'Allgemeine Gesundheitsunterstützung',
-        description: '',
+        description: 'Herkömmliches Futter',
         icon: 'tabler:backslash',
       },
       // 3
@@ -277,12 +282,12 @@ const metadata = {
       },
       {
         title: 'Anpassbar an Veränderungen wie Allergien',
-        description: '',
+        description: 'NapfGenuss Futter',
         icon: 'tabler:circle-plus-filled',
       },
       {
-        title: 'Allgemeine Gesundheitsunterstützung',
-        description: '',
+        title: 'Keine Anpassungen möglich',
+        description: 'Herkömmliches Futter',
         icon: 'tabler:backslash',
       },
       // 4
@@ -292,12 +297,12 @@ const metadata = {
       },
       {
         title: 'Lokale Zulieferung, nachhaltige Verpackung...',
-        description: '',
+        description: 'NapfGenuss Futter',
         icon: 'tabler:circle-plus-filled',
       },
       {
         title: 'Unterschiedlich',
-        description: '',
+        description: 'Herkömmliches Futter',
         icon: 'tabler:backslash',
       },
       // 5
@@ -307,12 +312,12 @@ const metadata = {
       },
       {
         title: 'Transparent, anpassbar und personalisiert',
-        description: '',
+        description: 'NapfGenuss Futter',
         icon: 'tabler:circle-plus-filled',
       },
       {
         title: 'Oft nicht auf individuelle Bedürfnisse zugeschnitten',
-        description: '',
+        description: 'Herkömmliches Futter',
         icon: 'tabler:backslash',
       },
     ]}
@@ -327,8 +332,8 @@ actions={[
     href: '/products',
   },
 ]}
-title="Starte jetzt – Füttere deinen Hund besser!"
-subtitle="Beginne noch heute mit der Erstellung eines individuellen Ernährungsplans und erlebe, wie maßgeschneidertes Futter das Leben deines Hundes verbessert."
+title="Starte jetzt – Fütteren Sie Ihren Hund besser!"
+subtitle="Beginne noch heute mit der Erstellung eines individuellen Ernährungsplans und erlebe, wie maßgeschneidertes Futter das Leben Ihres Hundes verbessert."
 />
 
   <FAQs
@@ -337,23 +342,23 @@ subtitle="Beginne noch heute mit der Erstellung eines individuellen Ernährungsp
     {
       title: 'Warum wird nach Parametern wie Kastrationsstatus oder Leckerli-Menge gefragt?',
       description:
-        'Diese Informationen sind entscheidend, um den Energiebedarf und die Nährstoffzufuhr deines Hundes exakt zu berechnen. So stellen wir sicher, dass dein Hund weder unter- noch überversorgt wird.',
+        'Diese Informationen sind entscheidend, um den Energiebedarf und die Nährstoffzufuhr Ihres Hundes exakt zu berechnen. So stellen wir sicher, dass Ihr Hund weder unter- noch überversorgt wird.',
       icon: 'tabler:chevrons-right',
     },
     {
       title: 'Was passiert, wenn mein Hund Allergien entwickelt oder sich seine Bedürfnisse ändern?',
-      description: `Du kannst dein Hundeprofil jederzeit aktualisieren. Unser Algorithmus passt die Rezeptur automatisch an die neuen Anforderungen an.`,
+      description: `Sie können Ihr Hundeprofil jederzeit aktualisieren. Unser Algorithmus passt die Rezeptur automatisch an die neuen Anforderungen an.`,
       icon: 'tabler:chevrons-right',
     },
     {
       title: 'Wie schnell wird das Futter geliefert, und wie bleibt es frisch?',
       description:
-        'In der Regel erhältst du deine Lieferung innerhalb von 2–4 Werktagen. Unsere speziellen Verpackungen halten das Futter länger frisch.',
+        'In der Regel erhalten Sie Ihre Lieferung innerhalb von 2–4 Werktagen. Unsere speziellen Verpackungen halten das Futter länger frisch.',
       icon: 'tabler:chevrons-right',
     },
     {
       title: 'Gibt es eine Möglichkeit, Proben zu bestellen?',
-      description: `Ja, wir bieten Probierpakete an, damit du sicherstellen kannst, dass das Futter den Geschmack deines Hundes trifft.`,
+      description: `Ja, wir bieten Probierpakete an, damit Sie sicherstellen können, dass das Futter den Geschmack Ihres Hundes trifft.`,
       icon: 'tabler:chevrons-right',
     },
   ]}
