@@ -1,33 +1,19 @@
 ---
 import { UI } from 'astrowind:config';
-
-// TODO: This code is temporary
+// Falls du sonst keine config brauchst, kannst du auch diesen Import weglassen
 ---
 
-<script is:inline define:vars={{ defaultTheme: UI.theme || 'system' }}>
-  function applyTheme(theme) {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    const matches = document.querySelectorAll('[data-aw-toggle-color-scheme] > input');
+<script is:inline>
+  // Immer Light Theme erzwingen
+  document.documentElement.classList.remove('dark');
+  document.documentElement.classList.add('light');
 
-    if (matches && matches.length) {
-      matches.forEach((elem) => {
-        elem.checked = theme !== 'dark';
-      });
-    }
-  }
-
-  if ((defaultTheme && defaultTheme.endsWith(':only')) || (!localStorage.theme && defaultTheme !== 'system')) {
-    applyTheme(defaultTheme.replace(':only', ''));
-  } else if (
-    localStorage.theme === 'dark' ||
-    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-  ) {
-    applyTheme('dark');
-  } else {
-    applyTheme('light');
-  }
+  // Optional: Wenn du noch das Toggle-Element hast und sicherstellen willst,
+  // dass es nicht "Dark" anzeigt:
+  const toggles = document.querySelectorAll('[data-aw-toggle-color-scheme] > input');
+  toggles.forEach((toggle) => {
+    // Hier je nach deinem Setup anpassen:
+    // false = "Light" / true = "Dark" (kann in deinem Projekt auch umgekehrt sein)
+    toggle.checked = false;
+  });
 </script>

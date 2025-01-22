@@ -8,6 +8,7 @@ import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
+import react from '@astrojs/react';
 import compress from 'astro-compress';
 import type {AstroIntegration} from 'astro';
 
@@ -26,6 +27,7 @@ export default defineConfig({
   output: 'server',
   adapter: vercel(),
   integrations: [
+    react(),
     tailwind({ 
       applyBaseStyles: false,
     }),

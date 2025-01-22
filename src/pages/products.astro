@@ -1,54 +1,1514 @@
 ---
-import Button from '~/components/ui/Button.astro';
-
 import PageLayout from '~/layouts/PageLayout.astro';
+import buddyImage from '../assets/images/MockUps/Buddy.png';
+import {getKibbleRecommendations} from '../lib/kibbleService';
+import {DogApiService} from "../services/dogApiService";
+import {HunderassenService} from '../lib/hunderassenService';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import BagMockUpImage from '../assets/images/MockUps/BagMockUp.png';
+import dogPlaceholder from '../assets/images/dog02.jpg';
+import cupHolder from '../assets/images/CupMockUp.svg';
+
+
 
 const metadata = {
-  title: 'Produkte',
+  title: 'Hundefutter Konfigurator',
+
 };
+// Abrufen der Hundedaten (als Objekte vom Typ DogBreed)
+const hunderassenService = HunderassenService.getInstance();
+const hunderassen = await hunderassenService.fetchHunderassen();
 ---
+
 <PageLayout metadata={metadata}>
-<!-- <header>
-  <script
-    src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-    crossorigin="anonymous"></script>
+  <head>
+    <!-- Deine bestehenden Scripts -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
 
-  <script
-    src="https://cdn.snipcart.com/scripts/2.0/snipcart.js"
-    data-api-key="MzNmMzc4MWMtMjZiZi00ZDBhLWI2NTAtMTllZmU1YjEwNDFhNjM4NzA0NTQ4MTEyNDgzMzE2"
-    id="snipcart"></script>
+    <!-- React Scripts korrigieren - nicht-minifizierte Version für bessere Fehlermeldungen -->
+    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
 
-  <link href="https://cdn.snipcart.com/themes/2.0/base/snipcart.min.css" rel="stylesheet" type="text/css" />
-</header>; -->
+    <!-- React Client Script hinzufügen -->
+    <script is:inline>
+      if (typeof window !== 'undefined') {
+        window.React = React;
+        window.ReactDOM = ReactDOM;
+      }
+    </script>
+    <title>{metadata.title}</title>
+  </head>
+  <!-- Irgendwo in Products.astro, z.B. direkt nach dem snipcart-container -->
+  <div id="loading-spinner" class="hidden flex flex-col items-center justify-center mt-8">
+    <!-- Einfacher CSS-Spinner (Tailwind-Beispiel) -->
+    <div class="w-16 h-16 border-4 border-green-900 border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-2 text-green-700">Futter wird zusammengestellt...</p>
+  </div>
 
-<body>
-  <button
-  class="snipcart-add-item"
-  data-item-url="index.astro"
-  data-item-id="astro-print"
-  data-item-price="39.99"
-  data-item-description="A framed print of the Astro logo."
-  data-item-image=''
-  data-item-name="Astro Print"
-  data-item-custom1-name="Frame color"
-  data-item-custom1-options="Brown|Silver[+10.00]|Gold[+20.00]"
-  data-item-custom2-name="Delivery instructions"
-  data-item-custom2-type="textarea"
-  >
-  Add to cart
-  </button>
-  <a href="#" class="snipcart-checkout">Click here to checkout</a>
-</body>
+  <div class="max-w-3xl mx-auto p-4 bg-page">
+    <form id="dog-configurator" class="space-y-8">
+      <div class="step-1">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie heißt Ihr Hund?</h2>
+
+        <div class="flex space-x-4 mb-4">
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="dogGender"
+              value="male"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Er heißt</span>
+          </label>
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="dogGender"
+              value="female"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Sie heißt</span>
+          </label>
+        </div>
+
+        <input
+          type="text"
+          name="dogName"
+          class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+          required
+          minlength="2"
+          placeholder="Name eingeben"
+        />
+      </div>
+
+      <div class="step-2 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Wurde <span class="dog-name"></span> kastriert?
+        </h2>
+        <div class="flex space-x-4 mb-4">
+          <!-- Ja -->
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="isNeutered"
+              value="yes"
+              required
+              class="mr-2 w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+            >
+            <span class="text-page group-hover:text-primary">Ja</span>
+          </label>
+          <!-- Nein -->
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="isNeutered"
+              value="no"
+              required
+              class="mr-2 w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+            >
+            <span class="text-page group-hover:text-primary">Nein</span>
+          </label>
+        </div>
+        <div class="bg-green-100 p-4 rounded-lg mt-4 flex items-center space-x-4 shadow-md">
+          <div>
+            <p class="text-sm text-gray-800 font-medium">
+              "Eine Kastration kann den Stoffwechsel Ihres Hundes beeinflussen. Mit diesem wichtigen Detail können wir
+              ein
+              perfekt angepasstes Rezept erstellen."
+            </p>
+            <p class="mt-2 text-sm font-semibold text-primary italic">Tierärztin Frau Dr. Berg</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-3 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie alt ist <span class="dog-name"></span>?</h2>
+        <div class="flex space-x-4">
+          <div class="flex-1">
+            <input
+              type="number"
+              name="ageYears"
+              min="0"
+              max="25"
+              class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+              required
+              placeholder="Alter in Jahren"
+            />
+          </div>
+          <div class="flex-1">
+            <input
+              type="number"
+              name="ageMonths"
+              min="0"
+              max="11"
+              class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+              placeholder="Monate (optional)"
+            />
+          </div>
+        </div>
+        <!-- Container für den zusätzlichen Text -->
+        <div class="bg-green-100 p-4 rounded-lg mt-4 shadow-md">
+          <p class="text-sm text-gray-800 font-medium">
+            Der Nährstoffbedarf Ihres Hundes ändert sich im Laufe seines Lebens. In jeder Phase werden wir das Rezept
+            an seine Bedürfnisse anpassen.
+          </p>
+        </div>
+      </div>
+
+      <div class="step-4 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Rasse von <span class="dog-name"></span></h2>
+
+        <div class="flex space-x-4 mb-6">
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="breedType"
+              value="purebred"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Reinrassig</span>
+          </label>
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="breedType"
+              value="mixed"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Mischling</span>
+          </label>
+          <label
+            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="breedType"
+              value="unknown"
+              required
+              class="mr-2"
+            >
+            <span class="text-page group-hover:text-primary">Ich kenne die Rasse nicht</span>
+          </label>
+        </div>
+
+        <!-- Reinrassig -->
+        <div id="purebred-select" class="hidden">
+          <select
+            name="breed"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
+            required
+          >
+            <option value="">Bitte Rasse wählen</option>
+            {hunderassen.map(breed => (
+              <option value={breed.nameDE}>
+                {breed.nameDE}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Mischling -->
+        <div id="mixed-select" class="hidden space-y-4">
+          <select
+            name="breed1"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
+            required
+          >
+            <option value="">Bitte Rasse wählen</option>
+            {hunderassen.map(breed => (
+              <option value={breed.nameDE}>
+                {breed.nameDE}
+              </option>
+            ))}
+          </select>
+          <select
+            name="breed2"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
+            required
+          >
+            <option value="">Bitte Rasse wählen</option>
+            {hunderassen.map(breed => (
+              <option value={breed.nameDE}>
+                {breed.nameDE}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Unbekannte Rasse -->
+        <div id="unknown-weight" class="hidden space-y-4">
+          <p class="text-page mb-4">Was ist das ausgewachsene Gewicht von <span class="dog-name"></span>?</p>
+          <div class="flex flex-col space-y-4">
+            <!-- Mini -->
+            <label
+              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="weight"
+                value="mini"
+                required
+                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+              >
+              <span class="text-page group-hover:text-primary transition duration-200">Mini (unter 5kg)</span>
+            </label>
+
+            <!-- Klein -->
+            <label
+              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="weight"
+                value="small"
+                required
+                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+              >
+              <span class="text-page group-hover:text-primary transition duration-200">Klein (5-10kg)</span>
+            </label>
+
+            <!-- Mittel -->
+            <label
+              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="weight"
+                value="medium"
+                required
+                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+              >
+              <span class="text-page group-hover:text-primary transition duration-200">Mittel (10-25kg)</span>
+            </label>
+
+            <!-- Groß -->
+            <label
+              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="weight"
+                value="large"
+                required
+                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+              >
+              <span class="text-page group-hover:text-primary transition duration-200">Groß (25-45kg)</span>
+            </label>
+
+            <!-- Riese -->
+            <label
+              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="weight"
+                value="giant"
+                required
+                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+              >
+              <span class="text-page group-hover:text-primary transition duration-200">Riese (über 45kg)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schritt 5: Aktuelles Gewicht -->
+      <div class="step-5 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Wie schwer ist <span class="dog-name"></span> aktuell?
+        </h2>
+        <div class="flex items-center space-x-2">
+          <input
+            type="number"
+            name="currentWeight"
+            value="5"
+            min="0.1"
+            max="60"
+            step="0.1"
+            class="w-32 p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+            required
+          />
+          <span class="text-page">kg</span>
+        </div>
+      </div>
+
+      <!-- Schritt 6: Aktuelles Gewicht -->
+      <div class="step-6 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Welche körperliche Verfassung beschreibt <span class="dog-name"></span> am Besten?
+        </h2>
+        <div class="space-y-4">
+          <!-- Very Underweight -->
+          <label
+            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="bodyCondition" value="very-underweight" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Stark untergewichtig</span>
+            </div>
+            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+          </label>
+
+          <!-- Underweight -->
+          <label
+            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="bodyCondition" value="underweight" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Untergewichtig</span>
+            </div>
+            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+          </label>
+
+          <!-- Ideal -->
+          <label
+            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="bodyCondition" value="ideal" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Ideal</span>
+            </div>
+            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+          </label>
+
+          <!-- Overweight -->
+          <label
+            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="bodyCondition" value="overweight" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Übergewichtig</span>
+            </div>
+            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+          </label>
+
+          <!-- Obese -->
+          <label
+            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="bodyCondition" value="obese" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Fettleibig</span>
+            </div>
+            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Schritt 7: Aktivitätslevel -->
+      <div class="step-7 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Wie aktiv ist <span class="dog-name"></span> am Tag?
+        </h2>
+        <div class="space-y-4">
+          <!-- Very Low -->
+          <label
+            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="activityLevel" value="very-low" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">< 30 Min</span>
+            </div>
+            <img src="/images/hunde-calculator/hund-liegt.svg" alt="Hund liegt" class="w-12 h-12">
+          </label>
+
+          <!-- Low -->
+          <label
+            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="activityLevel" value="low" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">30 Min - 1 Stunde</span>
+            </div>
+            <img src="/images/hunde-calculator/hund-steht.svg" alt="Hund steht" class="w-12 h-12">
+          </label>
+
+          <!-- Medium -->
+          <label
+            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="activityLevel" value="medium" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">1 - 2 Stunden</span>
+            </div>
+            <img src="/images/hunde-calculator/hund-tollt.svg" alt="Hund tollt" class="w-12 h-12">
+          </label>
+
+          <!-- High -->
+          <label
+            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="activityLevel" value="high" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Mehr als 2 Stunden</span>
+            </div>
+            <img src="/images/hunde-calculator/hund-springt.svg" alt="Hund springt" class="w-12 h-12">
+          </label>
+        </div>
+      </div>
+
+      <div class="step-8 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Hat <span class="dog-name"></span> gesundheitliche Probleme?
+        </h2>
+        <div class="flex space-x-4">
+          <!-- Ja -->
+          <label
+            class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="hasHealthIssues"
+              value="yes"
+              required
+              class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+            >
+            <span class="ml-4 text-page group-hover:text-primary transition duration-200">Ja</span>
+          </label>
+
+          <!-- Nein -->
+          <label
+            class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <input
+              type="radio"
+              name="hasHealthIssues"
+              value="no"
+              required
+              class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+            >
+            <span class="ml-4 text-page group-hover:text-primary transition duration-200">Nein</span>
+          </label>
+        </div>
+
+        <!-- Gesundheitsprobleme Details (anfangs versteckt) -->
+        <div id="health-issues-details" class="hidden space-y-4 mt-6">
+          <h3 class="text-xl font-heading font-bold mb-4 text-page">Welche Beschwerden gibt es?</h3>
+
+          <div class="space-y-3">
+            <label class="flex items-center space-x-3">
+              <input type="checkbox" name="health[]" value="digestion" class="w-4 h-4">
+              <span>Verdauung</span>
+            </label>
+            <label class="flex items-center space-x-3">
+              <input type="checkbox" name="health[]" value="joints" class="w-4 h-4">
+              <span>Gelenkprobleme</span>
+            </label>
+            <label class="flex items-center space-x-3">
+              <input type="checkbox" name="health[]" value="skin" class="w-4 h-4">
+              <span>Haut & Fell</span>
+            </label>
+            <label class="flex items-center space-x-3">
+              <input type="checkbox" name="health[]" value="bladder" class="w-4 h-4">
+              <span>Blasenprobleme</span>
+            </label>
+            <label class="flex items-center space-x-3">
+              <input type="checkbox" name="health[]" value="behavior" class="w-4 h-4">
+              <span>Stress / Aggression</span>
+            </label>
+            <label class="flex items-center space-x-3">
+              <input type="checkbox" name="health[]" value="dental" class="w-4 h-4">
+              <span>Zahnprobleme</span>
+            </label>
+            <!-- Allergien mit Detailangabe -->
+            <label class="flex items-center space-x-3">
+              <input type="checkbox" name="health[]" value="allergies" class="w-4 h-4" id="allergyCheckbox">
+              <span>Allergien</span>
+            </label>
+            <!-- Textfeld für detaillierte Angabe zu Allergien -->
+            <div id="allergyDetails" class="hidden ml-7">
+              <input
+                type="text"
+                name="allergyDescription"
+                class="w-full p-2 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+                placeholder="Bitte Allergie(en) genauer beschreiben..."
+              />
+            </div>
+            <label class="flex items-center space-x-3">
+              <input type="checkbox" name="health[]" value="other" class="w-4 h-4" id="otherHealthIssue">
+              <span>Sonstiges</span>
+            </label>
+            <!-- Neues Textfeld für Sonstiges -->
+            <div id="otherHealthDetails" class="hidden ml-7">
+              <input
+                type="text"
+                name="otherHealthDescription"
+                class="w-full p-2 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+                placeholder="Bitte beschreiben..."
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schritt 9: Leckerlis -->
+      <div class="step-9 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+          Wie viele Leckerlis bekommt <span class="dog-name"></span>?
+        </h2>
+        <div class="space-y-4">
+          <!-- Keine -->
+          <label
+            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="treats" value="none" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Keine</span>
+            </div>
+          </label>
+
+          <!-- Ein paar pro Woche -->
+          <label
+            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="treats" value="few-weekly" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Ein paar pro Woche</span>
+            </div>
+          </label>
+
+          <!-- Ein paar pro Tag -->
+          <label
+            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="treats" value="few-daily" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Ein paar pro Tag</span>
+            </div>
+          </label>
+
+          <!-- Viele am Tag -->
+          <label
+            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+            <div class="flex items-center space-x-3">
+              <input type="radio" name="treats" value="many-daily" required
+                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+              <span class="text-page group-hover:text-primary transition duration-200">Viele am Tag</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex justify-between pt-6">
+        <button
+          type="button"
+          id="prevButton"
+          class="btn btn-secondary hidden">
+          Zurück
+        </button>
+        <button
+          type="button"
+          id="nextButton"
+          class="btn btn-primary">
+          Weiter
+        </button>
+      </div>
+    </form>
+
+    <div id="snipcart-container" class="hidden mt-8 space-y-6">
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-heading font-bold mb-4 text-page">Ihre Auswahl</h3>
+        <div id="summary" class="text-muted"></div>
+      </div>
+
+      <button
+        class="snipcart-add-item btn btn-primary w-full justify-center"
+        data-item-id=""
+        data-item-price="39.99"
+        data-item-url="/produkte"
+        data-item-description="Testeintrag"
+        data-item-name=""
+      >
+        In den Warenkorb
+      </button>
+    </div>
+  </div>
 </PageLayout>
 
-<!-- <script>
-  window.SnipcartSettings = {
-      publicApiKey: 'MzNmMzc4MWMtMjZiZi00ZDBhLWI2NTAtMTllZmU1YjEwNDFhNjM4NzA0NTQ4MTEyNDgzMzE2',
-      loadStrategy: 'on-user-interaction',
-      modalStyle: 'side',
+<script is:inline define:vars={{
+  buddyImagePath: buddyImage.src,
+  hunderassenData: hunderassen,
+  bagMockUpImageSrc: BagMockUpImage.src,
+  dogPlaceholderPath: dogPlaceholder.src,
+  cupHolderPath: cupHolder.src,
+  BagMockUpComponent: `
+    window.BagMockUpComponent = function({ dogName, breedName, breedImage }) {
+  
+      return React.createElement('div', { className: 'relative w-full' },
+        React.createElement('img', {
+          src: bagMockUpImageSrc,
+          alt: 'Dog Food Bag',
+          className: 'relative w-90 mx-auto'
+        }),
+        React.createElement('div', { 
+          className: 'absolute inset-0 flex flex-col items-center justify-center text-center space-y-4'
+        }, [
+          // Kreisförmiger Container für das Rassebild
+          React.createElement('div', {
+            className: 'w-32 h-32 rounded-full overflow-hidden bg-white mb-4',
+            style: {
+              border: '4px solid #ffffff'
+            }
+          }, 
+            React.createElement('img', {
+              src: breedImage?.url || dogPlaceholderPath,
+              alt: breedName,
+              className: 'w-full h-full object-cover'
+            })
+          ),
+          // Name des Hundes
+          React.createElement('h2', { 
+            className: 'text-4xl font-bold text-white' 
+          }, dogName),
+          // Rasse des Hundes
+          React.createElement('p', { 
+            className: 'text-2xl text-white' 
+          }, breedName),
+          // Portionen-Box
+          React.createElement('div', {
+            className: 'bg-white rounded-lg p-4 mt-4 max-w-xs mx-auto'
+          }, [
+            React.createElement('p', {
+              className: 'text-green-900 font-semibold'
+            }, '2 Portionen pro Tag'),
+            React.createElement('div', {
+              className: 'flex items-center justify-center space-x-2 text-green-900'
+            }, [
+              React.createElement('span', {}, '0,5'),
+              React.createElement('span', {}, 'x'),
+              React.createElement('div', {
+                className: 'w-8 h-8 bg-contain bg-no-repeat bg-center',
+                style: {
+                    backgroundImage: "url(" + cupHolderPath + ")"
+                }
+              }),
+              React.createElement('span', {}, '='),
+              React.createElement('span', {}, '1 Portion')
+            ])
+          ])
+        ])
+      );
+    };
+  `
+}}>
+  function showLoadingSpinner() {
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) {
+      spinner.classList.remove('hidden');
+    }
+  }
+
+  function hideLoadingSpinner() {
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) {
+      spinner.classList.add('hidden');
+    }
+  }
+
+  // Globale Konstanten und Datenstrukturen
+  const foodImages = {
+    default: '/images/MockUps/Buddy.png',
   };
 
-  (()=>{var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`),n=document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`);e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`,i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`,t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl))}})();
-</script> -->
+  function calculateDailyPrice(totalGrams, kibbleGrams, dogData) {  // Änderung hier: kibbleGrams als Parameter
+    // Basis-Preis pro 100g: 0.35€
+    const basePrice = 0.35;
 
+    // Größenfaktor basierend auf Gewicht
+    let sizeFactor = 1.0;
+    if (dogData.currentWeight <= 5) sizeFactor = 1.2;  // Kleine Hunde = teureres Spezialfutter
+    else if (dogData.currentWeight <= 10) sizeFactor = 1.1;
+    else if (dogData.currentWeight <= 25) sizeFactor = 1.0;
+    else if (dogData.currentWeight <= 45) sizeFactor = 0.9;
+    else sizeFactor = 0.85;  // Mengenrabatt für sehr große Hunde
+
+    // Gesundheitsfaktor
+    let healthFactor = 1.0;
+    if (dogData.hasHealthIssues) {
+      // Jedes Gesundheitsproblem erhöht den Preis um 5%
+      healthFactor += (dogData.healthIssues.length * 0.05);
+    }
+
+    // Alter-Faktor
+    let ageFactor = 1.0;
+    if (dogData.age.years <= 1) ageFactor = 1.15;  // Welpenfutter ist teurer
+    else if (dogData.age.years >= 8) ageFactor = 1.1;  // Seniorenfutter ist teurer
+
+    // Berechnung des Tagespreises - WICHTIG: Nur auf Basis der Kibble-Menge!
+    let dailyPrice = (kibbleGrams / 100) * basePrice * sizeFactor * healthFactor * ageFactor;
+
+    // Preisbegrenzung zwischen 0.35€ und 3€
+    dailyPrice = Math.max(0.54, Math.min(5.0, dailyPrice));
+
+    // Monatspreis (30 Tage)
+    const monthlyPrice = dailyPrice * 30;
+
+    return {
+      daily: parseFloat(dailyPrice.toFixed(2)),
+      monthly: parseFloat(monthlyPrice.toFixed(2))
+    };
+  }
+
+
+  function computeDailyCalories(dogData) {
+    // Grundumsatz: 70 * (Gewicht^0.75)
+    let base = 70 * Math.pow(dogData.currentWeight, 0.75);
+
+    // Aktivitäts-Faktoren
+    let activityFactor = 1.3;
+    switch (dogData.activityLevel) {
+      case 'very-low':
+        activityFactor = 1.2;
+        break;
+      case 'low':
+        activityFactor = 1.4;
+        break;
+      case 'medium':
+        activityFactor = 1.6;
+        break;
+      case 'high':
+        activityFactor = 1.8;
+        break;
+    }
+
+    // Körperkonditions-Faktoren
+    let conditionFactor = 1.0;
+    switch (dogData.bodyCondition) {
+      case 'very-underweight':
+        conditionFactor = 1.1;
+        break;
+      case 'underweight':
+        conditionFactor = 1.05;
+        break;
+      case 'overweight':
+        conditionFactor = 0.9;
+        break;
+      case 'obese':
+        conditionFactor = 0.85;
+        break;
+    }
+
+    // Alters-Faktoren
+    let ageFactor = 1.0;
+    if (dogData.age.years <= 1) {
+      ageFactor = 1.2;  // Welpen brauchen mehr Energie
+    } else if (dogData.age.years >= 7) {
+      ageFactor = 0.9;  // Ältere Hunde haben niedrigeren Grundumsatz
+    }
+
+    // Gesundheits-Faktor
+    let healthFactor = 1.0;
+    if (dogData.hasHealthIssues && dogData.healthIssues.includes('digestion')) {
+      healthFactor = 1.1;  // Verdauungsprobleme können erhöhten Bedarf bedeuten
+    }
+    if (dogData.hasHealthIssues && dogData.healthIssues.includes('joints')) {
+      healthFactor = 0.95; // Gelenkprobleme evtl. weniger Kalorien 
+    }
+    // Weitere Anpassungen je nach Gesundheitsproblem...
+
+    // Tageskalorien ~ base * activityFactor * conditionFactor * ageFactor * healthFactor
+    const dailyCals = base * activityFactor * conditionFactor * ageFactor * healthFactor;
+
+    return Math.round(dailyCals);
+  }
+
+  /**
+   * Beispiel: Umrechnung von Kalorien zu Gramm
+   * (Hier annehmen: ~3.5 kcal pro Gramm Kibble)
+   */
+  function calsToGrams(dailyCals) {
+    return Math.round(dailyCals / 3.5);
+  }
+
+  /**
+   * Wie viel % geht an Leckerlis je nach dogData.treats
+   * - none => 0%
+   * - few-weekly => 5%
+   * - few-daily => 10%
+   * - many-daily => 20%
+   */
+  function getTreatsPercentage(treats) {
+    switch (treats) {
+      case 'none':
+        return 0;
+      case 'few-weekly':
+        return 5;
+      case 'few-daily':
+        return 10;
+      case 'many-daily':
+        return 20;
+      default:
+        return 0;
+    }
+  }
+
+  const dogData = {
+    gender: '',
+    name: '',
+    isNeutered: false,
+    age: {
+      years: 0,
+      months: 0
+    },
+    breedType: '',
+    breed: '',
+    breed2: '',
+    weight: '',
+    currentWeight: 5,
+    bodyCondition: '',
+    activityLevel: '',
+    treats: '',
+    hasHealthIssues: false,
+    healthIssues: []
+  };
+
+  // Hauptinitialisierungsfunktion
+  window.initializeDogConfigurator = function () {
+    const form = document.getElementById('dog-configurator');
+    if (!form) return false;
+
+    const nextButton = document.getElementById('nextButton');
+    const prevButton = document.getElementById('prevButton');
+    const snipcartContainer = document.getElementById('snipcart-container');
+    const summaryDiv = document.getElementById('summary');
+
+    if (!nextButton || !prevButton || !snipcartContainer || !summaryDiv) return false;
+
+    // Entferne alte Event Listener durch Klonen
+    const newNextButton = nextButton.cloneNode(true);
+    const newPrevButton = prevButton.cloneNode(true);
+    nextButton.parentNode.replaceChild(newNextButton, nextButton);
+    prevButton.parentNode.replaceChild(newPrevButton, prevButton);
+
+    let currentStep = 1;
+
+    // Event Listeners
+    newNextButton.addEventListener('click', async () => {
+      console.log('Next clicked, current step:', currentStep);
+      if (!validateStep()) {
+        return;
+      }
+
+      if (currentStep < 9) {
+        showStep(currentStep + 1)
+      } else {
+        await finishConfiguration();
+      }
+    });
+
+    newPrevButton.addEventListener('click', () => {
+      if (currentStep > 1) {
+        showStep(currentStep - 1);
+      }
+    });
+
+    const otherHealthCheckbox = document.getElementById('otherHealthIssue');
+    const otherHealthDetails = document.getElementById('otherHealthDetails');
+
+    if (otherHealthCheckbox && otherHealthDetails) {
+      otherHealthCheckbox.addEventListener('change', (e) => {
+        otherHealthDetails.classList.toggle('hidden', !e.target.checked);
+        const input = otherHealthDetails.querySelector('input');
+        if (input) {
+          input.required = e.target.checked;
+        }
+      });
+    }
+
+    // Neuer Event-Listener für Allergien
+    const allergyCheckbox = document.getElementById('allergyCheckbox');
+    const allergyDetails = document.getElementById('allergyDetails');
+
+    if (allergyCheckbox && allergyDetails) {
+      allergyCheckbox.addEventListener('change', (e) => {
+        allergyDetails.classList.toggle('hidden', !e.target.checked);
+        const input = allergyDetails.querySelector('input');
+        if (input) {
+          input.required = e.target.checked;
+        }
+      });
+    }
+
+    const nameInput = form.querySelector('[name="dogName"]');
+    if (nameInput) {
+      nameInput.addEventListener('input', updateDogName);
+    }
+
+    function updateDogName() {
+      const nameInput = form.querySelector('[name="dogName"]');
+      const nameSpans = document.querySelectorAll('.dog-name');
+      if (nameInput instanceof HTMLInputElement) {
+        dogData.name = nameInput.value || '';
+        nameSpans.forEach(span => {
+          if (span instanceof HTMLElement) {
+            span.textContent = nameInput.value || '';
+          }
+        });
+      }
+    }
+
+    /*// Fügen Sie diese Funktion zu Ihrem bestehenden Skript hinzu
+    function generateProductImage(dogName, breedName, breedImage) {
+      return new Promise((resolve, reject) => {
+        // Erstellen Sie ein Canvas-Element
+        const canvas = document.createElement('canvas');
+        canvas.width = 400;  // Breite Ihres Mockups
+        canvas.height = 600; // Höhe Ihres Mockups
+
+        const ctx = canvas.getContext('2d');
+
+        // Laden des Hintergrund-Mockup-Bildes
+        const backgroundImage = new Image();
+        backgroundImage.src = bagMockUpImageSrc;
+        backgroundImage.onload = () => {
+          // Zeichnen des Hintergrundbildes
+          ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+          // Laden des Hundebildes
+          const dogImageSrc = breedImage?.url || dogPlaceholderPath;
+          const dogImage = new Image();
+          dogImage.src = dogImageSrc;
+          dogImage.onload = () => {
+            // Kreisförmiger Ausschnitt für Hundebild
+            const circleX = canvas.width / 2;
+            const circleY = canvas.height / 2 - 50;
+            const circleRadius = 100;
+
+            // Kreisförmige Maske erstellen
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(circleX, circleY, circleRadius, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+
+            // Hund zentriert zeichnen
+            ctx.drawImage(
+              dogImage,
+              circleX - circleRadius,
+              circleY - circleRadius,
+              circleRadius * 2,
+              circleRadius * 2
+            );
+            ctx.restore();
+
+            // Hundenamen zeichnen
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 36px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(dogName, canvas.width / 2, canvas.height / 2 + 100);
+
+            // Rassenamen zeichnen
+            ctx.fillStyle = 'white';
+            ctx.font = '24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(breedName, canvas.width / 2, canvas.height / 2 + 150);
+
+            // Canvas als Bild exportieren
+            const imageDataUrl = canvas.toDataURL('image/png');
+            resolve(imageDataUrl);
+          };
+
+          dogImage.onerror = reject;
+        };
+
+        backgroundImage.onerror = reject;
+      });
+    }*/
+
+    const conditionTexts = {
+      "very-underweight": "Die Rippen sind deutlich sichtbar und leicht zu fühlen, keine Fettschicht. Die Oberansicht zeigt eine sehr deutliche Sanduhrform.",
+      "underweight": "Die Rippen sind sichtbar, mit einer minimalen Fettschicht zwischen Haut und Knochen. In der Oberansicht ist eine deutliche Sanduhrform zu sehen.",
+      "ideal": "Die Rippen sind nicht sichtbar, können aber leicht ertastet werden. In der Oberansicht steht die Taille im Verhältnis zum Rest des Körpers.",
+      "overweight": "Die Rippen sind nicht sichtbar und aufgrund einer moderaten Fettschicht schwer zu ertasten. In der Oberansicht ist der Rücken auf Höhe der Taille leicht verbreitert.",
+      "obese": "Die Rippen sind unter einer dicken Fettschicht schwer zu ertasten. In der Oberansicht ist der Rücken sichtbar verbreitert."
+    };
+
+    const radios = document.querySelectorAll('input[name="bodyCondition"]');
+
+    radios.forEach((radio) => {
+      radio.addEventListener('change', (event) => {
+        const value = event.target.value;
+
+        // Alle Info-Boxen ausblenden
+        document.querySelectorAll('.info-box').forEach((box) => {
+          box.classList.add('hidden');
+        });
+
+        // Text in die zugehörige Info-Box einfügen und anzeigen
+        const selectedBox = radio.closest('label').querySelector('.info-box');
+        selectedBox.textContent = conditionTexts[value];
+        selectedBox.classList.remove('hidden');
+      });
+    });
+
+    function showStep(step) {
+      const steps = document.querySelectorAll('[class^="step-"]');
+      steps.forEach(el => el.classList.add('hidden'));
+
+      const nextStep = document.querySelector(`.step-${step}`);
+      if (nextStep) {
+        nextStep.classList.remove('hidden');
+      }
+
+      newPrevButton.classList.toggle('hidden', step === 1);
+      newNextButton.textContent = step === 9 ? 'Fertig' : 'Weiter';  // Änderung von 4 auf 6
+      currentStep = step;
+    }
+
+    const healthRadios = form.querySelectorAll('[name="hasHealthIssues"]');
+    const healthDetails = document.getElementById('health-issues-details');
+
+    healthRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio instanceof HTMLInputElement) {
+          dogData.hasHealthIssues = radio.value === 'yes';
+          if (healthDetails) {
+            healthDetails.classList.toggle('hidden', !dogData.hasHealthIssues);
+
+            // Wenn "Nein" gewählt wurde, alle Checkboxen und das Sonstiges-Feld zurücksetzen
+            if (!dogData.hasHealthIssues) {
+              // Alle Checkboxen zurücksetzen
+              const checkboxes = healthDetails.querySelectorAll('input[type="checkbox"]');
+              checkboxes.forEach(checkbox => {
+                if (checkbox instanceof HTMLInputElement) {
+                  checkbox.checked = false;
+                }
+              });
+
+              // Sonstiges-Textfeld zurücksetzen
+              const otherInput = document.querySelector('[name="otherHealthDescription"]');
+              if (otherInput instanceof HTMLInputElement) {
+                otherInput.value = '';
+                otherInput.required = false;
+              }
+
+              // Sonstiges-Details verstecken
+              const otherDetails = document.getElementById('otherHealthDetails');
+              if (otherDetails) {
+                otherDetails.classList.add('hidden');
+              }
+
+              // Alle Fehlermeldungen entfernen
+              const errorMessages = healthDetails.querySelectorAll('.error-message');
+              errorMessages.forEach(msg => msg.remove());
+            }
+          }
+        }
+      });
+    });
+
+    // Geschlechts-Handler
+    const genderInputs = form.querySelectorAll('[name="dogGender"]');
+    genderInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        if (input instanceof HTMLInputElement) {
+          dogData.gender = input.value;
+        }
+      });
+    });
+    const breedTypeInputs = form.querySelectorAll('[name="breedType"]');
+    const purebredSelect = document.getElementById('purebred-select');
+    const mixedSelect = document.getElementById('mixed-select');
+    const unknownWeight = document.getElementById('unknown-weight');
+
+    function updateBreedType() {
+      purebredSelect?.classList.add('hidden');
+      mixedSelect?.classList.add('hidden');
+      unknownWeight?.classList.add('hidden');
+
+      purebredSelect?.querySelector('select')?.removeAttribute('required');
+      mixedSelect?.querySelectorAll('select').forEach(select => select.removeAttribute('required'));
+      unknownWeight?.querySelectorAll('input[type="radio"]').forEach(input => input.removeAttribute('required'));
+
+      const selectedBreedType = document.querySelector('input[name="breedType"]:checked');
+      if (selectedBreedType) {
+        switch (selectedBreedType.value) {
+          case 'purebred':
+            purebredSelect?.classList.remove('hidden');
+            purebredSelect?.querySelector('select')?.setAttribute('required', 'required');
+            break;
+          case 'mixed':
+            mixedSelect?.classList.remove('hidden');
+            mixedSelect?.querySelectorAll('select').forEach(select => select.setAttribute('required', 'required'));
+            break;
+          case 'unknown':
+            unknownWeight?.classList.remove('hidden');
+            unknownWeight?.querySelectorAll('input[type="radio"]').forEach(input => input.setAttribute('required', 'required'));
+            break;
+        }
+      }
+    }
+
+    breedTypeInputs.forEach(input => {
+      input.addEventListener('change', updateBreedType);
+    });
+
+    updateBreedType();
+
+
+    function validateStep() {
+      const currentStepEl = document.querySelector(`.step-${currentStep}`);
+      if (!currentStepEl) return false;
+
+      const inputs = currentStepEl.querySelectorAll('input, select');
+      let isValid = true;
+
+      currentStepEl.querySelectorAll('.error-message').forEach(msg => msg.remove());
+
+      switch (currentStep) {
+        case 1: {
+          const genderSelected = Array.from(genderInputs).some(input =>
+            input instanceof HTMLInputElement && input.checked
+          );
+          if (!genderSelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle das Geschlecht aus';
+            genderInputs[0].parentElement?.parentElement?.appendChild(err);
+          }
+          break;
+        }
+        case 4: {
+          const breedTypeSelected = Array.from(breedTypeInputs).some(input =>
+            input instanceof HTMLInputElement && input.checked
+          );
+          if (!breedTypeSelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle eine Rassen-Option aus';
+            breedTypeInputs[0].parentElement?.parentElement?.appendChild(err);
+          }
+          break;
+        }
+        case 5: {
+          const weightInput = currentStepEl.querySelector('[name="currentWeight"]');
+          if (weightInput instanceof HTMLInputElement) {
+            const weight = parseFloat(weightInput.value || '0');
+            if (isNaN(weight) || weight < 0.1 || weight > 60) {
+              isValid = false;
+              const err = document.createElement('div');
+              err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+              err.textContent = 'Bitte gib ein gültiges Gewicht zwischen 0,1 und 60 kg ein';
+              weightInput.parentElement?.appendChild(err);
+            }
+          }
+          break;
+        }
+        case 6: {
+          const bodyConditionSelected = Array.from(
+            currentStepEl.querySelectorAll('[name="bodyCondition"]')
+          ).some(input => input instanceof HTMLInputElement && input.checked);
+
+          if (!bodyConditionSelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle eine körperliche Verfassung aus';
+            currentStepEl.querySelector('.space-y-4')?.appendChild(err);
+          }
+          break;
+        }
+        case 7: {
+          const activitySelected = Array.from(
+            currentStepEl.querySelectorAll('[name="activityLevel"]')
+          ).some(input => input instanceof HTMLInputElement && input.checked);
+
+          if (!activitySelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle ein Aktivitätslevel aus';
+            currentStepEl.querySelector('.space-y-4')?.appendChild(err);
+          }
+          break;
+        }
+        case 8: {
+          // 1) Prüfen, ob überhaupt "Ja" oder "Nein" ausgewählt wurde:
+          const yesRadio = currentStepEl.querySelector('[name="hasHealthIssues"][value="yes"]');
+          const noRadio = currentStepEl.querySelector('[name="hasHealthIssues"][value="no"]');
+
+          // Hat der Nutzer weder "Ja" noch "Nein" ausgewählt?
+          if (!(yesRadio?.checked || noRadio?.checked)) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle aus, ob gesundheitliche Probleme vorhanden sind: Ja oder Nein';
+            currentStepEl.querySelector('.mb-6')?.appendChild(err);
+            break;
+          }
+
+          // 2) Nur wenn "Ja" angekreuzt ist, mind. 1 Checkbox fordern
+          if (yesRadio.checked) {
+            const healthIssuesSelected = Array.from(
+              currentStepEl.querySelectorAll('[name="health[]"]')
+            ).some(input => input instanceof HTMLInputElement && input.checked);
+
+            if (!healthIssuesSelected) {
+              isValid = false;
+              const err = document.createElement('div');
+              err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+              err.textContent = 'Bitte wähle mindestens eine Beschwerde aus, wenn du "Ja" angegeben hast';
+              currentStepEl.querySelector('#health-issues-details')?.appendChild(err);
+            }
+          }
+          const otherCheckbox = currentStepEl.querySelector('#otherHealthIssue');
+          const otherInput = currentStepEl.querySelector('[name="otherHealthDescription"]');
+          if (otherCheckbox?.checked && otherInput && !otherInput.value.trim()) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte geben Sie die sonstigen Beschwerden an';
+            otherInput.parentElement?.appendChild(err);
+          }
+          break;
+        }
+
+        case 9: {
+          const treatsSelected = Array.from(
+            currentStepEl.querySelectorAll('[name="treats"]')
+          ).some(input => input instanceof HTMLInputElement && input.checked);
+
+          if (!treatsSelected) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = 'Bitte wähle eine Option aus';
+            currentStepEl.querySelector('.space-y-4')?.appendChild(err);
+          }
+          break;
+        }
+      }
+
+      inputs.forEach(input => {
+        if (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+          // Überspringe Validierung für versteckte Felder
+          const container = input.closest('div');
+          if (container?.classList.contains('hidden')) return;
+
+          if (!input.checkValidity()) {
+            isValid = false;
+            const err = document.createElement('div');
+            err.classList.add('error-message', 'text-red-500', 'text-sm', 'mt-1');
+            err.textContent = input.validationMessage;
+            input.parentElement?.appendChild(err);
+          }
+        }
+      });
+
+      return isValid;
+    }
+
+    const foodImages = {
+      default: '/images/MockUps/Buddy.png',
+    };
+
+    const hunderassen = hunderassenData;
+
+    async function finishConfiguration() {
+      const formData = new FormData(form);
+
+      dogData.name = formData.get('dogName')?.toString() || '';
+      dogData.isNeutered = formData.get('isNeutered') === 'yes';
+      dogData.age.years = parseInt(formData.get('ageYears')?.toString() || '0');
+      dogData.age.months = parseInt(formData.get('ageMonths')?.toString() || '0');
+      dogData.gender = formData.get('dogGender')?.toString() || '';
+      dogData.breedType = formData.get('breedType')?.toString() || '';
+      dogData.currentWeight = parseFloat(formData.get('currentWeight')?.toString() || '5');
+      dogData.bodyCondition = formData.get('bodyCondition')?.toString() || '';
+      dogData.activityLevel = formData.get('activityLevel')?.toString() || '';
+      dogData.treats = formData.get('treats')?.toString() || '';
+      dogData.hasHealthIssues = formData.get('hasHealthIssues') === 'yes';
+
+      // Gesundheitsprobleme verarbeiten...
+      if (dogData.hasHealthIssues) {
+        dogData.healthIssues = formData.getAll('health[]').map(issue => issue.toString());
+        const otherDescription = formData.get('otherHealthDescription')?.toString();
+        if (dogData.healthIssues.includes('other') && otherDescription) {
+          dogData.otherHealthDescription = otherDescription;
+        }
+      } else {
+        dogData.healthIssues = [];
+      }
+
+      // Rassentyp verarbeiten...
+      switch (dogData.breedType) {
+        case 'purebred':
+          dogData.breed = formData.get('breed')?.toString();
+          dogData.breed2 = undefined;
+          dogData.weight = undefined;
+          break;
+        case 'mixed':
+          dogData.breed = formData.get('breed1')?.toString();
+          dogData.breed2 = formData.get('breed2')?.toString();
+          dogData.weight = undefined;
+          break;
+        case 'unknown':
+          dogData.breed = undefined;
+          dogData.breed2 = undefined;
+          dogData.weight = formData.get('weight')?.toString() || undefined;
+          break;
+      }
+
+      // Spinner zeigen und Button deaktivieren
+      showLoadingSpinner();
+      newNextButton.disabled = true;
+
+      try {
+        // API-Aufruf und Berechnungen...
+        const response = await fetch('/api/kibble-recommendations', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(dogData)
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const recommendations = await response.json();
+        const topKibble = recommendations[0];
+        if (!topKibble) throw new Error('Keine Empfehlung erhalten!');
+
+        // Berechnungen durchführen
+        const dailyCals = computeDailyCalories(dogData);
+        const totalGrams = calsToGrams(dailyCals);
+        const treatPerc = getTreatsPercentage(dogData.treats);
+        const treatGrams = Math.round(totalGrams * (treatPerc / 100));
+        const kibbleGrams = totalGrams - treatGrams;
+        const prices = calculateDailyPrice(totalGrams, kibbleGrams, dogData);
+
+        const topKibbleHtml = `
+          <div class="bg-white p-4 rounded-lg shadow-lg mb-4">
+            <h4 class="font-bold">Maßgeschneiderter Futterplan</h4>
+            <p class="text-sm mb-2"><strong>Proteinquelle:</strong> ${topKibble.Proteinquelle}</p>
+            <p class="text-sm mb-2"><strong>Benötigte Kalorien pro Tag:</strong> ${dailyCals} kcal</p>
+            <p class="text-sm mb-2"><strong>Davon durch Leckerlis:</strong> ${Math.round(dailyCals * treatPerc / 100)} kcal (${treatPerc}%)</p>
+            <p class="text-sm mb-2"><strong>Verbleibende Kalorien durch Napfgenuss:</strong> ${Math.round(dailyCals * (100 - treatPerc) / 100)} kcal</p>
+            <p class="text-sm mb-2"><strong>Napfgenuss-Portion:</strong> ${kibbleGrams} g/Tag</p>
+            <p class="text-sm mb-2"><strong>Leckerli-Portion:</strong> ${treatGrams} g/Tag</p>
+            <p class="text-sm mb-2"><strong>Tagespreis:</strong> ${prices.daily}€</p>
+            <p class="text-sm mb-2"><strong>Monatspreis:</strong> ${prices.monthly}€</p>
+          </div>
+        `;
+
+        // HTML für die Zusammenfassung generieren
+        // Zuerst den Container für das BagMockup
+        summaryDiv.innerHTML = `
+          <div class="flex flex-col items-center mb-8">
+            <div id="bag-mockup-container"></div>
+          </div>
+          <!-- Rest deiner Zusammenfassung -->
+          <div class="mb-6">
+            <!-- Dein bestehendes HTML für die Zusammenfassung -->
+          </div>
+          <div class="mt-6">
+            ${topKibbleHtml}
+          </div>
+          <button id="editAnswers" class="btn btn-secondary mt-4" type="button">
+            Antworten ändern
+          </button>
+        `;
+
+        const selectedBreed = hunderassenData.find(breed => breed.nameDE === dogData.breed);
+        const breedImage = selectedBreed?.image || dogPlaceholderPath
+
+        const bagMockupContainer = document.getElementById('bag-mockup-container');
+        if (bagMockupContainer && window.React && window.ReactDOM) {
+          try {
+            eval(BagMockUpComponent);
+            const root = window.ReactDOM.createRoot(bagMockupContainer);
+            root.render(
+              window.React.createElement(window.BagMockUpComponent, {
+                dogName: dogData.name,
+                breedName: dogData.breed || '',
+                breedImage: breedImage
+              })
+            );
+          } catch (error) {
+            console.error('React rendering error:', error);
+          }
+        }
+
+
+        // Snipcart Button aktualisieren
+        const snipcartButton = document.querySelector('.snipcart-add-item');
+        if (snipcartButton) {
+          const nameForId = dogData.name.trim() || "unknown";
+          const timestamp = new Date().getTime();
+          const uniqueId = `custom-dog-food-${nameForId}-${timestamp}`;
+          snipcartButton.setAttribute('data-item-id', uniqueId);
+          snipcartButton.setAttribute('data-item-name', `Hundefutter für einen Monat für ${dogData.name}`);
+          snipcartButton.setAttribute('data-item-description',
+            `Individuelles Hundefutter für einen Monat für ${dogData.name}`);
+          snipcartButton.setAttribute('data-item-price', prices.monthly.toString());
+        }
+
+        
+        // UI-Status aktualisieren
+        form.classList.add('hidden');
+        snipcartContainer.classList.remove('hidden');
+
+      } catch (error) {
+        console.error('Fehler bei der Berechnung:', error);
+        summaryDiv.innerHTML = `
+          <div class="text-red-500">
+            Es ist ein Fehler bei der Berechnung aufgetreten. Bitte versuche es später erneut.
+          </div>
+          <button id="editAnswers" class="btn btn-secondary mt-4" type="button">
+            Zurück
+          </button>
+        `;
+      } finally {
+        hideLoadingSpinner();
+        newNextButton.disabled = false;
+      }
+
+      // Edit-Button Event Listener
+      document.getElementById('editAnswers')?.addEventListener('click', () => {
+        snipcartContainer.classList.add('hidden');
+        form.classList.remove('hidden');
+        showStep(9);
+      });
+    }
+
+    // Initialisiere ersten Schritt
+    showStep(1);
+    return true;
+  }
+
+  // Setup-Funktion
+  function setupConfigurator() {
+    console.log('Setting up configurator');
+    const result = window.initializeDogConfigurator();
+    console.log('Setup result:', result);
+  }
+
+  // Initialisiere bei verschiedenen Events
+  document.addEventListener('DOMContentLoaded', setupConfigurator);
+  document.addEventListener('astro:page-load', setupConfigurator);
+  document.addEventListener('astro:after-swap', () => {
+    setTimeout(setupConfigurator, 0);
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupConfigurator);
+  } else {
+    setupConfigurator();
+  }
+</script>
+
+
+<script>
+  document.addEventListener('astro:after-swap', () => {
+    setTimeout(() => {
+      if (document.getElementById('dog-configurator')) {
+        window.initializeDogConfigurator();
+      }
+    }, 0);
+  });
+</script>

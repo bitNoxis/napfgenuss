@@ -25,17 +25,21 @@ export default {
 
       keyframes: {
         fadeInUp: {
-          '0%': { opacity: 0, transform: 'translateY(2rem)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' },
+          '0%': {opacity: 0, transform: 'translateY(2rem)'},
+          '100%': {opacity: 1, transform: 'translateY(0)'},
         },
       },
     },
   },
   plugins: [
     typographyPlugin,
-    plugin(({ addVariant }) => {
+    plugin(({addVariant}) => {
       addVariant('intersect', '&:not([no-intersect])');
     }),
   ],
-  darkMode: 'class',
+  // Einfach weg damit:
+  // darkMode: 'class',
+
+  // Oder explizit deaktivieren:
+  darkMode: false,
 };
