@@ -7,6 +7,7 @@ import {HunderassenService} from '../lib/hunderassenService';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import BagMockUpImage from '../assets/images/MockUps/BagMockUp.png';
+import kibbleImage from '../../public/images/kibble.png';
 import dogPlaceholder from '../assets/images/dog02.jpg';
 import cupHolder from '../assets/images/CupMockUp.svg';
 
@@ -613,8 +614,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
     </form>
 
     <div id="snipcart-container" class="hidden mt-8 space-y-6">
-      <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h3 class="text-xl font-heading font-bold mb-4 text-page">Ihre Auswahl</h3>
+      <div class="bg-green-200 p-6 rounded-lg shadow-lg">
         <div id="summary" class="text-muted"></div>
       </div>
 
@@ -745,7 +745,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
     let dailyPrice = (kibbleGrams / 100) * basePrice * sizeFactor * healthFactor * ageFactor;
 
     // Preisbegrenzung zwischen 0.35€ und 3€
-    dailyPrice = Math.max(0.54, Math.min(5.0, dailyPrice));
+    dailyPrice = Math.max(0.35, Math.min(5.0, dailyPrice));
 
     // Monatspreis (30 Tage)
     const monthlyPrice = dailyPrice * 30;
@@ -1055,6 +1055,19 @@ const hunderassen = await hunderassenService.fetchHunderassen();
       const nextStep = document.querySelector(`.step-${step}`);
       if (nextStep) {
         nextStep.classList.remove('hidden');
+        // Scroll mit Offset für die sticky Navbar
+        setTimeout(() => {
+          const form = document.getElementById('dog-configurator');
+          if (form) {
+            const navbarHeight = 80; // Angenommene Höhe der Navbar, passen Sie diesen Wert an
+            const formRect = form.getBoundingClientRect();
+            const absoluteFormTop = window.pageYOffset + formRect.top - navbarHeight - 20; // 20px zusätzlicher Abstand
+            window.scrollTo({
+              top: absoluteFormTop,
+              behavior: 'smooth'
+            });
+          }
+        }, 100); // Kleine Verzögerung für bessere Zuverlässigkeit
       }
 
       newPrevButton.classList.toggle('hidden', step === 1);
@@ -1401,19 +1414,83 @@ const hunderassen = await hunderassenService.fetchHunderassen();
         // HTML für die Zusammenfassung generieren
         // Zuerst den Container für das BagMockup
         summaryDiv.innerHTML = `
-          <div class="flex flex-col items-center mb-8">
-            <div id="bag-mockup-container"></div>
+          <!-- Oben: BagMockup -->
+          
+          <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold mb-2">Maßgeschneiderter Futterplan</h1>
+            <p class="text-gray-600">Unsere ErnährungsexpertInnen empfehlen die folgende ausgewogene und gesunde Ernährung:</p>
           </div>
-          <!-- Rest deiner Zusammenfassung -->
-          <div class="mb-6">
-            <!-- Dein bestehendes HTML für die Zusammenfassung -->
+          
+          <div class="flex justify-center mb-12">
+            <div id="bag-mockup-container" class="w-[700px]"></div>
           </div>
-          <div class="mt-6">
-            ${topKibbleHtml}
+          
+          <!-- Unterer Bereich: Zwei Spalten -->
+          <div class="grid md:grid-cols-2 gap-8">
+            <!-- Linke Spalte: Rezeptdetails -->
+            <div class="bg-white rounded-lg p-6 shadow-lg">
+              <h2 class="text-2xl font-bold mb-6">Rezept für ${dogData.name}</h2>
+              
+              <!-- Grundinformationen -->
+              <div class="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                  <p class="text-gray-600 text-sm">Tägliche Portion:</p>
+                  <p class="font-bold">${kibbleGrams}g/Tag</p>
+                </div>
+                <div>
+                  <p class="text-gray-600 text-sm">Geschmack:</p>
+                  <p class="font-bold">${topKibble.Proteinquelle}</p>
+                </div>
+              </div>
+              
+              <!-- Kalorienverteilung -->
+              <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-4">Kalorienverteilung</h3>
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm">Napfgenuss Futter</span>
+                  <span class="font-bold">${Math.round(dailyCals * (100 - treatPerc) / 100)} kcal</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                  <div class="bg-primary h-2 rounded-full" style="width: ${100 - treatPerc}%"></div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm">Leckerlis</span>
+                  <span class="font-bold">${Math.round(dailyCals * treatPerc / 100)} kcal</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-secondary h-2 rounded-full" style="width: ${treatPerc}%"></div>
+                </div>
+              </div>
+              
+              <!-- Preisinformationen -->
+              <div class="border-t pt-4">
+                <div class="flex justify-between items-center mb-2">
+                  <span>Tagespreis:</span>
+                  <span class="font-bold">${prices.daily}€</span>
+                </div>
+                <div class="flex justify-between items-center text-lg">
+                  <span>Monatspreis:</span>
+                  <span class="font-bold text-primary">${prices.monthly}€</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Rechte Spalte: Produktbild -->
+            <div class="flex items-center justify-center">
+              <img 
+                src="/images/kibble.png" 
+                alt="Hundefutter Napf" 
+              />
+            </div>
           </div>
-          <button id="editAnswers" class="btn btn-secondary mt-4" type="button">
-            Antworten ändern
-          </button>
+          
+          <!-- Buttons -->
+          <div class="mt-8 flex justify-center space-x-4">
+            <button id="editAnswers" class="btn btn-tertiary" type="button">
+              Antworten ändern
+            </button>
+          </div>
         `;
 
         const selectedBreed = hunderassenData.find(breed => breed.nameDE === dogData.breed);
