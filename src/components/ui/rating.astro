@@ -29,6 +29,6 @@ const hollowStars = maxStars - fullStars - (hasHalfStar ? 1 : 0); // Verbleibend
     {Array.from({ length: hollowStars }).map(() => (
       <Icon name="tabler:star" class="text-white w-6 h-6" />
     ))}
-    <div class="font-title text-white font-bold">{reviews.toLocaleString()} Bewertungen</div>
+    <div class="font-title text-white font-bold">{reviews.toString()} Bewertungen</div>
   </div>
 </div>
