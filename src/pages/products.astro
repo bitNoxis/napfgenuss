@@ -18,8 +18,8 @@ const metadata = {
 
 };
 // Abrufen der Hundedaten (als Objekte vom Typ DogBreed)
-const hunderassenService = HunderassenService.getInstance();
-const hunderassen = await hunderassenService.fetchHunderassen();
+const cachedBreeds = typeof localStorage !== 'undefined' ? localStorage.getItem('hunderassen') : null;
+const hunderassen = cachedBreeds ? JSON.parse(cachedBreeds) : [];
 ---
 
 <PageLayout metadata={metadata}>
@@ -598,7 +598,7 @@ const hunderassen = await hunderassenService.fetchHunderassen();
       </div>
               </div>
               <!-- Ersetze den bestehenden Button-Container -->
-              <div class="fixed-button-container fixed bottom-0 left-0 right-0 border-gray-200 p-4 z-50">
+              <div class="fixed-button-container bg-green-200 fixed bottom-0 left-0 right-0 border-gray-200 p-4 z-50">
               <div class="max-w-3xl mx-auto flex justify-center items-center gap-4">
               <button
               type="button"
@@ -1735,15 +1735,56 @@ const hunderassen = await hunderassenService.fetchHunderassen();
     showStep(1);
     return true;
   }
+    async function loadBreeds() {
+    try {
+      // Zuerst aus dem Cache laden
+    const cachedBreeds = localStorage.getItem('hunderassen');
+      if (cachedBreeds) {
+        updateSelectOptions(JSON.parse(cachedBreeds));
+      }
 
+      // Dann im Hintergrund aktualisieren
+    const response = await fetch('/api/hunderassen');
+      const breeds = await response.json();
+
+      // Cache aktualisieren
+    localStorage.setItem('hunderassen', JSON.stringify(breeds));
+
+      // Select-Optionen aktualisieren
+    updateSelectOptions(breeds);
+    } catch (error) {
+      console.error('Error loading breeds:', error);
+    }
+  }
+
+    function updateSelectOptions(breeds) {
+    const selects = document.querySelectorAll('select[name="breed"], select[name="breed1"], select[name="breed2"]');
+    selects.forEach(select => {
+      select.innerHTML = '<option value="">Bitte Rasse wählen</option>';
+      breeds.forEach(breed => {
+        const option = document.createElement('option');
+        option.value = breed.nameDE;
+        option.textContent = breed.nameDE;
+        select.appendChild(option);
+      });
+    });
+
+    // Select2 neu initialisieren
+  initializeSelect2();
+  }
+    
   // Setup-Funktion
-  function setupConfigurator() {
+    function setupConfigurator() {
     console.log('Setting up configurator');
     const result = window.initializeDogConfigurator();
+    if (result) {
+      loadBreeds();
+    }
     console.log('Setup result:', result);
   }
 
-  // Initialisiere bei verschiedenen Events
+
+    // Initialisiere bei verschiedenen Events
   document.addEventListener('DOMContentLoaded', setupConfigurator);
   document.addEventListener('astro:page-load', setupConfigurator);
   document.addEventListener('astro:after-swap', () => {
