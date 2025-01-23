@@ -7,8 +7,8 @@ export const FieteDayPrice = 1.18;
 
 const dogSizeConsumption = {
   Luna: 20,  // Hohe energetische Nahrung
-  Balu: 10,   // im Wachstum
-  Otto: 10,   // Gelenkprobleme
+  Balu: 10,  // im Wachstum
+  Otto: 10,  // Gelenkprobleme
   Fiete: 20, // Senioren
 };
 
