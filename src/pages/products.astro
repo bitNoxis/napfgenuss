@@ -597,8 +597,9 @@ const hunderassen = await hunderassenService.fetchHunderassen();
         </div>
       </div>
               </div>
-
-              <div class="flex justify-center items-center gap-4 pt-6">
+              <!-- Ersetze den bestehenden Button-Container -->
+              <div class="fixed-button-container fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-200 p-4 z-50">
+              <div class="max-w-3xl mx-auto flex justify-center items-center gap-4">
               <button
               type="button"
               id="prevButton"
@@ -618,6 +619,32 @@ const hunderassen = await hunderassenService.fetchHunderassen();
               </svg>
               </button>
               </div>
+              </div>
+
+              <!-- Füge einen Spacer am Ende des Formulars hinzu, um Platz für die fixed buttons zu schaffen -->
+              <div class="h-24"></div>
+
+              <style>
+              /* Stelle sicher, dass der Content nicht hinter den Buttons verschwindet */
+              #dog-configurator {
+              padding-bottom: calc(env(safe-area-inset-bottom) + 5rem);
+            }
+
+    /* Füge Support für iOS safe-area hinzu */
+    .fixed-button-container {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  }
+
+    /* Optimiere die Button-Container-Animation */
+    .fixed-button-container {
+    transition: transform 0.3s ease-in-out;
+  }
+
+    /* Optional: Verstecke die Buttons beim Scrollen nach unten */
+    .fixed-button-container.hidden {
+    transform: translateY(100%);
+  }
+    </style>
     </form>
 
     <div id="snipcart-container" class="hidden mt-8 space-y-6">
@@ -1614,23 +1641,24 @@ const hunderassen = await hunderassenService.fetchHunderassen();
 
             <!-- Zutatenliste -->
             <div class="mt-8 bg-white rounded-xl p-6 shadow-lg">
-              <div class="flex justify-between items-center cursor-pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                <h3 class="font-bold">Alle Zutaten</h3>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-              <div class="hidden mt-4">
-                <p class="mb-4">Anteil tierischer Proteine: 80.0%</p>
-                <p class="text-sm text-gray-600">
-                  Getrocknetes Hühnerfleisch (33%), Reis (32%), tierisches Fett (15%), getrocknete Kartoffeln, Erbsen, 
-                  hydrolisiertes tierisches Eiweiß (2,5%) Rübenschnitzel, Mineralstoffe, getrocknete Bierhefe, raffinierte 
-                  Lignozellulose, Fischöl, G.O.S., M.O.S., F.O.S., β-Glucane, Getrocknete Kräuter (Rosmarinus sp., 
-                  Curcuma sp., Eugenia sp.).
-                </p>
-              </div>
+  <div class="flex justify-between items-center cursor-pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
+    <h3 class="font-bold">Alle Zutaten</h3>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+  <div class="hidden mt-4">
+    <p class="mb-4">Anteil tierischer Proteine: ${topKibble.proteinAnteil || '80.0'}%</p>
+    <p class="text-sm text-gray-600">
+      ${topKibble.zutaten || `
+        Getrocknetes ${topKibble.Proteinquelle}fleisch (33%), Reis (32%), tierisches Fett (15%),
+          getrocknete Kartoffeln, Erbsen, hydrolisiertes tierisches Eiweiß (2,5%) Rübenschnitzel,
+          Mineralstoffe, getrocknete Bierhefe, raffinierte Lignozellulose, Fischöl, G.O.S., M.O.S.,
+          F.O.S., β-Glucane, Getrocknete Kräuter (Rosmarinus sp., Curcuma sp., Eugenia sp.).
+        `}
+    </p>
+  </div>
             </div>
-          </div>
           
           <!-- Buttons -->
           <div class="mt-8 flex justify-center space-x-4">
