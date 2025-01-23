@@ -33,11 +33,12 @@ import Button from './Button.astro';
     const snipcartCountElement = document.getElementById('snipcart_count');
     const reminder = document.getElementById('reminder');
 
+    
     if (!snipcartCountElement || !reminder) {
       console.error('Required elements (#snipcart_count or #reminder) not found.');
       return;
     }
-
+    
     let reminderVisible = false; // Status: ob der Reminder sichtbar ist
     let lastScrollPosition = 0; // Letzte bekannte Scrollposition
 
