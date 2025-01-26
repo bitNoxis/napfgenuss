@@ -42,609 +42,609 @@ const hunderassen = cachedBreeds ? JSON.parse(cachedBreeds) : [];
     </script>
     <title>{metadata.title}</title>
   </head>
-    
+
   <!-- Irgendwo in Products.astro, z.B. direkt nach dem snipcart-container -->
   <div id="loading-spinner" class="hidden flex flex-col items-center justify-center mt-8">
     <!-- Einfacher CSS-Spinner (Tailwind-Beispiel) -->
     <div class="w-16 h-16 border-4 border-green-900 border-t-transparent rounded-full animate-spin"></div>
     <p class="mt-2 text-green-700">Futter wird zusammengestellt...</p>
   </div>
-    
+
   <div class="max-w-3xl mx-auto p-4 mt-10 sm:mt-0 bg-page">
     <form id="dog-configurator" class="space-y-8">
       <div class="md:min-h-[450px] md:relative">
-      <div class="step-1 md:absolute md:inset-0">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie heißt Ihr Hund?</h2>
+        <div class="step-1 md:absolute md:inset-0">
+          <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie heißt Ihr Hund?</h2>
 
-        <div class="flex space-x-4 mb-4">
-          <label
-            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
-            <input
-              type="radio"
-              name="dogGender"
-              value="male"
-              required
-              class="mr-2"
-            >
-            <span class="text-page group-hover:text-primary">Er heißt</span>
-          </label>
-          <label
-            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
-            <input
-              type="radio"
-              name="dogGender"
-              value="female"
-              required
-              class="mr-2"
-            >
-            <span class="text-page group-hover:text-primary">Sie heißt</span>
-          </label>
-        </div>
-
-        <input
-          type="text"
-          name="dogName"
-          class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
-          required
-          minlength="2"
-          placeholder="Name eingeben"
-        />
-      </div>
-
-      <div class="step-2 hidden md:absolute md:inset-0">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
-          Wurde <span class="dog-name"></span> kastriert?
-        </h2>
-        <div class="flex space-x-4 mb-4">
-          <!-- Ja -->
-          <label
-            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
-            <input
-              type="radio"
-              name="isNeutered"
-              value="yes"
-              required
-              class="mr-2 w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
-            >
-            <span class="text-page group-hover:text-primary">Ja</span>
-          </label>
-          <!-- Nein -->
-          <label
-            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
-            <input
-              type="radio"
-              name="isNeutered"
-              value="no"
-              required
-              class="mr-2 w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
-            >
-            <span class="text-page group-hover:text-primary">Nein</span>
-          </label>
-        </div>
-        <div class="bg-green-100 p-4 rounded-lg mt-4 flex items-center space-x-4 shadow-md">
-          <div>
-            <p class="text-sm text-gray-800 font-medium">
-              "Eine Kastration kann den Stoffwechsel Ihres Hundes beeinflussen. Mit diesem wichtigen Detail können wir
-              ein
-              perfekt angepasstes Rezept erstellen."
-            </p>
-            <p class="mt-2 text-sm font-semibold text-primary italic">Tierärztin Frau Dr. Berg</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-3 hidden md:absolute md:inset-0">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie alt ist <span class="dog-name"></span>?</h2>
-        <div class="flex space-x-4">
-          <div class="flex-1">
-            <input
-              type="number"
-              name="ageYears"
-              min="0"
-              max="25"
-              class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
-              required
-              placeholder="Alter in Jahren"
-            />
-          </div>
-          <div class="flex-1">
-            <input
-              type="number"
-              name="ageMonths"
-              min="0"
-              max="11"
-              class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
-              placeholder="Monate (optional)"
-            />
-          </div>
-        </div>
-        <!-- Container für den zusätzlichen Text -->
-        <div class="bg-green-100 p-4 rounded-lg mt-4 shadow-md">
-          <p class="text-sm text-gray-800 font-medium">
-            Der Nährstoffbedarf Ihres Hundes ändert sich im Laufe seines Lebens. In jeder Phase werden wir das Rezept
-            an seine Bedürfnisse anpassen.
-          </p>
-        </div>
-      </div>
-
-      <div class="step-4 hidden md:absolute md:inset-0">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">Rasse von <span class="dog-name"></span></h2>
-
-        <div class="flex space-x-4 mb-6">
-          <label
-            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
-            <input
-              type="radio"
-              name="breedType"
-              value="purebred"
-              required
-              class="mr-2"
-            >
-            <span class="text-page group-hover:text-primary">Reinrassig</span>
-          </label>
-          <label
-            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
-            <input
-              type="radio"
-              name="breedType"
-              value="mixed"
-              required
-              class="mr-2"
-            >
-            <span class="text-page group-hover:text-primary">Mischling</span>
-          </label>
-          <label
-            class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
-            <input
-              type="radio"
-              name="breedType"
-              value="unknown"
-              required
-              class="mr-2"
-            >
-            <span class="text-page group-hover:text-primary">Ich kenne die Rasse nicht</span>
-          </label>
-        </div>
-
-        <!-- Reinrassig -->
-        <div id="purebred-select" class="hidden">
-          <select
-            name="breed"
-            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
-            required
-          >
-            <option value="">Bitte Rasse wählen</option>
-            {hunderassen.map(breed => (
-              <option value={breed.nameDE}>
-                {breed.nameDE}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <!-- Mischling -->
-        <div id="mixed-select" class="hidden space-y-4">
-          <select
-            name="breed1"
-            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
-            required
-          >
-            <option value="">Bitte Rasse wählen</option>
-            {hunderassen.map(breed => (
-              <option value={breed.nameDE}>
-                {breed.nameDE}
-              </option>
-            ))}
-          </select>
-          <select
-            name="breed2"
-            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
-            required
-          >
-            <option value="">Bitte Rasse wählen</option>
-            {hunderassen.map(breed => (
-              <option value={breed.nameDE}>
-                {breed.nameDE}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <!-- Unbekannte Rasse -->
-        <div id="unknown-weight" class="hidden space-y-4">
-          <p class="text-page mb-4">Was ist das ausgewachsene Gewicht von <span class="dog-name"></span>?</p>
-          <div class="flex flex-col space-y-4">
-            <!-- Mini -->
+          <div class="flex space-x-4 mb-4">
             <label
-              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
               <input
                 type="radio"
-                name="weight"
-                value="mini"
+                name="dogGender"
+                value="male"
                 required
-                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+                class="mr-2"
               >
-              <span class="text-page group-hover:text-primary transition duration-200">Mini (unter 5kg)</span>
+              <span class="text-page group-hover:text-primary">Er heißt</span>
             </label>
-
-            <!-- Klein -->
             <label
-              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
               <input
                 type="radio"
-                name="weight"
-                value="small"
+                name="dogGender"
+                value="female"
                 required
-                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+                class="mr-2"
               >
-              <span class="text-page group-hover:text-primary transition duration-200">Klein (5-10kg)</span>
-            </label>
-
-            <!-- Mittel -->
-            <label
-              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-              <input
-                type="radio"
-                name="weight"
-                value="medium"
-                required
-                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
-              >
-              <span class="text-page group-hover:text-primary transition duration-200">Mittel (10-25kg)</span>
-            </label>
-
-            <!-- Groß -->
-            <label
-              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-              <input
-                type="radio"
-                name="weight"
-                value="large"
-                required
-                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
-              >
-              <span class="text-page group-hover:text-primary transition duration-200">Groß (25-45kg)</span>
-            </label>
-
-            <!-- Riese -->
-            <label
-              class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-              <input
-                type="radio"
-                name="weight"
-                value="giant"
-                required
-                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
-              >
-              <span class="text-page group-hover:text-primary transition duration-200">Riese (über 45kg)</span>
+              <span class="text-page group-hover:text-primary">Sie heißt</span>
             </label>
           </div>
-        </div>
-      </div>
 
-      <!-- Schritt 5: Aktuelles Gewicht -->
-      <div class="step-5 hidden md:absolute md:inset-0">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
-          Wie schwer ist <span class="dog-name"></span> aktuell?
-        </h2>
-        <div class="flex items-center space-x-2">
           <input
-            type="number"
-            name="currentWeight"
-            value="5"
-            min="0.1"
-            max="60"
-            step="0.1"
-            class="w-32 p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+            type="text"
+            name="dogName"
+            class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
             required
+            minlength="2"
+            placeholder="Name eingeben"
           />
-          <span class="text-page">kg</span>
-        </div>
-      </div>
-
-      <!-- Schritt 6: Aktuelles Gewicht -->
-      <div class="step-6 hidden md:absolute md:inset-0">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
-          Welche körperliche Verfassung beschreibt <span class="dog-name"></span> am Besten?
-        </h2>
-        <div class="space-y-4">
-          <!-- Very Underweight -->
-          <label
-            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="bodyCondition" value="very-underweight" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Stark untergewichtig</span>
-            </div>
-            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
-          </label>
-
-          <!-- Underweight -->
-          <label
-            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="bodyCondition" value="underweight" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Untergewichtig</span>
-            </div>
-            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
-          </label>
-
-          <!-- Ideal -->
-          <label
-            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="bodyCondition" value="ideal" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Ideal</span>
-            </div>
-            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
-          </label>
-
-          <!-- Overweight -->
-          <label
-            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="bodyCondition" value="overweight" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Übergewichtig</span>
-            </div>
-            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
-          </label>
-
-          <!-- Obese -->
-          <label
-            class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="bodyCondition" value="obese" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Fettleibig</span>
-            </div>
-            <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
-          </label>
-        </div>
-      </div>
-
-      <!-- Schritt 7: Aktivitätslevel -->
-      <div class="step-7 hidden md:absolute md:inset-0">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
-          Wie aktiv ist <span class="dog-name"></span> am Tag?
-        </h2>
-        <div class="space-y-4">
-          <!-- Very Low -->
-          <label
-            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="activityLevel" value="very-low" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">< 30 Min</span>
-            </div>
-            <img src="/images/hunde-calculator/hund-liegt.svg" alt="Hund liegt" class="w-12 h-12">
-          </label>
-
-          <!-- Low -->
-          <label
-            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="activityLevel" value="low" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">30 Min - 1 Stunde</span>
-            </div>
-            <img src="/images/hunde-calculator/hund-steht.svg" alt="Hund steht" class="w-12 h-12">
-          </label>
-
-          <!-- Medium -->
-          <label
-            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="activityLevel" value="medium" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">1 - 2 Stunden</span>
-            </div>
-            <img src="/images/hunde-calculator/hund-tollt.svg" alt="Hund tollt" class="w-12 h-12">
-          </label>
-
-          <!-- High -->
-          <label
-            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="activityLevel" value="high" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Mehr als 2 Stunden</span>
-            </div>
-            <img src="/images/hunde-calculator/hund-springt.svg" alt="Hund springt" class="w-12 h-12">
-          </label>
-        </div>
-      </div>
-
-      <div class="step-8 hidden md:absolute md:inset-0">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
-          Hat <span class="dog-name"></span> gesundheitliche Probleme?
-        </h2>
-        <div class="flex space-x-4">
-          <!-- Ja -->
-          <label
-            class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <input
-              type="radio"
-              name="hasHealthIssues"
-              value="yes"
-              required
-              class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
-            >
-            <span class="ml-4 text-page group-hover:text-primary transition duration-200">Ja</span>
-          </label>
-
-          <!-- Nein -->
-          <label
-            class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <input
-              type="radio"
-              name="hasHealthIssues"
-              value="no"
-              required
-              class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
-            >
-            <span class="ml-4 text-page group-hover:text-primary transition duration-200">Nein</span>
-          </label>
         </div>
 
-        <!-- Gesundheitsprobleme Details (anfangs versteckt) -->
-        <div id="health-issues-details" class="hidden space-y-4 mt-6">
-          <h3 class="text-xl font-heading font-bold mb-4 text-page">Welche Beschwerden gibt es?</h3>
-
-          <div class="space-y-3">
-            <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="digestion" class="w-4 h-4">
-              <span>Verdauung</span>
-            </label>
-            <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="joints" class="w-4 h-4">
-              <span>Gelenkprobleme</span>
-            </label>
-            <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="skin" class="w-4 h-4">
-              <span>Haut & Fell</span>
-            </label>
-            <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="bladder" class="w-4 h-4">
-              <span>Blasenprobleme</span>
-            </label>
-            <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="behavior" class="w-4 h-4">
-              <span>Stress / Aggression</span>
-            </label>
-            <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="dental" class="w-4 h-4">
-              <span>Zahnprobleme</span>
-            </label>
-            <!-- Allergien mit Detailangabe -->
-            <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="allergies" class="w-4 h-4" id="allergyCheckbox">
-              <span>Allergien</span>
-            </label>
-            <!-- Textfeld für detaillierte Angabe zu Allergien -->
-            <div id="allergyDetails" class="hidden ml-7">
+        <div class="step-2 hidden md:absolute md:inset-0">
+          <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+            Wurde <span class="dog-name"></span> kastriert?
+          </h2>
+          <div class="flex space-x-4 mb-4">
+            <!-- Ja -->
+            <label
+              class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
               <input
-                type="text"
-                name="allergyDescription"
-                class="w-full p-2 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
-                placeholder="Bitte Allergie(en) genauer beschreiben..."
-              />
-            </div>
-            <label class="flex items-center space-x-3">
-              <input type="checkbox" name="health[]" value="other" class="w-4 h-4" id="otherHealthIssue">
-              <span>Sonstiges</span>
+                type="radio"
+                name="isNeutered"
+                value="yes"
+                required
+                class="mr-2 w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+              >
+              <span class="text-page group-hover:text-primary">Ja</span>
             </label>
-            <!-- Neues Textfeld für Sonstiges -->
-            <div id="otherHealthDetails" class="hidden ml-7">
+            <!-- Nein -->
+            <label
+              class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
               <input
-                type="text"
-                name="otherHealthDescription"
-                class="w-full p-2 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
-                placeholder="Bitte beschreiben..."
-              />
+                type="radio"
+                name="isNeutered"
+                value="no"
+                required
+                class="mr-2 w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+              >
+              <span class="text-page group-hover:text-primary">Nein</span>
+            </label>
+          </div>
+          <div class="bg-green-100 p-4 rounded-lg mt-4 flex items-center space-x-4 shadow-md">
+            <div>
+              <p class="text-sm text-gray-800 font-medium">
+                "Eine Kastration kann den Stoffwechsel Ihres Hundes beeinflussen. Mit diesem wichtigen Detail können wir
+                ein
+                perfekt angepasstes Rezept erstellen."
+              </p>
+              <p class="mt-2 text-sm font-semibold text-primary italic">Tierärztin Frau Dr. Berg</p>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Schritt 9: Leckerlis -->
-      <div class="step-9 hidden md:absolute md:inset-0">
-        <h2 class="text-2xl font-heading font-bold mb-6 text-page">
-          Wie viele Leckerlis bekommt <span class="dog-name"></span>?
-        </h2>
-        <div class="space-y-4">
-          <!-- Keine -->
-          <label
-            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="treats" value="none" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Keine</span>
+        <div class="step-3 hidden md:absolute md:inset-0">
+          <h2 class="text-2xl font-heading font-bold mb-6 text-page">Wie alt ist <span class="dog-name"></span>?</h2>
+          <div class="flex space-x-4">
+            <div class="flex-1">
+              <input
+                type="number"
+                name="ageYears"
+                min="0"
+                max="25"
+                class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+                required
+                placeholder="Alter in Jahren"
+              />
             </div>
-          </label>
+            <div class="flex-1">
+              <input
+                type="number"
+                name="ageMonths"
+                min="0"
+                max="11"
+                class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+                placeholder="Monate (optional)"
+              />
+            </div>
+          </div>
+          <!-- Container für den zusätzlichen Text -->
+          <div class="bg-green-100 p-4 rounded-lg mt-4 shadow-md">
+            <p class="text-sm text-gray-800 font-medium">
+              Der Nährstoffbedarf Ihres Hundes ändert sich im Laufe seines Lebens. In jeder Phase werden wir das Rezept
+              an seine Bedürfnisse anpassen.
+            </p>
+          </div>
+        </div>
 
-          <!-- Ein paar pro Woche -->
-          <label
-            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="treats" value="few-weekly" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Ein paar pro Woche</span>
-            </div>
-          </label>
+        <div class="step-4 hidden md:absolute md:inset-0">
+          <h2 class="text-2xl font-heading font-bold mb-6 text-page">Rasse von <span class="dog-name"></span></h2>
 
-          <!-- Ein paar pro Tag -->
-          <label
-            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="treats" value="few-daily" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Ein paar pro Tag</span>
-            </div>
-          </label>
+          <div class="flex space-x-4 mb-6">
+            <label
+              class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="breedType"
+                value="purebred"
+                required
+                class="mr-2"
+              >
+              <span class="text-page group-hover:text-primary">Reinrassig</span>
+            </label>
+            <label
+              class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="breedType"
+                value="mixed"
+                required
+                class="mr-2"
+              >
+              <span class="text-page group-hover:text-primary">Mischling</span>
+            </label>
+            <label
+              class="flex-1 flex items-center justify-center p-3 border rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="breedType"
+                value="unknown"
+                required
+                class="mr-2"
+              >
+              <span class="text-page group-hover:text-primary">Ich kenne die Rasse nicht</span>
+            </label>
+          </div>
 
-          <!-- Viele am Tag -->
-          <label
-            class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
-            <div class="flex items-center space-x-3">
-              <input type="radio" name="treats" value="many-daily" required
-                     class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
-              <span class="text-page group-hover:text-primary transition duration-200">Viele am Tag</span>
+          <!-- Reinrassig -->
+          <div id="purebred-select" class="hidden">
+            <select
+              name="breed"
+              class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
+              required
+            >
+              <option value="">Bitte Rasse wählen</option>
+              {hunderassen.map(breed => (
+                <option value={breed.nameDE}>
+                  {breed.nameDE}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <!-- Mischling -->
+          <div id="mixed-select" class="hidden space-y-4">
+            <select
+              name="breed1"
+              class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
+              required
+            >
+              <option value="">Bitte Rasse wählen</option>
+              {hunderassen.map(breed => (
+                <option value={breed.nameDE}>
+                  {breed.nameDE}
+                </option>
+              ))}
+            </select>
+            <select
+              name="breed2"
+              class="w-full p-3 rounded-lg border border-gray-400 bg-transparent text-gray-500 focus:ring-2 focus:ring-primary transition duration-200"
+              required
+            >
+              <option value="">Bitte Rasse wählen</option>
+              {hunderassen.map(breed => (
+                <option value={breed.nameDE}>
+                  {breed.nameDE}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <!-- Unbekannte Rasse -->
+          <div id="unknown-weight" class="hidden space-y-4">
+            <p class="text-page mb-4">Was ist das ausgewachsene Gewicht von <span class="dog-name"></span>?</p>
+            <div class="flex flex-col space-y-4">
+              <!-- Mini -->
+              <label
+                class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+                <input
+                  type="radio"
+                  name="weight"
+                  value="mini"
+                  required
+                  class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+                >
+                <span class="text-page group-hover:text-primary transition duration-200">Mini (unter 5kg)</span>
+              </label>
+
+              <!-- Klein -->
+              <label
+                class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+                <input
+                  type="radio"
+                  name="weight"
+                  value="small"
+                  required
+                  class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+                >
+                <span class="text-page group-hover:text-primary transition duration-200">Klein (5-10kg)</span>
+              </label>
+
+              <!-- Mittel -->
+              <label
+                class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+                <input
+                  type="radio"
+                  name="weight"
+                  value="medium"
+                  required
+                  class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+                >
+                <span class="text-page group-hover:text-primary transition duration-200">Mittel (10-25kg)</span>
+              </label>
+
+              <!-- Groß -->
+              <label
+                class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+                <input
+                  type="radio"
+                  name="weight"
+                  value="large"
+                  required
+                  class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+                >
+                <span class="text-page group-hover:text-primary transition duration-200">Groß (25-45kg)</span>
+              </label>
+
+              <!-- Riese -->
+              <label
+                class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+                <input
+                  type="radio"
+                  name="weight"
+                  value="giant"
+                  required
+                  class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+                >
+                <span class="text-page group-hover:text-primary transition duration-200">Riese (über 45kg)</span>
+              </label>
             </div>
-          </label>
+          </div>
+        </div>
+
+        <!-- Schritt 5: Aktuelles Gewicht -->
+        <div class="step-5 hidden md:absolute md:inset-0">
+          <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+            Wie schwer ist <span class="dog-name"></span> aktuell?
+          </h2>
+          <div class="flex items-center space-x-2">
+            <input
+              type="number"
+              name="currentWeight"
+              value="5"
+              min="0.1"
+              max="60"
+              step="0.1"
+              class="w-32 p-3 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+              required
+            />
+            <span class="text-page">kg</span>
+          </div>
+        </div>
+
+        <!-- Schritt 6: Aktuelles Gewicht -->
+        <div class="step-6 hidden md:absolute md:inset-0">
+          <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+            Welche körperliche Verfassung beschreibt <span class="dog-name"></span> am Besten?
+          </h2>
+          <div class="space-y-4">
+            <!-- Very Underweight -->
+            <label
+              class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="bodyCondition" value="very-underweight" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Stark untergewichtig</span>
+              </div>
+              <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+            </label>
+
+            <!-- Underweight -->
+            <label
+              class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="bodyCondition" value="underweight" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Untergewichtig</span>
+              </div>
+              <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+            </label>
+
+            <!-- Ideal -->
+            <label
+              class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="bodyCondition" value="ideal" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Ideal</span>
+              </div>
+              <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+            </label>
+
+            <!-- Overweight -->
+            <label
+              class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="bodyCondition" value="overweight" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Übergewichtig</span>
+              </div>
+              <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+            </label>
+
+            <!-- Obese -->
+            <label
+              class="flex flex-col p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary relative">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="bodyCondition" value="obese" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Fettleibig</span>
+              </div>
+              <div class="info-box hidden bg-green-100 p-4 mt-2 rounded-lg text-sm text-gray-800"></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Schritt 7: Aktivitätslevel -->
+        <div class="step-7 hidden md:absolute md:inset-0">
+          <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+            Wie aktiv ist <span class="dog-name"></span> am Tag?
+          </h2>
+          <div class="space-y-4">
+            <!-- Very Low -->
+            <label
+              class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="activityLevel" value="very-low" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">< 30 Min</span>
+              </div>
+              <img src="/images/hunde-calculator/hund-liegt.svg" alt="Hund liegt" class="w-12 h-12">
+            </label>
+
+            <!-- Low -->
+            <label
+              class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="activityLevel" value="low" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">30 Min - 1 Stunde</span>
+              </div>
+              <img src="/images/hunde-calculator/hund-steht.svg" alt="Hund steht" class="w-12 h-12">
+            </label>
+
+            <!-- Medium -->
+            <label
+              class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="activityLevel" value="medium" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">1 - 2 Stunden</span>
+              </div>
+              <img src="/images/hunde-calculator/hund-tollt.svg" alt="Hund tollt" class="w-12 h-12">
+            </label>
+
+            <!-- High -->
+            <label
+              class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="activityLevel" value="high" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Mehr als 2 Stunden</span>
+              </div>
+              <img src="/images/hunde-calculator/hund-springt.svg" alt="Hund springt" class="w-12 h-12">
+            </label>
+          </div>
+        </div>
+
+        <div class="step-8 hidden md:absolute md:inset-0">
+          <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+            Hat <span class="dog-name"></span> gesundheitliche Probleme?
+          </h2>
+          <div class="flex space-x-4">
+            <!-- Ja -->
+            <label
+              class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="hasHealthIssues"
+                value="yes"
+                required
+                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+              >
+              <span class="ml-4 text-page group-hover:text-primary transition duration-200">Ja</span>
+            </label>
+
+            <!-- Nein -->
+            <label
+              class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <input
+                type="radio"
+                name="hasHealthIssues"
+                value="no"
+                required
+                class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200"
+              >
+              <span class="ml-4 text-page group-hover:text-primary transition duration-200">Nein</span>
+            </label>
+          </div>
+
+          <!-- Gesundheitsprobleme Details (anfangs versteckt) -->
+          <div id="health-issues-details" class="hidden space-y-4 mt-6">
+            <h3 class="text-xl font-heading font-bold mb-4 text-page">Welche Beschwerden gibt es?</h3>
+
+            <div class="space-y-3">
+              <label class="flex items-center space-x-3">
+                <input type="checkbox" name="health[]" value="digestion" class="w-4 h-4">
+                <span>Verdauung</span>
+              </label>
+              <label class="flex items-center space-x-3">
+                <input type="checkbox" name="health[]" value="joints" class="w-4 h-4">
+                <span>Gelenkprobleme</span>
+              </label>
+              <label class="flex items-center space-x-3">
+                <input type="checkbox" name="health[]" value="skin" class="w-4 h-4">
+                <span>Haut & Fell</span>
+              </label>
+              <label class="flex items-center space-x-3">
+                <input type="checkbox" name="health[]" value="bladder" class="w-4 h-4">
+                <span>Blasenprobleme</span>
+              </label>
+              <label class="flex items-center space-x-3">
+                <input type="checkbox" name="health[]" value="behavior" class="w-4 h-4">
+                <span>Stress / Aggression</span>
+              </label>
+              <label class="flex items-center space-x-3">
+                <input type="checkbox" name="health[]" value="dental" class="w-4 h-4">
+                <span>Zahnprobleme</span>
+              </label>
+              <!-- Allergien mit Detailangabe -->
+              <label class="flex items-center space-x-3">
+                <input type="checkbox" name="health[]" value="allergies" class="w-4 h-4" id="allergyCheckbox">
+                <span>Allergien</span>
+              </label>
+              <!-- Textfeld für detaillierte Angabe zu Allergien -->
+              <div id="allergyDetails" class="hidden ml-7">
+                <input
+                  type="text"
+                  name="allergyDescription"
+                  class="w-full p-2 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+                  placeholder="Bitte Allergie(en) genauer beschreiben..."
+                />
+              </div>
+              <label class="flex items-center space-x-3">
+                <input type="checkbox" name="health[]" value="other" class="w-4 h-4" id="otherHealthIssue">
+                <span>Sonstiges</span>
+              </label>
+              <!-- Neues Textfeld für Sonstiges -->
+              <div id="otherHealthDetails" class="hidden ml-7">
+                <input
+                  type="text"
+                  name="otherHealthDescription"
+                  class="w-full p-2 rounded-lg border border-gray-400 bg-transparent text-page focus:ring-2 focus:ring-primary transition duration-200"
+                  placeholder="Bitte beschreiben..."
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schritt 9: Leckerlis -->
+        <div class="step-9 hidden md:absolute md:inset-0">
+          <h2 class="text-2xl font-heading font-bold mb-6 text-page">
+            Wie viele Leckerlis bekommt <span class="dog-name"></span>?
+          </h2>
+          <div class="space-y-4">
+            <!-- Keine -->
+            <label
+              class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="treats" value="none" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Keine</span>
+              </div>
+            </label>
+
+            <!-- Ein paar pro Woche -->
+            <label
+              class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="treats" value="few-weekly" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Ein paar pro Woche</span>
+              </div>
+            </label>
+
+            <!-- Ein paar pro Tag -->
+            <label
+              class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="treats" value="few-daily" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Ein paar pro Tag</span>
+              </div>
+            </label>
+
+            <!-- Viele am Tag -->
+            <label
+              class="flex justify-between items-center p-4 border border-gray-300 rounded-lg cursor-pointer group hover:border-primary">
+              <div class="flex items-center space-x-3">
+                <input type="radio" name="treats" value="many-daily" required
+                       class="w-5 h-5 border-2 border-gray-400 text-primary focus:ring-primary transition duration-200">
+                <span class="text-page group-hover:text-primary transition duration-200">Viele am Tag</span>
+              </div>
+            </label>
+          </div>
         </div>
       </div>
-              </div>
-              <!-- Ersetze den bestehenden Button-Container -->
-              <div class="fixed-button-container bg-green-200 fixed bottom-0 left-0 right-0 border-gray-200 p-4 z-50">
-              <div class="max-w-3xl mx-auto flex justify-center items-center gap-4">
-              <button
-              type="button"
-              id="prevButton"
-              class="btn border-2 border-gray-300 bg-white text-gray-700 px-8 py-3 rounded-full flex items-center gap-2 hover:bg-gray-50 hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Ersetze den bestehenden Button-Container -->
+      <div class="fixed-button-container bg-green-200 fixed bottom-0 left-0 right-0 border-gray-200 p-4 z-50">
+        <div class="max-w-3xl mx-auto flex justify-center items-center gap-4">
+          <button
+            type="button"
+            id="prevButton"
+            class="btn border-2 border-gray-300 bg-white text-gray-700 px-8 py-3 rounded-full flex items-center gap-2 hover:bg-gray-50 hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M15 18l-6-6 6-6"/>
-              </svg>
-              Zurück
-              </button>
-              <button
-              type="button"
-              id="nextButton"
-              class="btn bg-primary text-white px-24 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-primary/90 flex-grow md:flex-grow-0">
-              Weiter
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            </svg>
+            Zurück
+          </button>
+          <button
+            type="button"
+            id="nextButton"
+            class="btn bg-primary text-white px-24 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-primary/90 flex-grow md:flex-grow-0">
+            Weiter
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9 18l6-6-6-6"/>
-              </svg>
-              </button>
-              </div>
-              </div>
+            </svg>
+          </button>
+        </div>
+      </div>
 
-              <!-- Füge einen Spacer am Ende des Formulars hinzu, um Platz für die fixed buttons zu schaffen -->
-              <div class="h-24"></div>
+      <!-- Füge einen Spacer am Ende des Formulars hinzu, um Platz für die fixed buttons zu schaffen -->
+      <div class="h-24"></div>
 
-              <style>
-              /* Stelle sicher, dass der Content nicht hinter den Buttons verschwindet */
-              #dog-configurator {
-              padding-bottom: calc(env(safe-area-inset-bottom) + 5rem);
-            }
+      <style>
+        /* Stelle sicher, dass der Content nicht hinter den Buttons verschwindet */
+        #dog-configurator {
+          padding-bottom: calc(env(safe-area-inset-bottom) + 5rem);
+        }
 
-    /* Füge Support für iOS safe-area hinzu */
-    .fixed-button-container {
-    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
-  }
+        /* Füge Support für iOS safe-area hinzu */
+        .fixed-button-container {
+          padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+        }
 
-    /* Optimiere die Button-Container-Animation */
-    .fixed-button-container {
-    transition: transform 0.3s ease-in-out;
-  }
+        /* Optimiere die Button-Container-Animation */
+        .fixed-button-container {
+          transition: transform 0.3s ease-in-out;
+        }
 
-    /* Optional: Verstecke die Buttons beim Scrollen nach unten */
-    .fixed-button-container.hidden {
-    transform: translateY(100%);
-  }
-    </style>
+        /* Optional: Verstecke die Buttons beim Scrollen nach unten */
+        .fixed-button-container.hidden {
+          transform: translateY(100%);
+        }
+      </style>
     </form>
 
     <div id="snipcart-container" class="hidden mt-8 space-y-6">
@@ -1166,30 +1166,30 @@ const hunderassen = cachedBreeds ? JSON.parse(cachedBreeds) : [];
     const unknownWeight = document.getElementById('unknown-weight');
 
     function initializeSelect2() {
-      
-    $('select').select2('destroy');
-  
-    $('select:not(.hidden)').each(function() {
-          $(this).select2({
-            placeholder: 'Bitte Rasse wählen',
-            width: '100%',
-            theme: 'classic',
-            minimumInputLength: 2,
-            language: {
-              inputTooShort: function() {
-                return 'Bitte geben Sie mindestens 2 Zeichen ein';
-              },
-              noResults: function() {
-                return 'Keine Ergebnisse gefunden';
-              },
-              searching: function() {
-                return 'Suche...';
-              }
+
+      $('select').select2('destroy');
+
+      $('select:not(.hidden)').each(function() {
+        $(this).select2({
+          placeholder: 'Bitte Rasse wählen',
+          width: '100%',
+          theme: 'classic',
+          minimumInputLength: 2,
+          language: {
+            inputTooShort: function() {
+              return 'Bitte geben Sie mindestens 2 Zeichen ein';
+            },
+            noResults: function() {
+              return 'Keine Ergebnisse gefunden';
+            },
+            searching: function() {
+              return 'Suche...';
             }
-          });
+          }
         });
-      }
-    
+      });
+    }
+
     function updateBreedType() {
       purebredSelect?.classList.add('hidden');
       mixedSelect?.classList.add('hidden');
@@ -1206,18 +1206,18 @@ const hunderassen = cachedBreeds ? JSON.parse(cachedBreeds) : [];
             purebredSelect?.classList.remove('hidden');
             purebredSelect?.querySelector('select')?.setAttribute('required', 'required');
             // Initialize Select2 for purebred select
-        $(purebredSelect?.querySelector('select')).select2({
-            placeholder: 'Bitte Rasse wählen',
-            width: '100%',
-            theme: 'classic'
-          });
+            $(purebredSelect?.querySelector('select')).select2({
+              placeholder: 'Bitte Rasse wählen',
+              width: '100%',
+              theme: 'classic'
+            });
             break;
           case 'mixed':
             mixedSelect?.classList.remove('hidden');
             mixedSelect?.querySelectorAll('select').forEach(select => {
               select.setAttribute('required', 'required');
               // Initialize Select2 for each mixed breed select
-          $(select).select2({
+              $(select).select2({
                 placeholder: 'Bitte Rasse wählen',
                 width: '100%',
                 theme: 'classic'
@@ -1703,7 +1703,7 @@ const hunderassen = cachedBreeds ? JSON.parse(cachedBreeds) : [];
           snipcartButton.setAttribute('data-item-price', prices.monthly.toString());
         }
 
-        
+
         // UI-Status aktualisieren
         form.classList.add('hidden');
         snipcartContainer.classList.remove('hidden');
@@ -1735,29 +1735,29 @@ const hunderassen = cachedBreeds ? JSON.parse(cachedBreeds) : [];
     showStep(1);
     return true;
   }
-    async function loadBreeds() {
+  async function loadBreeds() {
     try {
       // Zuerst aus dem Cache laden
-    const cachedBreeds = localStorage.getItem('hunderassen');
+      const cachedBreeds = localStorage.getItem('hunderassen');
       if (cachedBreeds) {
         updateSelectOptions(JSON.parse(cachedBreeds));
       }
 
       // Dann im Hintergrund aktualisieren
-    const response = await fetch('/api/hunderassen');
+      const response = await fetch('/api/hunderassen');
       const breeds = await response.json();
 
       // Cache aktualisieren
-    localStorage.setItem('hunderassen', JSON.stringify(breeds));
+      localStorage.setItem('hunderassen', JSON.stringify(breeds));
 
       // Select-Optionen aktualisieren
-    updateSelectOptions(breeds);
+      updateSelectOptions(breeds);
     } catch (error) {
       console.error('Error loading breeds:', error);
     }
   }
 
-    function updateSelectOptions(breeds) {
+  function updateSelectOptions(breeds) {
     const selects = document.querySelectorAll('select[name="breed"], select[name="breed1"], select[name="breed2"]');
     selects.forEach(select => {
       select.innerHTML = '<option value="">Bitte Rasse wählen</option>';
@@ -1770,11 +1770,11 @@ const hunderassen = cachedBreeds ? JSON.parse(cachedBreeds) : [];
     });
 
     // Select2 neu initialisieren
-  initializeSelect2();
+    initializeSelect2();
   }
-    
+
   // Setup-Funktion
-    function setupConfigurator() {
+  function setupConfigurator() {
     console.log('Setting up configurator');
     const result = window.initializeDogConfigurator();
     if (result) {
@@ -1784,7 +1784,7 @@ const hunderassen = cachedBreeds ? JSON.parse(cachedBreeds) : [];
   }
 
 
-    // Initialisiere bei verschiedenen Events
+  // Initialisiere bei verschiedenen Events
   document.addEventListener('DOMContentLoaded', setupConfigurator);
   document.addEventListener('astro:page-load', setupConfigurator);
   document.addEventListener('astro:after-swap', () => {
