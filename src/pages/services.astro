@@ -12,16 +12,12 @@ import HowTo from '~/components/widgets/HowTo.astro';
 import Explanation from '~/components/widgets/Explanation.astro';
 
 import KibbleRawFood from 'src/assets/images/kibbles/RawFood01.png';
+import RexBowl from 'src/assets/images/MockUps/RexBowl.png'
 import Features3 from '~/components/widgets/Features3.astro';
-import { title } from 'process';
-
-import {Content as Table} from '../content/table_compare.md'
-import { getEntry, render } from 'astro:content';
 
 import VerticalKibbleBowl from '~/assets/images/kibbles/VerticalKibbleBowl.jpg';
 import KibbleStack from '~/assets/images/kibbles/Kibbles02.png'
 import FAQs from '~/components/widgets/FAQs.astro';
-import { text } from 'stream/consumers';
 
 const metadata = {
   title: 'Services',
@@ -37,7 +33,7 @@ const metadata = {
     subtitle="<span class='font-bold'>Der Weg zu maßgeschneidertem Hundefutter</span> <br> Unsere Plattform kombiniert modernste Technologie mit wissenschaftlich fundierten Erkenntnissen, um eine perfekt abgestimmte Ernährung für Ihren Hund zu entwickeln."
     actions={[{ variant: 'primary', target: '_blank', text: 'Jetzt zusammenstellen', href: '/search' }]}
     image={{
-      src: KibbleRawFood,
+      src: RexBowl,
       alt: 'So funktioniert NapfGenuss',
     }}
   />
@@ -50,7 +46,7 @@ const metadata = {
     items={[
       {
         title: 'Profilerstellung',
-        description: 'Unser benutzerfreundlicher Konfigurator erfasst präzise Details über Ihren Hund, um ein ...',
+        description: 'Unser benutzerfreundlicher Konfigurator erfasst präzise Details über ...',
         icon: 'tabler:user-circle',
         callToAction: { text: 'Mehr lesen', variant: 'link', href: '#profile' },
       },
@@ -64,7 +60,7 @@ const metadata = {
         title: 'Produktion',
         description: 'Sobald die Rezeptur feststeht, beginnt die Herstellung in einem ...',
         icon: 'tabler:settings-spark',
-        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#pro' },
+        callToAction: { text: 'Mehr lesen', variant: 'link', href: '#production' },
       },
     ]}
   />
@@ -193,6 +189,7 @@ const metadata = {
   />
 </div>
 
+<div id="production">
   <ContentModify
     isReversed
     items={[
@@ -219,14 +216,13 @@ const metadata = {
       alt: 'Features Image',
     }}
   >
-  <div id="pro">
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Produktion und Lieferung</h3>
       <h2 class="text-xl mt-2 text-muted font-semibold">Frisch, nachhaltig, unkompliziert</h2>
       <p class="mt-4 text-base text-muted">Sobald die Rezeptur feststeht, beginnt die Herstellung in einem spezialisierten Verfahren.</p>
     </Fragment>
   </ContentModify>
-</div>
+  </div>
 
   <Features2
     title="Vergleich - <span class='text-primary'> NapfGenuss </span> vs. Haustierfachmarkt"
@@ -323,7 +319,6 @@ const metadata = {
     ]}
   />
   
-
 <CallToAction
 actions={[
   {

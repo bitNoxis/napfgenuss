@@ -43,12 +43,8 @@ export const headerData = {
           href: getBlogPermalink(),
         },
         {
-          text: 'Artikel XY',
-          href: getPermalink('get-started-website-with-astro-tailwind-css', 'post'),
-        },
-        {
-          text: 'Kategorien',
-          href: getPermalink('tutorials', 'category'),
+          text: 'Ernährungsallergien',
+          href: getPermalink('allergien', 'post'),
         },
       ],
     },
@@ -72,9 +68,10 @@ export const footerData = {
     {
       title: 'Formulare',
       links: [
-        { text: "Log In", href: '#/login' },
-        { text: "Zur Kasse", href: '#/checkout' },
         { text: "Kontakt", href: '/contact' },
+        { text: "Anmelden", href: '#/signin' },
+        { text: "Registrieren", href: '#/register' },
+        { text: "Zur Kasse", href: '#/checkout' },
       ],
     },
     {
@@ -91,9 +88,7 @@ export const footerData = {
     { text: 'Datenschutz', href: getPermalink('/privacy') },
   ],
   socialLinks: [
-    { ariaLabel: 'X', icon: 'tabler:brand-x', href: '#' },
     { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: 'https://www.instagram.com/napfgenuss_shop/' },
-    { ariaLabel: 'Facebook', icon: 'tabler:brand-facebook', href: '#' },
   ],
   footNote: `
     Mit Liebe gemacht von <a class="text-blue-600 underline dark:text-muted" href="/index"> NapfGenuss</a> · Alle Rechte vorbehalten
