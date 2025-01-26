@@ -1,6 +1,6 @@
 ---
 publishDate: 2025-01-20T00:00:00Z
-title: Futterumstellung bei Hunden – Sanfte Übergänge für ein glückliches Bäuchlein
+title: Umstellung des Futters bei Hunden – Sanfte Übergänge für ein glückliches Bäuchlein
 excerpt: Erfahre, wie du mit unserem individuellen und nachhaltigen Hundefutter eine gesunde Futterumstellung für deinen Hund durchführst und Verdauungsprobleme vermeidest.
 category: Hundeernährung
 image: https://images.unsplash.com/photo-1558788353-f76d92427f16?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3
