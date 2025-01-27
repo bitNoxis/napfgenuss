@@ -1,28 +1,47 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 
-// Debug: Versuche den Pfad zu loggen
-console.log('Content Directory Path:', import.meta.url);
+// Debug Information sammeln
+const envInfo = {
+  mode: import.meta.env.MODE,
+  prod: import.meta.env.PROD,
+  dev: import.meta.env.DEV
+};
 
+// Direkter Versuch, den spezifischen Eintrag zu laden
+let directEntry = null;
 try {
-  // Debug: Log vor dem Versuch
-  console.log('Versuche Posts zu laden...');
-
-  const allPosts = await getCollection('post');
-  console.log('Posts geladen, Anzahl:', allPosts.length);
-
-  const publishedPosts = await getCollection('post', ({ data }) => {
-    console.log('Post data beim Filtern:', data);
-    return import.meta.env.PROD ? !data.draft : true;
-  });
-} catch (error) {
-  console.error('Fehler beim Laden der Posts:', error);
+  directEntry = await getEntry('post', 'futterumstellung');
+} catch (e) {
+  console.error('Fehler beim direkten Laden:', e);
 }
+
+// Versuche alle Posts zu laden
+let allPosts = [];
+try {
+  allPosts = await getCollection('post');
+} catch (e) {
+  console.error('Fehler beim Laden der Collection:', e);
+}
+
+// Glob-Pattern für alle MD files
+const mdFiles = await import.meta.glob('/src/content/post/*.md', {
+  eager: true
+});
 ---
 
-<h1>Test</h1>
-<h2>Debug Information:</h2>
-<div>
-  <p>Environment: {import.meta.env.MODE}</p>
-  <p>Content Collections verfügbar: {JSON.stringify(Object.keys(await import.meta.glob('/src/content/**/*.md')))}</p>
-</div>
+<h1>Erweiterter Test</h1>
+<h2>Environment:</h2>
+<pre>{JSON.stringify(envInfo, null, 2)}</pre>
+
+<h2>Direkter Eintrag:</h2>
+<pre>{JSON.stringify(directEntry, null, 2)}</pre>
+
+<h2>Collection Posts:</h2>
+<pre>{JSON.stringify(allPosts, null, 2)}</pre>
+
+<h2>Gefundene MD Files:</h2>
+<pre>{JSON.stringify(Object.keys(mdFiles), null, 2)}</pre>
+
+<h2>Erster MD File Inhalt:</h2>
+<pre>{JSON.stringify(Object.values(mdFiles)[0], null, 2)}</pre>
