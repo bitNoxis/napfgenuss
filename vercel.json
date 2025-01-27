@@ -11,5 +11,10 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "src/pages/**/*": {
+      "includeFiles": "src/content/**/*"
+    }
+  }
 }
