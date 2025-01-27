@@ -25,7 +25,11 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 export default defineConfig({
   // Falls du SSR nutzen möchtest
   output: 'server',
-  adapter: vercel(),
+  adapter: vercel({
+      includeFiles: [
+        'src/content/post/**/*'
+        ],
+  }),
   integrations: [
     react(),
     tailwind({ 
