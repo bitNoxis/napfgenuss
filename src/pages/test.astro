@@ -1,9 +1,23 @@
 ---
-const posts = await Astro.glob('../content/post/*.md');
-console.log('Gefundene Posts:', posts.length);
+// Logs vor dem Versuch, die Posts zu laden
+console.log('Starting test page load...');
+
+try {
+  console.log('Trying to load posts...');
+  const posts = await Astro.glob('../content/post/*.md');
+  console.log('Posts loaded successfully:', posts.length);
+  console.log('Post URLs:', posts.map(p => p.url));
+} catch (error) {
+  console.error('Error loading posts:', error);
+}
 ---
-<h1>Test</h1> <p>Anzahl gefundener Posts: {posts.length}</p>
-<ul>
-  {posts.map(post =>
-    <li>{post.url}</li>)}
-</ul>
+
+<h1>Test</h1>
+<div id="debug">
+  <pre>
+    {JSON.stringify({
+      currentPath: import.meta.url,
+      timestamp: new Date().toISOString()
+    }, null, 2)}
+  </pre>
+</div>
