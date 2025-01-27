@@ -1,13 +1,12 @@
 {
   "name": "@onwidget/astrowind",
   "version": "1.0.0-beta.48",
-  "description": "NapfGenuss",
+  "description": "AstroWind: A free template using Astro 4.0 and Tailwind CSS. Astro starter theme.",
   "type": "module",
   "private": true,
   "engines": {
-    "node": "^18.17.1 || ^20.3.0 || >= 21.0.0" },
-  "packageManager": "npm@18.20.6",
-  
+    "node": "^18.17.1 || ^20.3.0 || >= 21.0.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -24,7 +23,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.3",
-    "@astrojs/netlify": "^6.1.0",
+    "@astrojs/netlify": "^6.0.1",
     "@astrojs/react": "^4.1.6",
     "@astrojs/rss": "^4.0.10",
     "@astrojs/sitemap": "^3.2.1",
@@ -46,7 +45,6 @@
     "lodash.merge": "^4.6.2",
     "lucide-react": "^0.473.0",
     "mongodb": "^6.12.0",
-    "node": "^18.20.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-select": "^5.9.0",
