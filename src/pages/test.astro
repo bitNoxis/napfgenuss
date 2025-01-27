@@ -1,5 +1,15 @@
 ---
-const posts = await Astro.glob('../content/post/*.md');
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('post', ({ data }) => {
+  return import.meta.env.PROD ? !data.draft : true;
+});
+
+const posts = allPosts.sort((a, b) => {
+  const aDate = a.data.publishDate || new Date();
+  const bDate = b.data.publishDate || new Date();
+  return bDate.valueOf() - aDate.valueOf();
+});
 ---
 
 <h1>Test</h1>
@@ -9,9 +19,13 @@ const posts = await Astro.glob('../content/post/*.md');
     <li>
       <h3>Post Details:</h3>
       <ul>
-        <li>Filename: {post.file}</li>
-        <li>URL: {post.url}</li>
-        <li>Frontmatter: {JSON.stringify(post.frontmatter, null, 2)}</li>
+        <li>ID: {post.id}</li>
+        <li>Slug: {post.slug}</li>
+        <li>Title: {post.data.title}</li>
+        <li>Draft: {post.data.draft ? 'Ja' : 'Nein'}</li>
+        <li>Publish Date: {post.data.publishDate?.toISOString()}</li>
+        <li>Category: {post.data.category}</li>
+        <li>Tags: {post.data.tags?.join(', ')}</li>
       </ul>
     </li>
   ))}
