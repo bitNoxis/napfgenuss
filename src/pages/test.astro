@@ -1,32 +1,25 @@
 ---
 import { getCollection } from 'astro:content';
 
-const allPosts = await getCollection('post', ({ data }) => {
+// Erste Abfrage ohne Filter
+const allPosts = await getCollection('post');
+console.log('Alle Posts (ohne Filter):', allPosts.length);
+
+// Zweite Abfrage mit Draft-Check
+const publishedPosts = await getCollection('post', ({ data }) => {
+  console.log('Post data:', data);
   return import.meta.env.PROD ? !data.draft : true;
 });
-
-const posts = allPosts.sort((a, b) => {
-  const aDate = a.data.publishDate || new Date();
-  const bDate = b.data.publishDate || new Date();
-  return bDate.valueOf() - aDate.valueOf();
-});
+console.log('Publizierte Posts:', publishedPosts.length);
 ---
 
 <h1>Test</h1>
-<p>Anzahl gefundener Posts: {posts.length}</p>
-<ul>
-  {posts.map(post => (
-    <li>
-      <h3>Post Details:</h3>
-      <ul>
-        <li>ID: {post.id}</li>
-        <li>Slug: {post.slug}</li>
-        <li>Title: {post.data.title}</li>
-        <li>Draft: {post.data.draft ? 'Ja' : 'Nein'}</li>
-        <li>Publish Date: {post.data.publishDate?.toISOString()}</li>
-        <li>Category: {post.data.category}</li>
-        <li>Tags: {post.data.tags?.join(', ')}</li>
-      </ul>
-    </li>
-  ))}
-</ul>
+<h2>Debug Information:</h2>
+<div>
+  <p>Alle Posts: {allPosts.length}</p>
+  <p>Publizierte Posts: {publishedPosts.length}</p>
+  <h3>Rohe Post-Daten:</h3>
+  <pre>
+    {JSON.stringify(allPosts, null, 2)}
+  </pre>
+</div>
