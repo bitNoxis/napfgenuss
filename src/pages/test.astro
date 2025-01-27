@@ -1,0 +1,9 @@
+---
+const posts = await Astro.glob('../content/post/*.md');
+console.log('Gefundene Posts:', posts.length);
+---
+<h1>Test</h1> <p>Anzahl gefundener Posts: {posts.length}</p>
+<ul>
+  {posts.map(post =>
+    <li>{post.url}</li>)}
+</ul>
